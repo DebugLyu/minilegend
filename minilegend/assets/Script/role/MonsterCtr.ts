@@ -1,9 +1,10 @@
 import MonsterMod from "./MonsterMod";
 import WarriorCtr from "./WarriorCtr";
 
-const { ccclass, property } = cc._decorator;
+const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
+@menu("role/MonsterCtr")
 export default class MonsterCtr extends WarriorCtr {
     
     start(){
