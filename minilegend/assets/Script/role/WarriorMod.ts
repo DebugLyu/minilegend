@@ -1,4 +1,3 @@
-import living from "./livingMod";
 import WarriorCtr from "./WarriorCtr";
 import livingMod from "./livingMod";
 

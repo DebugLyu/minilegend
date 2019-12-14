@@ -6,12 +6,20 @@ const { ccclass, property } = cc._decorator;
 export default class LivingCtr extends cc.Component {
     @property(cc.Node)
     roleNode: cc.Node = null;
+
+    @property(cc.Label)
+    roleName: cc.Label = null;
     
-    public model: any = null;
+    public _model: any = null;
     setModel<T>(model:T){
-        this.model = model;
+        this._model = model;
     }
+
     updateAvatar(){
-        this.model.resId;
+        this._model.resId;
+    }
+
+    idle(){
+
     }
 }

@@ -1,11 +1,11 @@
 import { roleAnimation } from "../common/gFunc";
 import PlayerMod from "./PlayerMod";
-import LivingCtr from "./LivingCtr";
+import WarriorCtr from "./WarriorCtr";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class PlayerCtr extends LivingCtr {
+export default class PlayerCtr extends WarriorCtr {
     
     // private model: PlayerMod = new PlayerMod(this);
 
@@ -23,6 +23,6 @@ export default class PlayerCtr extends LivingCtr {
     // update (dt) {}
 
     test(){
-        this.model.weapon = 1;
+        this._model.weapon = 1;
     }
 }
