@@ -1,10 +1,10 @@
-import { roleAnimation } from "../common/gFunc";
 import PlayerMod from "./PlayerMod";
 import WarriorCtr from "./WarriorCtr";
 
-const { ccclass, property } = cc._decorator;
+const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
+@menu("role/PlayerCtr")
 export default class PlayerCtr extends WarriorCtr {
     
     // private model: PlayerMod = new PlayerMod(this);
@@ -14,12 +14,7 @@ export default class PlayerCtr extends WarriorCtr {
         this.runAction();
     }
 
-    async runAction(dir:number = 2, act: string = "idle") {
-        let curClip = await roleAnimation(3800, act, dir);
-        let addonani = this.roleNode.getComponent(cc.Animation);
-        addonani.addClip(curClip);
-        addonani.play(curClip.name);
-    }
+    
     // update (dt) {}
 
     test(){
