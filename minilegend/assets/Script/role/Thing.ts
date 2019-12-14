@@ -1,4 +1,4 @@
-export default class thing {
+export default class Thing<T> {
     onlyid: number = 0;// 唯一id
     // 地图坐标
     mapid: number = 0;
@@ -6,15 +6,18 @@ export default class thing {
     y: number = 0;
 
     // 场景实物脚本
-    control: cc.Component = null;
+    control: T = null;
 
-    constructor(control: cc.Component = null) {
-        if (control != null) {
-            this.setControl(control);
+    /**
+     *
+     */
+    constructor(control?:T) {
+        if(control != null){
+            this.control = control;
         }
     }
-
-    setControl(control: cc.Component) {
+    
+    setControl(control: T) {
         this.control = control;
     }
 

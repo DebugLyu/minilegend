@@ -1,17 +1,16 @@
 import { roleAnimation } from "../common/gFunc";
 import PlayerMod from "./PlayerMod";
+import LivingCtr from "./LivingCtr";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class PlayerCtr extends cc.Component {
-    @property(cc.Node)
-    roleNode: cc.Node = null;
+export default class PlayerCtr extends LivingCtr {
     
-    private resId: number = 0;
-    private model: PlayerMod = new PlayerMod(this);
+    // private model: PlayerMod = new PlayerMod(this);
 
     start() {
+        this.setModel(new PlayerMod(this));
         this.runAction();
     }
 
@@ -23,11 +22,7 @@ export default class PlayerCtr extends cc.Component {
     }
     // update (dt) {}
 
-    setResId(resid:number){
-        this.resId = resid;
-    }
-
-    getResId() : number{
-        return this.resId;
+    test(){
+        this.model.weapon = 1;
     }
 }
