@@ -23,22 +23,6 @@ cc.Class({
         scaleLab: cc.Label,
         sizeLab: cc.Label,
 
-        homeTexture: {
-            type: cc.Texture2D,
-            default: null,
-        },
-        bigtowerTexture: {
-            type: cc.Texture2D,
-            default: null,
-        },
-        smalltowerTexture: {
-            type: cc.Texture2D,
-            default: null,
-        },
-        taskTexture: {
-            type: cc.Texture2D,
-            default: null,
-        },
         netPointTexture: {
             type: cc.Texture2D,
             default: null,
@@ -53,6 +37,14 @@ cc.Class({
         inputLayer: cc.Node,
         inputEditbox: cc.EditBox,
         mapIdEditbox: cc.EditBox,
+
+        infoLabel:cc.Label,
+        newMap:cc.Node,
+    },
+
+    
+    start(){
+        
     },
 
     onLoad() {
@@ -60,11 +52,11 @@ cc.Class({
         canvasWidht = canvas.width;
         canvasHeight = canvas.height;
 
-        let self = this;
-        cc.loader.loadRes("Map/prop_map", function (err, data) {
-            mapInfoData = data.json;
-            self.loadMap();
-        });
+        // let self = this;
+        // cc.loader.loadRes("Map/prop_map", function (err, data) {
+        //     mapInfoData = data.json;
+        //     self.loadMap();
+        // });
         this.buildingLayer.zIndex = 4;
 
         this.aStarNetPoint = [];
@@ -73,13 +65,23 @@ cc.Class({
         this.width = cc.find('Canvas').width;
         this.height = cc.find('Canvas').height - MENU_HEIGHT;
 
-        cc.loader.loadResDir('npc', cc.SpriteFrame, function (err, assets) {
+        // cc.loader.loadResDir('npc', cc.SpriteFrame, function (err, assets) {
+        //     let sprites = {}
+        //     for (const spriteframe of assets) {
+        //         sprites[spriteframe.name] = spriteframe;
+        //     }
+        //     self.npcAssets = sprites;
+        //     self.showNPC();
+        // });
+
+        this.mapAssets = {};
+        // 加载所有地图资源
+        cc.loader.loadResDir('mapres', cc.SpriteFrame,  (err, assets) => {
             let sprites = {}
             for (const spriteframe of assets) {
                 sprites[spriteframe.name] = spriteframe;
             }
-            self.npcAssets = sprites;
-            self.showNPC();
+            this.mapAssets = sprites;
         });
 
         this.map = cc.find('Canvas/mapbg/map');
@@ -89,12 +91,13 @@ cc.Class({
         drawNode.zIndex = 3;
         this.draw = drawNode.addComponent(cc.Graphics);
         // this.showGrid();
-        this.node.on(cc.Node.EventType.TOUCH_START, self.touchBegan.bind(self));
-        this.node.on(cc.Node.EventType.TOUCH_MOVE, self.touchMoved.bind(self));
+        this.node.on(cc.Node.EventType.MOUSE_DOWN, self.touchBegan.bind(self));
+        this.node.on(cc.Node.EventType.MOUSE_MOVE, self.touchMoved.bind(self));
+        this.node.on(cc.Node.EventType.MOUSE_UP, self.touchEnd.bind(self));
 
         this.brushType = 1;
         this.brushSize = 0;
-        this.operationType = 0;
+        this.operationType = -1;
         this.mapScale = 1;
 
         this.selfHero.zIndex = 3;
@@ -114,23 +117,19 @@ cc.Class({
         this.mapIdEditbox.string = this.mapId;
     },
 
-    start(){
-        
-    },
-
     loadMap(e, d) {
-        if (this.mapId != 0) {
-            for (let yTileNum = 0; yTileNum < this.mapNodeArr.length; yTileNum++) {
-                let list = this.mapNodeArr[yTileNum];
-                for (let xTileNum = 0; xTileNum < list.length; xTileNum++) {
-                    if (list[xTileNum] == 1) {
-                        this.map.getChildByName(this.mapresId + '_' + yTileNum + '_' + xTileNum).destroy();
-                        this.mapNodeArr[yTileNum][xTileNum] = 0;
-                    }
-                }
-            }
-        }
-        this.mapId = this.mapIdEditbox.string;
+        // if (this.mapId != 0) {
+        //     for (let yTileNum = 0; yTileNum < this.mapNodeArr.length; yTileNum++) {
+        //         let list = this.mapNodeArr[yTileNum];
+        //         for (let xTileNum = 0; xTileNum < list.length; xTileNum++) {
+        //             if (list[xTileNum] == 1) {
+        //                 this.map.getChildByName(this.mapresId + '_' + yTileNum + '_' + xTileNum).destroy();
+        //                 this.mapNodeArr[yTileNum][xTileNum] = 0;
+        //             }
+        //         }
+        //     }
+        // }
+        // this.mapId = this.mapIdEditbox.string;
         if (mapInfoData == null) {
             return;
         }
@@ -242,15 +241,15 @@ cc.Class({
         // console.log('etart_time:', timestamp);
     },
 
-    showNPC() {
-        this.buildingLayer.removeAllChildren();
-        for (const index in this.npcInfo) {
-            if (this.npcInfo.hasOwnProperty(index)) {
-                const element = this.npcInfo[index];
-                this.addNPCIcon(element.x, element.y, this.npcAssets[element.id]);
-            }
-        }
-    },
+    // showNPC() {
+    //     this.buildingLayer.removeAllChildren();
+    //     for (const index in this.npcInfo) {
+    //         if (this.npcInfo.hasOwnProperty(index)) {
+    //             const element = this.npcInfo[index];
+    //             this.addNPCIcon(element.x, element.y, this.npcAssets[element.id]);
+    //         }
+    //     }
+    // },
 
     addNPCIcon(x, y, frame) {
         let icon = new cc.Node();
@@ -500,6 +499,18 @@ cc.Class({
     },
 
     touchBegan(event) {
+        let mouseType = event.getButton();
+        if(mouseType == cc.Event.EventMouse.BUTTON_RIGHT){
+            // this.tempOperationType = this.operationType;
+            this.operationType = 0;
+        }else if(mouseType == cc.Event.EventMouse.BUTTON_LEFT){
+            // this.tempOperationType = this.operationType;
+            this.operationType = 1;
+        }
+
+        if (this.operationType == 0) {
+            return;
+        }
         let beganPos = event.getLocation();
         if (beganPos.y > this.height) {
             return;
@@ -509,9 +520,7 @@ cc.Class({
         let touchy = Math.floor((drawPos.y + this.height / 2) / gridHeight);
         this.posLab.string = `(${Math.round(drawPos.x + this.width / 2)},${Math.round(drawPos.y + this.height / 2)})`;
         this.posLab1.string = `(${touchx},${touchy})`;
-        if (this.operationType == 0) {
-            return;
-        }
+        
         if (this.brushType == 9) {
             let startPosInMap = cc.v2(this.selfHero.x + this.width / 2 - gridWidth / 2, this.selfHero.y + this.height / 2 - gridHeight / 2);
             let startX = Math.round(startPosInMap.x / gridWidth);
@@ -590,6 +599,9 @@ cc.Class({
     },
 
     touchMoved(event) {
+        if (this.operationType == -1) {
+            return;
+        }
         if (event.getLocation().y > this.height) {
             return;
         }
@@ -600,6 +612,7 @@ cc.Class({
             // if (this.brushType < 0) {
             //     return;
             // }
+
             if (this.brushType == 3 || this.brushType == 5 || this.brushType == 9) {
                 return;
             }
@@ -621,6 +634,17 @@ cc.Class({
             // }
             this.showGrid();
         }
+    },
+
+    touchEnd(event){
+        // let mouseType = event.getButton();
+        // if(mouseType == cc.Event.EventMouse.BUTTON_RIGHT || this.tempOperationType != 0){
+        //     // this.tempBrushType = this.brushType;
+        //     // this.brushType = 0;
+        //     this.operationType = -1; //this.tempOperationType;
+        //     //this.tempOperationType = 0;
+        // }
+        this.operationType = -1; 
     },
 
     getAvailabelPoint(r, l, mapArr, rows, lines, pos) {
@@ -855,5 +879,11 @@ cc.Class({
         }
         return false;
     },
+
+    onBtnClicked(e, d){
+        if(d == 'newmap'){
+            this.newMap.active = true;
+        }
+    }
 
 });
