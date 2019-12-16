@@ -1,14 +1,25 @@
+class StageData {
+	stageid: number = 0;
+}
+
 export default class StageMgr {
-	public static instance: StageMgr = null
-	public static getInstance():StageMgr{
-		if(this.instance == null){
-			this.instance = new StageMgr();
+	private static _instance: StageMgr = null
+	public static getInstance(): StageMgr {
+		if (this._instance == null) {
+			this._instance = new StageMgr();
 
 		}
-		return this.instance;
+		return this._instance;
 	}
 
 
-	private cur_stage_id:number = 0;
-	private stage_data: JSON = {};
+	private _cur_stage_id: number = 0;
+	private _stage_data: {[index: number]: StageData} = {};
+	init() {
+		
+	}
+	
+	getStageData(stageid: number): StageData {
+		return this._stage_data[stageid];
+	}
 }
