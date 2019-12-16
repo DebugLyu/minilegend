@@ -4,9 +4,11 @@
 	 * @param act 动作标识 atk攻击 die死亡 idle等待 mgc施法 ratk攻击等待 run移动
 	 * @param dir 方向id 参考小键盘
 	 */
+let role_animation_list: cc.AnimationClip[] = [];
 export async function roleAnimation(resid: Number, act: String, dir: Number) {
+	let animation_key = "role/" + resid + "/" + act + "/" + dir;
 	return new Promise<cc.AnimationClip>((resolve, reject) => {
-		cc.loader.loadRes("role/" + resid + "/" + act + "/" + dir, cc.SpriteAtlas, (err, atlas) => {
+		cc.loader.loadRes(animation_key, cc.SpriteAtlas, (err, atlas) => {
 			let frames = [];
 			for (let i = 0; ; i++) {
 				let frame = atlas.getSpriteFrame(i);
@@ -16,6 +18,7 @@ export async function roleAnimation(resid: Number, act: String, dir: Number) {
 			let curClip = cc.AnimationClip.createWithSpriteFrames(frames, 10);
 			curClip.name = act + String(dir);
 			curClip.wrapMode = cc.WrapMode.Loop;
+			role_animation_list[animation_key] = curClip;
 			resolve(curClip);
 		});
 	});

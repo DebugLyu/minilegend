@@ -1,11 +1,11 @@
-
+import PlayerCtr from "../role/playerCtr";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class PlayerControl extends cc.Component {
 
-    @property(cc.Node)
-    player: cc.Node = null;
+    @property(PlayerCtr)
+    player: PlayerCtr = null;
 
     @property(cc.Node)
     controlNode: cc.Node = null;
@@ -33,64 +33,49 @@ export default class PlayerControl extends cc.Component {
         this.controlNode.setPosition(drawPos);
     }
 
-    getRad(pos1, pos2) {
-        var px1 = pos1.x;
-        var py1 = pos1.y;
-        var px2 = pos2.x;
-        var py2 = pos2.y;
-
-        //得到两点x的距离
-        var x = px2 - px1;
-        //得到两点y的距离
-        var y = py1 - py2;
-        //算出斜边长度
-        var xie = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-        //得到这个角度的余弦值(通过三角函数中的店里：角度余弦值=斜边/斜边)
-        var cosAngle = x / xie;
-        //通过反余弦定理获取到期角度的弧度
-        var rad = Math.acos(cosAngle);
-        //注意：当触屏的位置Y坐标<摇杆的Y坐标，我们要去反值-0~-180
-        if (py2 < py1) {
-            rad = -rad;
-        }
-        return rad;
-    }
-
     touchMove(event) {
         if (!this._touchEnable) {
             return;
         }
         let beganPos = event.getLocation();
-        let drawPos = this.controlNode.convertToNodeSpaceAR(beganPos);
+        let drawPos: cc.Vec2 = this.controlNode.convertToNodeSpaceAR(beganPos);
         let c = this.controlNode.position;
         let r = 100;
-        var dx = drawPos.x - c.x;
-        var dy = drawPos.y - c.y;
-        if (dx * dx + dy * dy <= r * r) {
-            this._controlSpr.setPosition(drawPos);
-        }
+        let len = drawPos.mag();
 
-        //计算两个圆心之间距离
-        var juli = Math.sqrt(Math.pow((c.x - drawPos.x), 2) + Math.pow((c.y - drawPos.y), 2));
-        //距离不超过半径
-        if (juli >= r) {
-            cc.log("go111>>>");
-            // this._controlSpr.setPosition(drawPos);
-            var p_rad = this.getRad(c, drawPos);
-            let p2 = cc.v2(r * Math.cos(p_rad), r * Math.sin(p_rad));
-            this._controlSpr.setPosition(p2.add(cc.v2(c.x, c.y)));
+        if (len > r) {
+            drawPos.x = r * drawPos.x / len;
+            drawPos.y = r * drawPos.y / len;
         }
-        else {
-            cc.log("go2222>>>");
-            this._controlSpr.setPosition(drawPos);
+        this._controlSpr.setPosition(drawPos);
+        let angle = drawPos.signAngle(cc.v2(1, 0));
+        let degree = angle / Math.PI * 180;
+        let dir = 2;
+        if (degree >= -22.5 && degree < 22.5) {
+            dir = 6;
+        } else if (degree >= 22.5 && degree < 67.5) {
+            dir = 3;
+        } else if (degree >= 67.5 && degree < 112.5) {
+            dir = 2;
+        } else if (degree >= 112.5 && degree < 157.5) {
+            dir = 1;
+        } else if (degree >= 157.5 && degree <= 180 || degree > -180 && degree < -157.5) {
+            dir = 4;
+        } else if (degree > -157.5 && degree < -112.5) {
+            dir = 7;
+        } else if (degree > -112.5 && degree < -67.5) {
+            dir = 8;
+        } else if (degree > -67.5 && degree < -22.5) {
+            dir = 9;
         }
-
+        this.player.move(dir);
     }
 
     touchEnd(event) {
         this._touchEnable = false;
         this.controlNode.setPosition(0, 0);
         this._controlSpr.setPosition(0, 0);
+        this.player.idle();
     }
 
     // update (dt) {}

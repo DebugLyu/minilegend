@@ -7,8 +7,8 @@ const { ccclass, property, menu } = cc._decorator;
 export default class WarriorCtr extends LivingCtr {
 
     
-    move(){
-
+    move(dir: number){
+        this.runAction(dir, "run");
     }
 
     dead(){
