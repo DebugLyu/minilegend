@@ -1,4 +1,4 @@
-import { roleAnimation } from "../common/gFunc";
+import { gameAnimation } from "../common/gFunc";
 import livingMod from "./LivingMod";
 import { ActState } from "../common/G";
 
@@ -27,7 +27,7 @@ export default class LivingCtr<T extends livingMod> extends cc.Component {
 
         this._lastDir = dir;
         this.state = act;
-        let curClip = await roleAnimation(3800, act, dir);
+        let curClip = await gameAnimation("role", 3800, act, dir);
         let addonani = this.node.getComponent(cc.Animation);
         addonani.addClip(curClip);
         addonani.play(curClip.name);

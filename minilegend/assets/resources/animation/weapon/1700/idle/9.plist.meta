@@ -1,0 +1,56 @@
+{
+  "ver": "1.2.4",
+  "uuid": "59c7ff5d-c964-4f85-98e2-be0ebf2ea3d3",
+  "rawTextureUuid": "d26f8259-0311-4d90-b251-f0e65ada42d4",
+  "size": {
+    "width": 128,
+    "height": 128
+  },
+  "type": "Texture Packer",
+  "subMetas": {
+    "0.png": {
+      "ver": "1.0.4",
+      "uuid": "b2f0ebd3-0b2d-41a6-8a9d-0cf8981d080a",
+      "rawTextureUuid": "d26f8259-0311-4d90-b251-f0e65ada42d4",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": true,
+      "offsetX": 61,
+      "offsetY": -53,
+      "trimX": 80,
+      "trimY": 0,
+      "width": 76,
+      "height": 48,
+      "rawWidth": 512,
+      "rawHeight": 512,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "spriteType": "normal",
+      "subMetas": {}
+    },
+    "1.png": {
+      "ver": "1.0.4",
+      "uuid": "2c1cb6f4-ba4b-4eb2-b333-111b6e1b0325",
+      "rawTextureUuid": "d26f8259-0311-4d90-b251-f0e65ada42d4",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 60,
+      "offsetY": -53,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 78,
+      "height": 48,
+      "rawWidth": 512,
+      "rawHeight": 512,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "spriteType": "normal",
+      "subMetas": {}
+    }
+  }
+}

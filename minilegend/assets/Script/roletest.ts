@@ -1,6 +1,7 @@
 const { ccclass, property } = cc._decorator;
 
-import {roleAnimation} from "./common/gFunc";
+import { gameAnimation } from "./common/gFunc";
+import { ActState } from "./common/G";
 
 @ccclass
 export default class roletest extends cc.Component {
@@ -13,8 +14,7 @@ export default class roletest extends cc.Component {
 
     async runAction() {
         let dir = 2;
-        let act = "idle";
-        let curClip = await roleAnimation(3800, act, dir);
+        let curClip = await gameAnimation("role", 3800, ActState.IDLE, dir);
         let addonani = this.roleNode.getComponent(cc.Animation);
         addonani.addClip(curClip);
         addonani.play(curClip.name);
