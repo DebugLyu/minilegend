@@ -1,5 +1,6 @@
 import PlayerCtr from "../role/playerCtr";
 import {degree2Dir} from "../common/G";
+import PlayerMod from "../role/PlayerMod";
 
 const { ccclass, property, menu} = cc._decorator;
 
@@ -8,7 +9,7 @@ const { ccclass, property, menu} = cc._decorator;
 export default class PlayerControl extends cc.Component {
 
     @property(PlayerCtr)
-    player: PlayerCtr = null;
+    player: PlayerCtr<PlayerMod> = null;
 
     @property(cc.Node)
     controlNode: cc.Node = null;

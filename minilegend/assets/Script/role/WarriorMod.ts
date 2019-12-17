@@ -4,6 +4,8 @@ export default class WarriorMod extends livingMod {
 	hp: number = 0;
     isdead : boolean = false;
 
+    speed: number = 500;
+
 
     setHp(hp: number){
         this.hp = hp;

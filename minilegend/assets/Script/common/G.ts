@@ -7,6 +7,28 @@ export enum LivingType {
 	PLAYER,
 }
 
+export enum ActState {
+	IDLE= 0,
+	RUN,
+	RATK,
+	ATK,
+	MGC,
+	DIE,
+}
+
+let ActStateStr = {
+	[ActState.IDLE] : "idle",
+	[ActState.RUN] : "run",
+	[ActState.RATK] : "ratk",
+	[ActState.ATK] : "atk",
+	[ActState.MGC] : "mgc",
+	[ActState.DIE] : "die",
+}
+
+export function ActState2Str(state: ActState) {
+	return ActStateStr[state];
+}
+
 export function degree2Dir(degree: number): number {
 	let dir = 2;
 	if (degree >= -22.5 && degree < 22.5) {
