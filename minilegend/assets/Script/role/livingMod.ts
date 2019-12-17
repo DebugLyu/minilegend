@@ -1,13 +1,17 @@
-import thing from "./Thing";
+import Thing from "./Thing";
 import { LivingType } from "../common/G";
 import LivingCtr from "./LivingCtr";
 
-export default class livingMod<T extends LivingCtr> extends thing<T> {
+export default class LivingMod extends Thing {
     name: string = "";
 
     livingType: LivingType = LivingType.NOTHING;
 
     private _resid : number = 0;
+
+    get control(): LivingCtr<LivingMod> {
+        return this._control;
+    }
 
     init(){
         super.init();

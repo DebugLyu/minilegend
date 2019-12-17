@@ -1,16 +1,16 @@
 import { roleAnimation } from "../common/gFunc";
-import livingMod from "./livingMod";
+import livingMod from "./LivingMod";
 
 const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("role/LivingCtr")
 
-export default class LivingCtr extends cc.Component {
+export default class LivingCtr<T extends livingMod> extends cc.Component {
     @property(cc.Label)
     roleName: cc.Label = null;
     
-    protected _model: any = null;
+    protected _model: T = null;
     private _lastDir : number = 2;
     private _lastAct : string = "idle";
 
@@ -34,7 +34,7 @@ export default class LivingCtr extends cc.Component {
     setModel(model){
         this._model = model;
     }
-    getModel(): livingMod<this> {
+    getModel(): T {
         return this._model;
     }
 

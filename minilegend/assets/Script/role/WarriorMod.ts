@@ -1,7 +1,6 @@
-import WarriorCtr from "./WarriorCtr";
-import livingMod from "./livingMod";
+import livingMod from "./LivingMod";
 
-export default class WarriorMod<T extends WarriorCtr> extends livingMod<T> {
+export default class WarriorMod extends livingMod {
 	hp: number = 0;
     isdead : boolean = false;
 
