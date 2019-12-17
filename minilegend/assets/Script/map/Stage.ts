@@ -28,20 +28,14 @@ export default class Stage extends cc.Component {
 	}
 
 	update(dt){
-		// if(this.player.state == ActState.IDLE){
-		// 	return;
-		// }
-		// this.checkPlayerPos();
+		if(this.player.state == ActState.IDLE){
+			return;
+		}
+		this.checkPlayerPos();
 	}
 
 	checkPlayerPos(){
 		let ppos = this.player.node.position;
-
-		// let worldpos = this.node.convertToWorldSpaceAR(ppos);
-		// let topos = cc.v2(-worldpos.x, -worldpos.y);
-		
-		// 人物目标点
-		let r_pos = cc.v2(cc.winSize.width / 2, cc.winSize.height / 2);
 		let topos = cc.v2(-ppos.x, -ppos.y);
 		if(topos.x > root_pos.x){
 			topos.x = root_pos.x;
@@ -58,7 +52,6 @@ export default class Stage extends cc.Component {
 
 
 		this.node.setPosition(topos);
-		console.log(this.node.position);
 	}
 
 
