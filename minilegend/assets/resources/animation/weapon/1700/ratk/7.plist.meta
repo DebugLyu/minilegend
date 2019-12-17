@@ -1,7 +1,7 @@
 {
   "ver": "1.2.4",
-  "uuid": "72ecff27-53e9-487c-a66d-bc1defc8105c",
-  "rawTextureUuid": "a2c7f260-5185-4b5e-9807-add09bce7b35",
+  "uuid": "a6d533d1-25cd-405d-ab42-da6199430c5b",
+  "rawTextureUuid": "68317fd2-bfc2-4472-a883-fc8daf0a9765",
   "size": {
     "width": 64,
     "height": 64
@@ -10,8 +10,8 @@
   "subMetas": {
     "0.png": {
       "ver": "1.0.4",
-      "uuid": "8b949c89-aff8-4241-894c-cb20a27440ab",
-      "rawTextureUuid": "a2c7f260-5185-4b5e-9807-add09bce7b35",
+      "uuid": "5e4343dc-62e2-4cfa-8f9e-19fc9510f6f8",
+      "rawTextureUuid": "68317fd2-bfc2-4472-a883-fc8daf0a9765",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

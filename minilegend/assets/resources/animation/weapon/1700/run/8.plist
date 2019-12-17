@@ -7,39 +7,39 @@
             <key>0.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{108,0},{10,40}}</string>
+                <string>{{108,0},{10,42}}</string>
                 <key>offset</key>
                 <string>{36,-55}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{287,291},{10,40}}</string>
+                <string>{{287,290},{10,42}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
             <key>1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{98,90},{26,78}}</string>
+                <string>{{98,90},{26,80}}</string>
                 <key>offset</key>
-                <string>{29,-26}</string>
+                <string>{29,-25}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{272,243},{26,78}}</string>
+                <string>{{272,241},{26,80}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
             <key>2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,0},{42,106}}</string>
+                <string>{{0,46},{42,106}}</string>
                 <key>offset</key>
-                <string>{19,3}</string>
+                <string>{20,3}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{254,200},{42,106}}</string>
+                <string>{{255,200},{42,106}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
@@ -59,20 +59,20 @@
             <key>4.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,44},{44,104}}</string>
+                <string>{{0,0},{44,106}}</string>
                 <key>offset</key>
                 <string>{17,4}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{251,200},{44,104}}</string>
+                <string>{{251,199},{44,106}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
             <key>5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,170},{36,72}}</string>
+                <string>{{0,172},{36,72}}</string>
                 <key>offset</key>
                 <string>{23,-28}</string>
                 <key>rotated</key>
@@ -92,7 +92,7 @@
             <key>size</key>
             <string>{128,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:353b3da6416cdc05900684d846a1c95b$</string>
+            <string>$TexturePacker:SmartUpdate:970522b7d9fad105389e1ab206c67f63$</string>
             <key>textureFileName</key>
             <string>8.png</string>
         </dict>

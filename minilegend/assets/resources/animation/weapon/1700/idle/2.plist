@@ -7,7 +7,7 @@
             <key>0.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{12,0},{10,94}}</string>
+                <string>{{36,0},{10,94}}</string>
                 <key>offset</key>
                 <string>{10,-94}</string>
                 <key>rotated</key>
@@ -20,7 +20,33 @@
             <key>1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,0},{10,94}}</string>
+                <string>{{0,0},{10,96}}</string>
+                <key>offset</key>
+                <string>{10,-93}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{261,301},{10,96}}</string>
+                <key>sourceSize</key>
+                <string>{512,512}</string>
+            </dict>
+            <key>2.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{24,0},{10,94}}</string>
+                <key>offset</key>
+                <string>{10,-94}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{261,303},{10,94}}</string>
+                <key>sourceSize</key>
+                <string>{512,512}</string>
+            </dict>
+            <key>3.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{12,0},{10,94}}</string>
                 <key>offset</key>
                 <string>{10,-94}</string>
                 <key>rotated</key>
@@ -38,9 +64,9 @@
             <key>realTextureFileName</key>
             <string>2.png</string>
             <key>size</key>
-            <string>{32,128}</string>
+            <string>{64,128}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:725d7f6c576b69f37f20589acf6c9ba3$</string>
+            <string>$TexturePacker:SmartUpdate:b25d151a7b428ebbcc2f94ff6386c132$</string>
             <key>textureFileName</key>
             <string>2.png</string>
         </dict>

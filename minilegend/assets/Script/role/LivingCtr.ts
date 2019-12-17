@@ -14,20 +14,36 @@ export default class LivingCtr<T extends livingMod> extends cc.Component {
 
     protected _model: T = null;
     public state: ActState = ActState.IDLE;
-    protected _lastDir: number = 2;
+    lastDir: number = 2;
+    resid : number = 3800;
+    weapon_res_id: number = 0; // 武器id
 
     start() {
         this.runAction();
+        if(this.weapon_res_id == 0){
+            let weaponNode = this.node.getChildByName("weapon");
+            weaponNode.active = false;
+        }
     }
 
     async runAction(dir: number = 2, act: number = ActState.IDLE) {
-        if (this.state == act && this._lastDir == dir) {
+        if (this.state == act && this.lastDir == dir) {
             return;
         }
 
-        this._lastDir = dir;
+        this.lastDir = dir;
         this.state = act;
-        let curClip = await gameAnimation("role", 3800, act, dir);
+        let curClip = await gameAnimation("role", this.resid, act, dir);
+
+        if(this.weapon_res_id != 0){
+            let weaponClip = await gameAnimation("weapon", this.weapon_res_id, this.state, this.lastDir);
+            let weaponNode = this.node.parent.getChildByName("weapon");
+            weaponNode.zIndex = (dir == 1 || dir == 4 || dir == 7 ) ? -1 : 1;
+            let weaponAni = weaponNode.getComponent(cc.Animation);
+            weaponAni.addClip(weaponClip);
+            weaponAni.play(weaponClip.name);
+        }
+
         let addonani = this.node.getComponent(cc.Animation);
         addonani.addClip(curClip);
         addonani.play(curClip.name);
@@ -36,6 +52,7 @@ export default class LivingCtr<T extends livingMod> extends cc.Component {
     setModel(model) {
         this._model = model;
     }
+
     getModel(): T {
         return this._model;
     }
@@ -46,7 +63,7 @@ export default class LivingCtr<T extends livingMod> extends cc.Component {
 
     idle(dir: number = null) {
         if (dir == null) {
-            dir = this._lastDir;
+            dir = this.lastDir;
         }
         this.runAction(dir);
     }

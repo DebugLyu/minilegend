@@ -1,5 +1,6 @@
 import PlayerMod from "./PlayerMod";
 import WarriorCtr from "./WarriorCtr";
+import { gameAnimation } from "../common/gFunc";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -8,15 +9,14 @@ const { ccclass, property, menu } = cc._decorator;
 export default class PlayerCtr<T extends PlayerMod> extends WarriorCtr<T> {
     
     // private model: PlayerMod = new PlayerMod(this);
+    
 
     start() {
         this.setModel(new PlayerMod(this));
-        this.runAction();
+        this.weapon_res_id = 1700;
+        super.start();
     }
 
-    update(dt){
-        super.update(dt);
-    }
 
     ptest(){
         

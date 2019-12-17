@@ -7,7 +7,7 @@
             <key>0.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{12,0},{10,62}}</string>
+                <string>{{36,0},{10,62}}</string>
                 <key>offset</key>
                 <string>{36,-38}</string>
                 <key>rotated</key>
@@ -20,13 +20,39 @@
             <key>1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,0},{10,62}}</string>
+                <string>{{24,0},{10,62}}</string>
                 <key>offset</key>
                 <string>{36,-38}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
                 <string>{{287,263},{10,62}}</string>
+                <key>sourceSize</key>
+                <string>{512,512}</string>
+            </dict>
+            <key>2.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{12,0},{10,64}}</string>
+                <key>offset</key>
+                <string>{36,-37}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{287,261},{10,64}}</string>
+                <key>sourceSize</key>
+                <string>{512,512}</string>
+            </dict>
+            <key>3.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{0,0},{10,64}}</string>
+                <key>offset</key>
+                <string>{36,-38}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{287,262},{10,64}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
@@ -38,9 +64,9 @@
             <key>realTextureFileName</key>
             <string>8.png</string>
             <key>size</key>
-            <string>{32,64}</string>
+            <string>{64,64}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:293de4772910b887ab01682067c9d06a$</string>
+            <string>$TexturePacker:SmartUpdate:5f13b872413ec9fe040c2d960668379d$</string>
             <key>textureFileName</key>
             <string>8.png</string>
         </dict>

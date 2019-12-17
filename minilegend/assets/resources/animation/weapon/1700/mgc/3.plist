@@ -22,11 +22,11 @@
                 <key>frame</key>
                 <string>{{0,100},{44,96}}</string>
                 <key>offset</key>
-                <string>{27,-8}</string>
+                <string>{28,-8}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{261,216},{44,96}}</string>
+                <string>{{262,216},{44,96}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
@@ -35,11 +35,11 @@
                 <key>frame</key>
                 <string>{{0,0},{70,98}}</string>
                 <key>offset</key>
-                <string>{12,8}</string>
+                <string>{12,7}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{233,199},{70,98}}</string>
+                <string>{{233,200},{70,98}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
@@ -48,11 +48,11 @@
                 <key>frame</key>
                 <string>{{110,0},{30,72}}</string>
                 <key>offset</key>
-                <string>{7,13}</string>
+                <string>{8,13}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{248,207},{30,72}}</string>
+                <string>{{249,207},{30,72}}</string>
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
@@ -92,7 +92,7 @@
             <key>size</key>
             <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:066829829a9d937adfbfaa29ee7a3428$</string>
+            <string>$TexturePacker:SmartUpdate:5a743eeec3bc2ebe867f421b674aebae$</string>
             <key>textureFileName</key>
             <string>3.png</string>
         </dict>
