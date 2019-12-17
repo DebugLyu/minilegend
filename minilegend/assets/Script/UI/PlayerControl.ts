@@ -1,7 +1,10 @@
 import PlayerCtr from "../role/playerCtr";
-const { ccclass, property } = cc._decorator;
+import {degree2Dir} from "../common/G";
+
+const { ccclass, property, menu} = cc._decorator;
 
 @ccclass
+@menu("ui/playerControl")
 export default class PlayerControl extends cc.Component {
 
     @property(PlayerCtr)
@@ -39,7 +42,7 @@ export default class PlayerControl extends cc.Component {
         }
         let beganPos = event.getLocation();
         let drawPos: cc.Vec2 = this.controlNode.convertToNodeSpaceAR(beganPos);
-        let c = this.controlNode.position;
+        // let c = this.controlNode.position;
         let r = 100;
         let len = drawPos.mag();
 
@@ -50,25 +53,7 @@ export default class PlayerControl extends cc.Component {
         this._controlSpr.setPosition(drawPos);
         let angle = drawPos.signAngle(cc.v2(1, 0));
         let degree = angle / Math.PI * 180;
-        let dir = 2;
-        if (degree >= -22.5 && degree < 22.5) {
-            dir = 6;
-        } else if (degree >= 22.5 && degree < 67.5) {
-            dir = 3;
-        } else if (degree >= 67.5 && degree < 112.5) {
-            dir = 2;
-        } else if (degree >= 112.5 && degree < 157.5) {
-            dir = 1;
-        } else if (degree >= 157.5 && degree <= 180 || degree > -180 && degree < -157.5) {
-            dir = 4;
-        } else if (degree > -157.5 && degree < -112.5) {
-            dir = 7;
-        } else if (degree > -112.5 && degree < -67.5) {
-            dir = 8;
-        } else if (degree > -67.5 && degree < -22.5) {
-            dir = 9;
-        }
-        this.player.move(dir);
+        this.player.move(degree2Dir(degree));
     }
 
     touchEnd(event) {

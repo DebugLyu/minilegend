@@ -1,5 +1,5 @@
 import WarriorMod from "./WarriorMod";
-import { G } from "../common/G";
+import { LivingType } from "../common/G";
 import PlayerCtr from "./playerCtr";
 
 export default class PlayerMod<T extends PlayerCtr> extends WarriorMod<T> {
@@ -7,6 +7,11 @@ export default class PlayerMod<T extends PlayerCtr> extends WarriorMod<T> {
 
     //resid: number = 0; // 资源id
     weapon: number = 0; // 武器id
+
+    init(){
+        super.init();
+        this.livingType = LivingType.PLAYER;
+    }
 
     test(){
         this.control.dead();

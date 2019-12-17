@@ -15,6 +15,11 @@ export default class Thing<T> {
         if(control != null){
             this.control = control;
         }
+        this.init();
+    }
+
+    init(){
+
     }
     
     setControl(control: T) {

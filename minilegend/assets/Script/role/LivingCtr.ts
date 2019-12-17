@@ -5,11 +5,12 @@ const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("role/LivingCtr")
+
 export default class LivingCtr extends cc.Component {
     @property(cc.Label)
     roleName: cc.Label = null;
     
-    public _model: any = null;
+    protected _model: any = null;
     private _lastDir : number = 2;
     private _lastAct : string = "idle";
 
@@ -30,8 +31,11 @@ export default class LivingCtr extends cc.Component {
         addonani.play(curClip.name);
     }
 
-    setModel<T>(model:T){
+    setModel(model){
         this._model = model;
+    }
+    getModel(): livingMod<this> {
+        return this._model;
     }
 
     updateAvatar(){

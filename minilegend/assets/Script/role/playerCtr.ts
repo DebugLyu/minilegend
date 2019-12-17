@@ -1,5 +1,6 @@
 import PlayerMod from "./PlayerMod";
 import WarriorCtr from "./WarriorCtr";
+import livingMod from "./livingMod";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -14,10 +15,15 @@ export default class PlayerCtr extends WarriorCtr {
         this.runAction();
     }
 
-    
-    // update (dt) {}
+    getModel():PlayerMod<this>{
+        return this._model;
+    }
 
     test(){
-        this._model.weapon = 1;
+        
+    }
+
+    ptest(){
+
     }
 }
