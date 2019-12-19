@@ -1,4 +1,4 @@
-import { Cell } from "../common/G";
+import { Gird } from "../common/G";
 
 export class StageData {
 	stageid: number = 0;
@@ -54,12 +54,12 @@ export default class MapMgr {
 	}
 
 	public static pixPos2GirdPos(pixpos: cc.Vec2): cc.Vec2{
-		let x = Math.floor(pixpos.x / Cell.width);
-		let y = Math.floor(pixpos.y / Cell.height);
+		let x = Math.floor(pixpos.x / Gird.width);
+		let y = Math.floor(pixpos.y / Gird.height);
 		return cc.v2(x, y);
 	}
 
 	public static GirdPos2pixPos(girdpos: cc.Vec2): cc.Vec2{
-		return cc.v2(girdpos.x * Cell.width, girdpos.y * Cell.height);
+		return cc.v2(girdpos.x * Gird.width, girdpos.y * Gird.height);
 	}
 }

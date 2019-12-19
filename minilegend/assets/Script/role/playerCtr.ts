@@ -8,9 +8,7 @@ const { ccclass, property, menu } = cc._decorator;
 @ccclass
 @menu("role/PlayerCtr")
 export default class PlayerCtr extends WarriorCtr {
-    @property(Stage)
-    stage: Stage = null;
-
+    
     get model(): PlayerMod {
         return <PlayerMod>this._model;
     }
@@ -32,26 +30,5 @@ export default class PlayerCtr extends WarriorCtr {
 
     ptest() {
         this.model.test();
-    }
-
-    enterMap(mapid?: number){
-        this.model.mapid = mapid;
-        this.stage.loadMap(mapid, true);
-        // this.enterStage
-    }
-
-    enterStage(stageid: number) {
-        if(this.model.stageid == stageid){
-            return;
-        }
-
-        let mapdata = MapMgr.getInstance().getMapData(this.model.mapid);
-        let stagedata = mapdata.stageList[stageid];
-        if (stagedata) {
-            this.model.stageid = stageid;
-            this.node.setPosition(cc.v2(stagedata.startPos.x, stagedata.startPos.y));
-
-            this.stage.loadStage(stageid);
-        }
     }
 }

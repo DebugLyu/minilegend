@@ -17,10 +17,11 @@ export default class Stage extends cc.Component {
 	stageData: StageData = null;
 
 	@property(Role)
-	player: Role = null;
-
+	role:Role = null;
 
 	start() {
+		this.role = cc.find("rolebg", this.node).getComponent("Role");
+
 		RootPos = cc.v2(-cc.winSize.width / 2, -cc.winSize.height / 2);
 		this.node.setPosition(RootPos);
 		// cc.log(root_pos);
@@ -52,7 +53,7 @@ export default class Stage extends cc.Component {
 		this.mapData = MapMgr.getInstance().getMapData(mapid);
 
 		if(enter){
-			this.player.role.enterStage(this.mapData.startStage);
+			this.role.enterStage(this.mapData.startStage);
 		}
 		// this.loadStage(this.mapData.startStage);
 	}
@@ -65,7 +66,7 @@ export default class Stage extends cc.Component {
 	}
 
 	update(dt) {
-		if (this.player.role.state == ActState.IDLE) {
+		if (this.role.warrior.state == ActState.IDLE) {
 			return;
 		}
 		this.checkPlayerPos();
@@ -73,7 +74,7 @@ export default class Stage extends cc.Component {
 	}
 
 	checkPlayerPos() {
-		let ppos = this.player.node.position;
+		let ppos = this.role.node.position;
 		let topos = cc.v2(-ppos.x, -ppos.y);
 		if (topos.x > RootPos.x) {
 			topos.x = RootPos.x;

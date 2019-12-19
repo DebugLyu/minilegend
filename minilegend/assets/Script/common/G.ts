@@ -3,6 +3,11 @@ export const Cell = {
 	height: 256,
 }
 
+export const Gird = {
+	width : 40,
+	height: 40,
+}
+
 export enum LivingType {
 	NOTHING = 0,
 	OBJECT,
@@ -73,7 +78,7 @@ export enum AttrIds {
 export class Attribute {
 	[AttrIds.Attack]: number = 0;
 	[AttrIds.MaxHp]: number = 0;
-	[AttrIds.Speed]: number = 300;
+	[AttrIds.Speed]: number = 240;
 	[AttrIds.Attack]: number = 0;
 	[AttrIds.Defense]: number = 0;
 	[AttrIds.Mattack]: number = 0;
