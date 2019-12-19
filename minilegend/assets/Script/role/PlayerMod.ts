@@ -1,10 +1,9 @@
 import WarriorMod from "./WarriorMod";
 import { LivingType } from "../common/G";
-import PlayerCtr from "./playerCtr";
+import PlayerCtr from "./PlayerCtr";
 
 export default class PlayerMod extends WarriorMod {
     playerid: number = 0;// 玩家id
-    //resid: number = 0; // 资源id
    
 
     init(){
@@ -13,7 +12,7 @@ export default class PlayerMod extends WarriorMod {
     }
 
     get control(): PlayerCtr<PlayerMod> {
-        return this._control;
+        return this.control;
     }
 
     test(){

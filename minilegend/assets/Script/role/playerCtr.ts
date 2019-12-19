@@ -1,6 +1,5 @@
 import PlayerMod from "./PlayerMod";
 import WarriorCtr from "./WarriorCtr";
-import { gameAnimation } from "../common/gFunc";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -8,15 +7,20 @@ const { ccclass, property, menu } = cc._decorator;
 @menu("role/PlayerCtr")
 export default class PlayerCtr<T extends PlayerMod> extends WarriorCtr<T> {
     
-    // private model: PlayerMod = new PlayerMod(this);
-    
-
-    start() {
+    onLoad(){
+        super.onLoad();
         this.setModel(new PlayerMod(this));
-        this.weapon_res_id = 1700;
-        super.start();
+        this.weaponResId = 1700;
     }
 
+    start(){
+        // 测试用 资源id 设置了 资源id 就可以形成动画了
+        this.resId = 3800;
+    }
+
+    init(){
+        
+    }
 
     ptest(){
         

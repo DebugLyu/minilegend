@@ -6,14 +6,14 @@ export default class Thing {
     y: number = 0;
 
     // 场景实物脚本
-    _control: any = null;
+    control: any = null;
 
     /**
      *
      */
     constructor(control?) {
         if(control != null){
-            this._control = control;
+            this.control = control;
         }
         this.init();
     }
@@ -23,10 +23,6 @@ export default class Thing {
     }
     
     setControl(control) {
-        this._control = control;
-    }
-
-    setMap(mapid: number) {
-        this.mapid = mapid;
+        this.control = control;
     }
 }

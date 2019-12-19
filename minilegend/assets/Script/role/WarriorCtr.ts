@@ -8,8 +8,6 @@ const { ccclass, property, menu } = cc._decorator;
 @menu("role/WarriorCtr")
 export default class WarriorCtr<T extends WarriorMod> extends LivingCtr<T> {
 
-
-
     move(dir: number) {
         this.runAction(dir, ActState.RUN);
     }

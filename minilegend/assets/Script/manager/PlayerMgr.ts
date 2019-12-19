@@ -2,40 +2,40 @@ import PlayerMod from "../role/PlayerMod";
 
 export default class PlayerMgr {
 	// 单例
-	private static _instance: PlayerMgr = null;
+	private static instance: PlayerMgr = null;
 	public static getInstance(): PlayerMgr {
-		if (this._instance == null) {
-			this._instance = new PlayerMgr();
+		if (this.instance == null) {
+			this.instance = new PlayerMgr();
 		}
-		return this._instance;
+		return this.instance;
 	}
 
 
 	// 玩家数据列表
-	private _player_list: {[key:number]: PlayerMod} = {};
+	private playerList = new Map<number, PlayerMod>();// {[key:number]: PlayerMod} = {};
 	// 玩家id列表对应 数据列表
-	private _player_pid_list: {[key:number]: number} = {};
+	private playerPidList = new Map<number, number>();
 
 	addPlayer(player: PlayerMod){
-		this._player_list[player.onlyid] = player;
-		this._player_pid_list[player.playerid] = player.onlyid;
+		this.playerList[player.onlyid] = player;
+		this.playerPidList[player.playerid] = player.onlyid;
 	}
 
 	getPlayerByOnlyId(onlyid:number): PlayerMod {
-		return this._player_list[onlyid];
+		return this.playerList[onlyid];
 	}
 
 	getPlayerByPlayerId(pid: number): PlayerMod {
-		let onlyid = this._player_pid_list[pid];
+		let onlyid = this.playerPidList[pid];
 		if(onlyid != null){
-			return this._player_list[onlyid];
+			return this.playerList[onlyid];
 		}
 		return null;
 	}
 
 	delPlayer(pid: number){
-		if(this._player_list[pid]){
-			delete this._player_list[pid];
+		if(this.playerList[pid]){
+			delete this.playerList[pid];
 		}
 	}
 }

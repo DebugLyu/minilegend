@@ -26,17 +26,16 @@ export class MapData{
 }
 
 export default class MapMgr {
-	private static _instance: MapMgr = null
+	private static instance: MapMgr = null
 	public static getInstance(): MapMgr {
-		if (this._instance == null) {
-			this._instance = new MapMgr();
+		if (this.instance == null) {
+			this.instance = new MapMgr();
 
 		}
-		return this._instance;
+		return this.instance;
 	}
 
-	private _cur_stage_id: number = 0;
-	private _map_data: { [index: number]: MapData } = {};
+	private _map_data = new Map<number, MapData>(); //{ [index: number]: MapData } = {};
 
 	init() {
 		cc.loader.loadRes("prop_data/prop_stage", cc.JsonAsset, (error: Error, resource) => {

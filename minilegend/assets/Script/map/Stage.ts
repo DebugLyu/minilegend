@@ -1,5 +1,5 @@
 import StageMgr from "../manager/MapMgr";
-import PlayerCtr from "../role/playerCtr";
+import PlayerCtr from "../role/PlayerCtr";
 import PlayerMod from "../role/PlayerMod";
 import { ActState } from "../common/G";
 
@@ -53,6 +53,4 @@ export default class Stage extends cc.Component {
 
 		this.node.setPosition(topos);
 	}
-
-
 }

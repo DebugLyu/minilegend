@@ -20,21 +20,21 @@ export default class Role extends cc.Component {
         let len = this.role.getModel().speed * dt;
         let xie = 0.75;
         let x = 0, y = 0;
-        if (this.role.lastDir == 1) {
+        if (this.role.dir == 1) {
             x = y = -xie;
-        } else if (this.role.lastDir == 2) {
+        } else if (this.role.dir == 2) {
             x = 0; y = -1;
-        } else if (this.role.lastDir == 3) {
+        } else if (this.role.dir == 3) {
             x = xie; y = -xie;
-        } else if (this.role.lastDir == 4) {
+        } else if (this.role.dir == 4) {
             x = -1; y = 0;
-        } else if (this.role.lastDir == 6) {
+        } else if (this.role.dir == 6) {
             x = 1; y = 0;
-        } else if (this.role.lastDir == 7) {
+        } else if (this.role.dir == 7) {
             x = -xie; y = xie;
-        } else if (this.role.lastDir == 8) {
+        } else if (this.role.dir == 8) {
             x = 0; y = 1;
-        } else if (this.role.lastDir == 9) {
+        } else if (this.role.dir == 9) {
             x = xie; y = xie;
         }
         let pos = this.node.position.add(cc.v2(x * len, y * len));

@@ -1,29 +1,35 @@
 import livingMod from "./LivingMod";
+import { Attribute, AttrIds } from "../common/G";
 
 export default class WarriorMod extends livingMod {
-	hp: number = 0;
+    // 属性值
+    attr: Attribute = new Attribute();
+    // 是否死亡
     isdead : boolean = false;
+    // 技能列表
+    skillList: number[];
 
-    speed: number = 300;
-
-
-    setHp(hp: number){
-        this.hp = hp;
+    
+    set hp(hp: number){
+        this.attr[AttrIds.Hp] = hp;
         this.checkHp();
     }
-
-    subHp(hp: number){
-        this.hp -= hp;
-        this.checkHp();
+    get hp(): number{
+        return this.attr[AttrIds.Hp];
     }
-
+    
     dead(){
+        this.attr[AttrIds.Hp] = 0;
         this.isdead = true;
     }
 
     checkHp(){
         if(this.hp <= 0){
-            this.dead;
+            this.dead();
         }
+    }
+
+    getAttr(attrid: AttrIds): number{
+        return this.attr[attrid];
     }
 }

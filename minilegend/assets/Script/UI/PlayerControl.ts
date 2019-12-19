@@ -1,8 +1,8 @@
-import PlayerCtr from "../role/playerCtr";
-import {degree2Dir} from "../common/G";
+import PlayerCtr from "../role/PlayerCtr";
+import { degree2Dir } from "../common/gFunc";
 import PlayerMod from "../role/PlayerMod";
 
-const { ccclass, property, menu} = cc._decorator;
+const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("ui/playerControl")
