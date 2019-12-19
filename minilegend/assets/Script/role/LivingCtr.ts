@@ -2,20 +2,16 @@ import { gameAnimation } from "../common/gFunc";
 import livingMod from "./LivingMod";
 import { ActState } from "../common/G";
 
-
 const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("role/LivingCtr")
-export default class LivingCtr<T extends livingMod> extends cc.Component {
-    @property(cc.Label)
-    roleName: cc.Label = null;
-
-    model: T = null;
+export default class LivingCtr extends cc.Component {
+    protected _model: livingMod = null;
     // 当前状态
     state: ActState = ActState.IDLE;
-    // 当前方向
-    dir: number = 2;
+    // 当前方向 0：未初始化状态
+    dir: number = 0;
     // 资源id
     private _resid:number = 0;
     set resId(resid:number){
@@ -33,8 +29,13 @@ export default class LivingCtr<T extends livingMod> extends cc.Component {
     }
     set weaponResId(wResid: number){
         this._weaponResId = wResid;
-        let weaponNode = this.node.getChildByName("weapon");
-        weaponNode.active = this._weaponResId == 0;
+        this.weaponNode.active = this._weaponResId == 0;
+    }
+
+    // 武器节点
+    weaponNode: cc.Node = null;
+    onLoad(){
+        this.weaponNode = this.node.parent.getChildByName("weapon");
     }
     
     start() {
@@ -56,9 +57,8 @@ export default class LivingCtr<T extends livingMod> extends cc.Component {
 
         if(this.weaponResId != 0){
             let weaponClip = await gameAnimation("weapon", this.weaponResId, this.state, this.dir);
-            let weaponNode = this.node.parent.getChildByName("weapon");
-            weaponNode.zIndex = (dir == 1 || dir == 4 || dir == 7 ) ? -1 : 1;
-            let weaponAni = weaponNode.getComponent(cc.Animation);
+            this.weaponNode.zIndex = (dir == 1 || dir == 4 || dir == 7 ) ? -1 : 1;
+            let weaponAni = this.weaponNode.getComponent(cc.Animation);
             weaponAni.addClip(weaponClip);
             weaponAni.play(weaponClip.name);
         }
@@ -69,11 +69,11 @@ export default class LivingCtr<T extends livingMod> extends cc.Component {
     }
 
     setModel(model) {
-        this.model = model;
+        this._model = model;
     }
 
-    getModel(): T {
-        return this.model;
+    get model(): livingMod {
+        return this._model;
     }
 
     updateAvatar() {

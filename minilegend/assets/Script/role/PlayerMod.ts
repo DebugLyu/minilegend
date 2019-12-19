@@ -5,18 +5,16 @@ import PlayerCtr from "./PlayerCtr";
 export default class PlayerMod extends WarriorMod {
     playerid: number = 0;// 玩家id
    
+    get control(): PlayerCtr{
+        return <PlayerCtr>this._control;
+    }
 
     init(){
         super.init();
         this.livingType = LivingType.PLAYER;
     }
 
-    get control(): PlayerCtr<PlayerMod> {
-        return this.control;
-    }
-
     test(){
         this.control.dead();
-        
     }
 }

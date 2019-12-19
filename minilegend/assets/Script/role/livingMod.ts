@@ -6,14 +6,15 @@ export default class LivingMod extends Thing {
     name: string = "";
     // 类型
     livingType: LivingType = LivingType.NOTHING;
-    
 
-    get control(): LivingCtr<LivingMod> {
-        return this.control;
+    protected _control: LivingCtr = null;
+
+    constructor(control?: LivingCtr){
+        super();
+        this._control = control;
     }
-
-    init(){
-        super.init();
+    
+    init() {
         this.livingType = LivingType.OBJECT;
     }
 }

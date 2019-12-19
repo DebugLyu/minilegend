@@ -32,4 +32,6 @@ export default class WarriorMod extends livingMod {
     getAttr(attrid: AttrIds): number{
         return this.attr[attrid];
     }
+
+
 }

@@ -1,3 +1,7 @@
+export const Cell = {
+	width: 256,
+	height: 256,
+}
 
 export enum LivingType {
 	NOTHING = 0,
@@ -24,30 +28,28 @@ export enum SkillType {
 }
 
 export enum SkillActType {
-	active  = 0,
+	active = 0,
 	passive,
 }
 
-export const SkillInfo = {
-	SkillIds : {
-		NormalAttack: 10000, // 普通攻击
-		GongShaJianFa: 10001,// 攻杀剑法
-		LeiDianShu: 20001,//雷电术
-		LingHunHuoFu: 30001, // 灵魂火符
-	},
-	
-	SkillName : {
-		[this.SkillIds.NormalAttack]: "普通攻击",
-		[this.SkillIds.GongShaJianFa]: "攻杀剑法",
-		[this.SkillIds.LeiDianShu]: "雷电术",
-		[this.SkillIds.LingHunHuoFu]: "灵魂火符",
-	},
-	SkillDesc : {
-		[this.SkillIds.NormalAttack]: "普通攻击",
-		[this.SkillIds.GongShaJianFa]: "攻杀剑法",
-		[this.SkillIds.LeiDianShu]: "雷电术",
-		[this.SkillIds.LingHunHuoFu]: "灵魂火符",
-	}
+export const SkillIds = {
+	NormalAttack: 10000, // 普通攻击
+	GongShaJianFa: 10001,// 攻杀剑法
+	LeiDianShu: 20001,//雷电术
+	LingHunHuoFu: 30001, // 灵魂火符
+}
+
+export const SkillName = {
+	[SkillIds.NormalAttack]: "普通攻击",
+	[SkillIds.GongShaJianFa]: "攻杀剑法",
+	[SkillIds.LeiDianShu]: "雷电术",
+	[SkillIds.LingHunHuoFu]: "灵魂火符",
+}
+export const SkillDesc = {
+	[SkillIds.NormalAttack]: "普通攻击",
+	[SkillIds.GongShaJianFa]: "攻杀剑法",
+	[SkillIds.LeiDianShu]: "雷电术",
+	[SkillIds.LingHunHuoFu]: "灵魂火符",
 }
 
 export enum AtkType {
@@ -69,13 +71,13 @@ export enum AttrIds {
 }
 
 export class Attribute {
-	[AttrIds.Attack] : number = 0;
-	[AttrIds.MaxHp] : number = 0;
-	[AttrIds.Speed] : number = 300;
-	[AttrIds.Attack] : number = 0;
-	[AttrIds.Defense] : number = 0;
-	[AttrIds.Mattack] : number = 0;
-	[AttrIds.Mdefense] : number = 0;
-	[AttrIds.Dattack] : number = 0;
-	[AttrIds.Ddefense] : number = 0;
+	[AttrIds.Attack]: number = 0;
+	[AttrIds.MaxHp]: number = 0;
+	[AttrIds.Speed]: number = 300;
+	[AttrIds.Attack]: number = 0;
+	[AttrIds.Defense]: number = 0;
+	[AttrIds.Mattack]: number = 0;
+	[AttrIds.Mdefense]: number = 0;
+	[AttrIds.Dattack]: number = 0;
+	[AttrIds.Ddefense]: number = 0;
 }

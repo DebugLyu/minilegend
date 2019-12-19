@@ -7,7 +7,7 @@ const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("role/MonsterCtr")
-export default class MonsterCtr<T extends WarriorMod> extends WarriorCtr<T> {
+export default class MonsterCtr extends WarriorCtr {
     
     data:MonsterData = null;
 
@@ -27,5 +27,8 @@ export default class MonsterCtr<T extends WarriorMod> extends WarriorCtr<T> {
         }
     }
 
-    
+    testCtr(){
+        console.log("test monster control");
+        
+    }
 }

@@ -40,7 +40,7 @@ export function degree2Dir(degree: number): number {
 	 * @param act 动作标识 atk攻击 die死亡 idle等待 mgc施法 ratk攻击等待 run移动
 	 * @param dir 方向id 参考小键盘
 	 */
-let role_animation_list: cc.AnimationClip[] = [];
+// let role_animation_list: cc.AnimationClip[] = [];
 export async function gameAnimation(restype: string, resid: Number, act: ActState, dir: Number) {
 	let actstr = actState2Str(act);
 	let animation_key = `animation/${restype}/${resid}/${actstr}/${dir}`;
@@ -55,8 +55,21 @@ export async function gameAnimation(restype: string, resid: Number, act: ActStat
 			let curClip = cc.AnimationClip.createWithSpriteFrames(frames, 10);
 			curClip.name = act + String(dir);
 			curClip.wrapMode = cc.WrapMode.Loop;
-			role_animation_list[animation_key] = curClip;
+			// role_animation_list[animation_key] = curClip;
 			resolve(curClip);
+		});
+	});
+}
+
+export async function gameMapSpr(mapid: number, x: number, y: number) {
+	let res_key = `map/jpg/${mapid}/${mapid}_${y}_${x}`;
+	return new Promise<cc.SpriteFrame>((resolve, reject) => {
+		cc.loader.loadRes(res_key, cc.SpriteFrame, (err, spr) => {
+			if(err){
+				cc.log(err);
+			}else{
+				resolve(spr);
+			}
 		});
 	});
 }

@@ -1,6 +1,7 @@
-import { ActState } from "../common/G";
-import WarriorCtr from "./WarriorCtr";
-import WarriorMod from "./WarriorMod";
+import { ActState, AttrIds } from "../common/G";
+
+import PlayerCtr from "./PlayerCtr";
+import MapMgr from "../manager/MapMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -8,16 +9,15 @@ const { ccclass, property, menu } = cc._decorator;
 @menu("role/Role")
 
 export default class Role extends cc.Component {
-	
-	@property(WarriorCtr)
-	role: WarriorCtr<WarriorMod> = null;
+    @property(PlayerCtr)
+    role: PlayerCtr = null;
 
     update(dt) {
         if (this.role.state == ActState.IDLE) {
             return;
         }
 
-        let len = this.role.getModel().speed * dt;
+        let len = this.role.model.attr[AttrIds.Speed] * dt;
         let xie = 0.75;
         let x = 0, y = 0;
         if (this.role.dir == 1) {
@@ -37,22 +37,54 @@ export default class Role extends cc.Component {
         } else if (this.role.dir == 9) {
             x = xie; y = xie;
         }
-        let pos = this.node.position.add(cc.v2(x * len, y * len));
-        
+        let ppos = this.node.position;
+        let apos = cc.v2(x * len, y * len);
+        let npos = ppos.add(apos);
 
-        if(pos.x < 0){
-            pos.x = 0;
-        }
-        if(pos.x > this.node.parent.width){
-            pos.x = this.node.parent.width;
-        }
-        if(pos.y < 0){
-            pos.y = 0;
-        }
-        if(pos.y > this.node.parent.height){
-            pos.y = this.node.parent.height;
+
+
+
+        let stagedata = MapMgr.getInstance().getStageData(this.role.model.mapid, this.role.model.stageid);
+        if (stagedata) {
+            // 先判断 下一点
+            let nc_pos = MapMgr.pixPos2GirdPos(npos);
+            let grid = stagedata.mapInfo[nc_pos.x][nc_pos.y];
+            if (grid == 0) {
+                console.log("bukezou 111111");
+                
+                apos = cc.v2(x * len, 0);
+                npos = ppos.add(apos);
+
+                nc_pos = MapMgr.pixPos2GirdPos(npos);
+                grid = stagedata.mapInfo[nc_pos.x][nc_pos.y];
+
+                if (grid < 1) {
+                    console.log("bukezou 22222222");
+                    apos = cc.v2(0, y * len);
+                    npos = ppos.add(apos);
+
+                    nc_pos = MapMgr.pixPos2GirdPos(npos);
+                    grid = stagedata.mapInfo[nc_pos.x][nc_pos.y];
+                    if(grid < 1){
+                        console.log("bukezou 333333333");
+                        npos = ppos;
+                    }
+                }
+            }
         }
 
-        this.node.setPosition(pos);
+        if (npos.x < 0) {
+            npos.x = 0;
+        } else if (npos.x > this.node.parent.width) {
+            npos.x = this.node.parent.width;
+        } else if (npos.y < 0) {
+            npos.y = 0;
+        } else if (npos.y > this.node.parent.height) {
+            npos.y = this.node.parent.height;
+        }
+
+
+
+        this.node.setPosition(npos);
     }
 }

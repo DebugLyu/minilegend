@@ -1,3 +1,4 @@
+import { Cell } from "../common/G";
 
 export class StageData {
 	stageid: number = 0;
@@ -11,7 +12,7 @@ export class StageData {
 	name:string = "";
 	startPos: { x:number, y:number} = {x :0, y :0};
 	trancePos:{ tomap:number, x:number, y:number } [] = [];
-	map_info:number [][] = [];
+	mapInfo:number [][] = [];
 }
 
 export class MapData{
@@ -19,10 +20,6 @@ export class MapData{
 	mapName: string = "";
 	startStage: number = 0;
 	stageList: StageData[] = [];
-
-	getStageData(stageid: number): StageData {
-		return this.stageList[stageid];
-	}
 }
 
 export default class MapMgr {
@@ -35,17 +32,17 @@ export default class MapMgr {
 		return this.instance;
 	}
 
-	private _map_data = new Map<number, MapData>(); //{ [index: number]: MapData } = {};
+	private mapDatas = new Map<number, MapData>(); //{ [index: number]: MapData } = {};
 
 	init() {
-		cc.loader.loadRes("prop_data/prop_stage", cc.JsonAsset, (error: Error, resource) => {
-			this._map_data = resource.json;
+		cc.loader.loadRes("prop_data/prop_map", cc.JsonAsset, (error: Error, resource) => {
+			this.mapDatas = resource.json;
 		});
 	}
 
 
 	getMapData(mapid:number): MapData {
-		return this._map_data[mapid];
+		return this.mapDatas[mapid];
 	}
 
 	getStageData(mapid:number, stageid:number): StageData {
@@ -54,5 +51,15 @@ export default class MapMgr {
 			return mapdata.stageList[stageid];
 		}
 		return null;
+	}
+
+	public static pixPos2GirdPos(pixpos: cc.Vec2): cc.Vec2{
+		let x = Math.floor(pixpos.x / Cell.width);
+		let y = Math.floor(pixpos.y / Cell.height);
+		return cc.v2(x, y);
+	}
+
+	public static GirdPos2pixPos(girdpos: cc.Vec2): cc.Vec2{
+		return cc.v2(girdpos.x * Cell.width, girdpos.y * Cell.height);
 	}
 }
