@@ -20,7 +20,7 @@ export enum LivingType {
 }
 // 动作状态
 export enum ActState {
-	IDLE = 0,// 待机
+	IDLE = 1,// 待机
 	RUN,// 移动
 	RATK,// 准备攻击
 	ATK,// 攻击

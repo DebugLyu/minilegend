@@ -10,7 +10,7 @@ const { ccclass, property, menu } = cc._decorator;
 export default class LivingCtr extends cc.Component {
     protected _model: livingMod = null;
     // 当前状态
-    state: ActState = ActState.IDLE;
+    state: ActState = 0;
     // 当前方向 0：未初始化状态
     dir: number = 0;
     // 资源id
@@ -34,9 +34,16 @@ export default class LivingCtr extends cc.Component {
         if (this.weapon && this.weapon.resId == 0) {
             this.weapon.node.active = false;
         }
+        this.runAction(2, ActState.IDLE);
     }
 
-    async runAction(dir: number = 2, act: number = ActState.IDLE) {
+    async runAction(dir?: number, act?: number) {
+        if(dir == null){
+            dir = this.dir;
+        }
+        if(act == null){
+            act = this.state;
+        }
         if (this.state == act && this.dir == dir) {
             return;
         }
