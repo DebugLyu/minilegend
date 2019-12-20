@@ -122,9 +122,10 @@ export default class Role extends cc.Component {
         if (degree < 0) {
             degree = 360 + degree;
         }
-        console.log("degree", degree);
-
         this.warrior.move(degree2Dir(degree));
+        setTimeout(() => {
+            this.warrior.idle();
+        }, 300);
     }
 
     checkPos(dt) {
@@ -207,8 +208,6 @@ export default class Role extends cc.Component {
             if (tryxy(0, y * len)) {
                 break;
             }
-            npos = ppos;
-            break;
         }
 
         if (npos.x < 0) {
@@ -221,7 +220,10 @@ export default class Role extends cc.Component {
             npos.y = this.node.parent.height;
         }
 
-        if (grid == 1) {
+        if (grid == 0) {
+            this.warrior.idle();
+            return;
+        } else if (grid == 1) {
             this.node.opacity = 255;
         } else if (grid == 2) {
             this.node.opacity = 100;
@@ -238,7 +240,7 @@ export default class Role extends cc.Component {
             return;
         }
         this.aiTimer += dt;
-        let dotime = Math.floor(this.aiTimer);
+        let dotime = Math.floor(this.aiTimer / 1);
         if (dotime != this.aiDo) {
             this.aiDo = dotime;
             if (this.target == null) {
@@ -249,16 +251,20 @@ export default class Role extends cc.Component {
             if (this.target == null) {
                 this.warrior.idle();
                 return;
-            }
-
-            let skill = this.model.aiSkill(cc.v2(this.target.x, this.target.y));
+            }   
+            let target_pos = cc.v2(this.target.x, this.target.y);
+            let self_pos = cc.v2(this.x, this.y);
+            let skill = this.model.aiSkill(target_pos);
             if (skill == null) {
-                this.aiMoveToTarget();
+                let len = self_pos.sub(target_pos).mag();
+                if(len > 1){
+                    this.aiMoveToTarget();
+                }
                 return;
             }
             let skillinfo = skill.getatk(this.model.attr);
 
-            let angle = cc.v2(this.x, this.y).signAngle(cc.v2(this.target.x, this.target.y));
+            let angle = self_pos.signAngle(target_pos);
             let degree = angle / Math.PI * 180;
             if (degree < 0) {
                 degree = 360 + degree;

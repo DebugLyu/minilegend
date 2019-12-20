@@ -43,7 +43,7 @@ export default class TestBattle extends cc.Component {
 
 		setTimeout(() => {
 			// for(let i = 0; i < 5; i++){
-			MonsterMgr.instance.genMonster(1000, this.stage.node, 10, 5);
+			MonsterMgr.instance.genMonster(1000, this.stage, 10, 7);
 			// }
 
 		}, 3000);
