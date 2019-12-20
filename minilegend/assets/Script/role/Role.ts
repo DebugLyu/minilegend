@@ -1,40 +1,77 @@
 import { ActState, AttrIds } from "../common/G";
-import PlayerCtr from "./PlayerCtr";
 import MapMgr from "../manager/MapMgr";
 import Stage from "../map/Stage";
 import WarriorCtr from "./WarriorCtr";
+import WeaponCtr from "./weaponCtr";
 
 const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("role/Role")
 export default class Role extends cc.Component {
-    @property(WarriorCtr)
-    warrior: WarriorCtr = null;
-
-    @property(Stage)
-    stage: Stage = null;
-
-
-    enterMap(mapid?: number) {
-        this.warrior.model.mapid = mapid;
-        this.stage.loadMap(mapid, true);
-        // this.enterStage
+    private _x: number;
+    public get x(): number {
+        return this._x;
+    }
+    public set x(v: number) {
+        this._x = v;
+        this.node.x = MapMgr.girdX2PixX(v);
     }
 
-    enterStage(stageid: number) {
+    private _y: number;
+    public get y(): number {
+        return this._y;
+    }
+    public set y(v: number) {
+        this._y = v;
+        this.node.y = MapMgr.girdY2PixY(v)
+    }
+
+    public get pixx(): number {
+        return this.node.x;
+    }
+    public set pixx(v: number) {
+        this.node.x = v;
+        this._x = MapMgr.pixX2GirdX(v);
+    }
+
+    public get pixy(): number {
+        return this.node.y;
+    }
+    public set pixy(v: number) {
+        this.node.y = v;
+        this._y = MapMgr.pixY2GirdY(v);
+    }
+
+    weapon: WeaponCtr = null;
+    warrior: WarriorCtr = null;
+    stage: Stage = null;
+
+    onLoad(){
+        this.stage = this.node.parent.getComponent(Stage);
+        this.warrior = this.node.getChildByName("rolectr").getComponent(WarriorCtr);
+        let node = this.node.getChildByName("weapon");
+        this.weapon = node.getComponent(WeaponCtr);
+    }
+    start() {
+    }
+
+    getWarrior(): WarriorCtr{
+        return this.warrior;
+    }
+
+    enterStage(mapid:number, stageid: number) {
+        this.warrior.model.mapid = mapid;
         if (this.warrior.model.stageid == stageid) {
             return;
         }
 
-        let mapdata = MapMgr.getInstance().getMapData(this.warrior.model.mapid);
+        let mapdata = MapMgr.instance.getMapData(this.warrior.model.mapid);
         let stagedata = mapdata.stageList[stageid];
         if (stagedata) {
             this.warrior.model.stageid = stageid;
-            let pos = MapMgr.GirdPos2pixPos(cc.v2(stagedata.startPos.x, stagedata.startPos.y));
+            let pos = MapMgr.girdPos2pixPos(cc.v2(stagedata.startPos.x, stagedata.startPos.y));
             this.node.setPosition(pos);
-
-            this.stage.loadStage(stageid);
         }
     }
 
@@ -69,7 +106,7 @@ export default class Role extends cc.Component {
         let grid = 0;
 
         while (true) {
-            let stagedata = MapMgr.getInstance().getStageData(this.warrior.model.mapid, this.warrior.model.stageid);
+            let stagedata = MapMgr.instance.getStageData(this.warrior.model.mapid, this.warrior.model.stageid);
             if (!stagedata) {
                 break;
             }

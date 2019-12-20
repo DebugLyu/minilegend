@@ -1,6 +1,7 @@
 import { gameAnimation } from "../common/gFunc";
 import livingMod from "./LivingMod";
 import { ActState } from "../common/G";
+import WeaponCtr from "./weaponCtr";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -13,37 +14,26 @@ export default class LivingCtr extends cc.Component {
     // 当前方向 0：未初始化状态
     dir: number = 0;
     // 资源id
-    private _resid:number = 0;
-    set resId(resid:number){
+    private _resid: number = 0;
+    set resId(resid: number) {
         this._resid = resid;
         this.updateAvatar();
     }
-    get resId(): number{
+    get resId(): number {
         return this._resid;
     }
 
-    // 武器资源id
-    private _weaponResId = 0;
-    get weaponResId(): number{
-        return this._weaponResId;
-    }
-    set weaponResId(wResid: number){
-        this._weaponResId = wResid;
-        this.weaponNode.active = this._weaponResId == 0;
-    }
-
     // 武器节点
-    weaponNode: cc.Node = null;
-    onLoad(){
-        this.weaponNode = this.node.parent.getChildByName("weapon");
+    @property(WeaponCtr)
+    weapon: WeaponCtr = null;
+
+    onLoad() {
+
     }
-    
     start() {
-        if(this.weaponResId == 0){
-            let weaponNode = this.node.getChildByName("weapon");
-            weaponNode.active = false;
+        if (this.weapon && this.weapon.resId == 0) {
+            this.weapon.node.active = false;
         }
-        // this.runAction();
     }
 
     async runAction(dir: number = 2, act: number = ActState.IDLE) {
@@ -55,10 +45,10 @@ export default class LivingCtr extends cc.Component {
         this.state = act;
         let curClip = await gameAnimation("role", this.resId, act, dir);
 
-        if(this.weaponResId != 0){
-            let weaponClip = await gameAnimation("weapon", this.weaponResId, this.state, this.dir);
-            this.weaponNode.zIndex = (dir == 1 || dir == 4 || dir == 7 ) ? -1 : 1;
-            let weaponAni = this.weaponNode.getComponent(cc.Animation);
+        if (this.weapon.resId != 0) {
+            let weaponClip = await gameAnimation("weapon", this.weapon.resId, this.state, this.dir);
+            this.weapon.node.zIndex = (dir == 1 || dir == 4 || dir == 7) ? -1 : 1;
+            let weaponAni = this.weapon.node.getComponent(cc.Animation);
             weaponAni.addClip(weaponClip);
             weaponAni.play(weaponClip.name);
         }

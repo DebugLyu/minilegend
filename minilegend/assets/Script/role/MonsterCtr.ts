@@ -29,6 +29,5 @@ export default class MonsterCtr extends WarriorCtr {
 
     testCtr(){
         console.log("test monster control");
-        
     }
 }

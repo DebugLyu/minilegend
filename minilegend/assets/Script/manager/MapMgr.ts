@@ -23,13 +23,12 @@ export class MapData{
 }
 
 export default class MapMgr {
-	private static instance: MapMgr = null
-	public static getInstance(): MapMgr {
-		if (this.instance == null) {
-			this.instance = new MapMgr();
-
+	private static _instance: MapMgr = null
+	public static get instance(): MapMgr {
+		if (this._instance == null) {
+			this._instance = new MapMgr();
 		}
-		return this.instance;
+		return this._instance;
 	}
 
 	private mapDatas = new Map<number, MapData>(); //{ [index: number]: MapData } = {};
@@ -54,12 +53,26 @@ export default class MapMgr {
 	}
 
 	public static pixPos2GirdPos(pixpos: cc.Vec2): cc.Vec2{
-		let x = Math.floor(pixpos.x / Gird.width);
-		let y = Math.floor(pixpos.y / Gird.height);
-		return cc.v2(x, y);
+		return cc.v2(Math.floor(pixpos.x / Gird.width), Math.floor(pixpos.y / Gird.height));
 	}
 
-	public static GirdPos2pixPos(girdpos: cc.Vec2): cc.Vec2{
+	public static girdPos2pixPos(girdpos: cc.Vec2): cc.Vec2{
 		return cc.v2(girdpos.x * Gird.width, girdpos.y * Gird.height);
+	}
+
+	public static girdX2PixX(x: number):number {
+		return x * Gird.width;
+	}
+
+	public static girdY2PixY(y: number): number {
+		return y * Gird.height;
+	}
+	
+	public static pixX2GirdX(x: number) {
+		return Math.floor(x / Gird.width)
+	}
+
+	public static pixY2GirdY(y: number) {
+		return Math.floor(y / Gird.height)
 	}
 }

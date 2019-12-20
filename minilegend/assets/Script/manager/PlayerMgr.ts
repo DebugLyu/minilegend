@@ -1,13 +1,14 @@
 import PlayerMod from "../role/PlayerMod";
+import Role from "../role/Role";
 
 export default class PlayerMgr {
 	// 单例
-	private static instance: PlayerMgr = null;
-	public static getInstance(): PlayerMgr {
-		if (this.instance == null) {
-			this.instance = new PlayerMgr();
+	private static _instance: PlayerMgr = null;
+	public static get instance(): PlayerMgr {
+		if (this._instance == null) {
+			this._instance = new PlayerMgr();
 		}
-		return this.instance;
+		return this._instance;
 	}
 
 
@@ -15,26 +16,28 @@ export default class PlayerMgr {
 	private playerList = new Map<number, PlayerMod>();// {[key:number]: PlayerMod} = {};
 	// 玩家id列表对应 数据列表
 	private playerPidList = new Map<number, number>();
+	// main role ctr
+	public mainRole: Role = null;
 
-	addPlayer(player: PlayerMod){
+	addPlayer(player: PlayerMod) {
 		this.playerList[player.onlyid] = player;
 		this.playerPidList[player.playerid] = player.onlyid;
 	}
 
-	getPlayerByOnlyId(onlyid:number): PlayerMod {
+	getPlayerByOnlyId(onlyid: number): PlayerMod {
 		return this.playerList[onlyid];
 	}
 
 	getPlayerByPlayerId(pid: number): PlayerMod {
 		let onlyid = this.playerPidList[pid];
-		if(onlyid != null){
+		if (onlyid != null) {
 			return this.playerList[onlyid];
 		}
 		return null;
 	}
 
-	delPlayer(pid: number){
-		if(this.playerList[pid]){
+	delPlayer(pid: number) {
+		if (this.playerList[pid]) {
 			delete this.playerList[pid];
 		}
 	}

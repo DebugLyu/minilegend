@@ -12,6 +12,8 @@ export default class WarriorCtr extends LivingCtr {
         return <WarriorMod>this._model;
     }
 
+
+
     move(dir: number) {
         this.runAction(dir, ActState.RUN);
     }

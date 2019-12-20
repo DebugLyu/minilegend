@@ -1,9 +1,7 @@
 import PlayerMod from "./PlayerMod";
 import WarriorCtr from "./WarriorCtr";
-import MapMgr from "../manager/MapMgr";
-import Stage from "../map/Stage";
 
-const { ccclass, property, menu } = cc._decorator;
+const { ccclass, menu } = cc._decorator;
 
 @ccclass
 @menu("role/PlayerCtr")
@@ -16,7 +14,6 @@ export default class PlayerCtr extends WarriorCtr {
     onLoad() {
         super.onLoad();
         this.setModel(new PlayerMod(this));
-        this.weaponResId = 1700;
     }
 
     start() {

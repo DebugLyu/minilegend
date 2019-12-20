@@ -92,12 +92,12 @@ export class LingHunHuoFu extends SkillBase {
 
 export default class SkillMgr {
     // 单例
-    private static instance: SkillMgr = null;
-    public static getInstance(): SkillMgr {
-        if (this.instance == null) {
-            this.instance = new SkillMgr();
+    private static _instance: SkillMgr = null;
+    public static get instance(): SkillMgr {
+        if (this._instance == null) {
+            this._instance = new SkillMgr();
         }
-        return this.instance;
+        return this._instance;
     }
 
     skillList: Map<number, SkillBase> = new Map<number, SkillBase>();

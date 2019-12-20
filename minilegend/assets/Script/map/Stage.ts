@@ -2,6 +2,7 @@ import MapMgr, { MapData, StageData } from "../manager/MapMgr";
 import { ActState, Cell } from "../common/G";
 import Role from "../role/Role";
 import { gameMapSpr } from "../common/gFunc";
+import PlayerMgr from "../manager/PlayerMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;
@@ -16,11 +17,10 @@ export default class Stage extends cc.Component {
 	mapData: MapData = null;
 	stageData: StageData = null;
 
-	@property(Role)
 	role:Role = null;
 
 	start() {
-		this.role = cc.find("rolebg", this.node).getComponent("Role");
+		this.role = PlayerMgr.instance.mainRole;
 
 		RootPos = cc.v2(-cc.winSize.width / 2, -cc.winSize.height / 2);
 		this.node.setPosition(RootPos);
@@ -48,21 +48,22 @@ export default class Stage extends cc.Component {
 		this.nodeArray = [];
 	}
 
-	loadMap(mapid: number, enter?:boolean): void {
+	loadMap(mapid: number): void {
 		this.mapId = mapid;
-		this.mapData = MapMgr.getInstance().getMapData(mapid);
-
-		if(enter){
-			this.role.enterStage(this.mapData.startStage);
-		}
-		// this.loadStage(this.mapData.startStage);
+		this.mapData = MapMgr.instance.getMapData(mapid);
+		this.loadStage(this.mapData.startStage);
 	}
 
 	loadStage(stageid: number) {
 		this.clearStage();
+		this.stageId = stageid;
 		let stagedata = this.mapData.stageList[stageid];
 		this.stageData = stagedata;
 		this.checkMapNode();
+	}
+
+	roleEnter(role: Role){
+		role.enterStage(this.mapId, this.stageId);
 	}
 
 	update(dt) {

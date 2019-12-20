@@ -1,6 +1,6 @@
 import WarriorMod from "./WarriorMod";
 import { LivingType } from "../common/G";
-import PlayerCtr from "./PlayerCtr";
+import PlayerCtr from "./playerCtr";
 
 export default class PlayerMod extends WarriorMod {
     playerid: number = 0;// 玩家id

@@ -1,15 +1,14 @@
-import PlayerCtr from "../role/PlayerCtr";
 import { degree2Dir } from "../common/gFunc";
-import PlayerMod from "../role/PlayerMod";
+import PlayerCtr from "../role/playerCtr";
+import Role from "../role/Role";
+import PlayerMgr from "../manager/PlayerMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("ui/playerControl")
 export default class PlayerControl extends cc.Component {
-
-    @property(PlayerCtr)
-    player: PlayerCtr<PlayerMod> = null;
+    role: Role = null;
 
     @property(cc.Node)
     controlNode: cc.Node = null;
@@ -28,6 +27,7 @@ export default class PlayerControl extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchEnd, this);
 
         this._controlSpr = cc.find('spr', this.controlNode);
+        this.role = PlayerMgr.instance.mainRole;
     }
 
     touchBegan(event) {
@@ -54,14 +54,14 @@ export default class PlayerControl extends cc.Component {
         this._controlSpr.setPosition(drawPos);
         let angle = drawPos.signAngle(cc.v2(1, 0));
         let degree = angle / Math.PI * 180;
-        this.player.move(degree2Dir(degree));
+        this.role.getWarrior().move(degree2Dir(degree));
     }
 
     touchEnd(event) {
         this._touchEnable = false;
         this.controlNode.setPosition(0, 0);
         this._controlSpr.setPosition(0, 0);
-        this.player.idle();
+        this.role.getWarrior().idle();
     }
 
     // update (dt) {}

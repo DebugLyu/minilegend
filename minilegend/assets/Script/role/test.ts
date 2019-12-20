@@ -1,12 +1,19 @@
+import Thing from "./Thing";
 
-let b: {[key:number]: string } = {}
-b[1] = "123";
-b[2] = "2"
-b[3] = "3"
+let a = new Thing();
+let b = new Thing();
 
-delete b[2];
+console.log(a.onlyid, b.onlyid);
 
-console.log(b);
+
+// let b: {[key:number]: string } = {}
+// b[1] = "123";
+// b[2] = "2"
+// b[3] = "3"
+
+// delete b[2];
+
+// console.log(b);
 
 // let gg: Array<number>[] = [];
 // gg[10] = []

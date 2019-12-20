@@ -2,14 +2,14 @@ import LivingMod from "../role/LivingMod";
 
 
 export default class ObjectMgr {
-	private static instance: ObjectMgr = null;
+	private static _instance: ObjectMgr = null;
 
 	private objectList = new Map<number, LivingMod>();
-	public static getInstance(): ObjectMgr {
-		if (this.instance == null) {
-			this.instance = new ObjectMgr();
+	public static get instance(): ObjectMgr {
+		if (this._instance == null) {
+			this._instance = new ObjectMgr();
 		}
-		return this.instance;
+		return this._instance;
 	}
 
 	addObject(obj: LivingMod): LivingMod {
