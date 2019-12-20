@@ -27,6 +27,12 @@ export enum ActState {
 	MGC,// 魔法
 	DIE,// 死亡
 }
+// 技能计算回调
+export interface AtkInfo {
+    AtkType: number,
+    AtkNum: number
+}
+
 // 技能类型
 export enum SkillType {
 	ATTACK = 0,

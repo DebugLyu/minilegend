@@ -7,6 +7,7 @@ import Stage from "../../map/Stage";
 import PlayerMgr from "../../manager/PlayerMgr";
 import WarriorCtr from "../../role/WarriorCtr";
 import MonsterCtr from "../../role/MonsterCtr";
+import ObjectMgr from "../../manager/ObjectMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -27,26 +28,22 @@ export default class TestBattle extends cc.Component {
 
 		PlayerMgr.instance.mainRole = this.role;// addPlayer(this.role);
 	}
+
 	start() {
-		this.role.weapon.resId = 1700;
+		
 		setTimeout(() => {
 			// if(this.role){
 			// 	this.role.enterMap(1001);
 			// }
+			this.role.weapon.resId = 1700;
 			this.stage.loadMap(1001);
 			this.stage.roleEnter(this.role);
+			ObjectMgr.instance.addObject(this.role);
 		}, 2000);
 
 		setTimeout(() => {
 			// for(let i = 0; i < 5; i++){
-			let monster = MonsterMgr.instance.genMonster(1000);
-			monster.parent = this.stage.node;
-			let monsterctr = monster.getComponent(Role);
-			// let warrior: WarriorCtr =  monster.getComponent("WarriorCtr");
-			monsterctr.x = 10;
-			monsterctr.y = 5;
-			monsterctr.weapon.resId = 0;
-
+			MonsterMgr.instance.genMonster(1000, this.stage.node, 10, 5);
 			// }
 
 		}, 3000);

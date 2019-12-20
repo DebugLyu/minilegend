@@ -1,6 +1,6 @@
 import { SkillIds, SkillName, SkillDesc, SkillType, Attribute, AttrIds, AtkType, SkillActType } from "../common/G"
 
-class SkillBase {
+export class SkillBase {
     private _skillId: number = 0;
     set skillId(skillid: number) {
         this._skillId = skillid;
@@ -12,6 +12,7 @@ class SkillBase {
     get skillId(): number {
         return this._skillId;
     }
+    cando = false;
     // 技能名字
     skillName: string = "";
     // 技能图标
@@ -20,6 +21,10 @@ class SkillBase {
     desc: string = "";
     // 冷却时间
     cooldown: number = 1;
+    cooldownTimer: number = 0;
+
+    // 技能等级
+    level: number = 0;
 
     // 技能类型 0 攻击技能 1 buff技能 2 debuff技能
     skillType: SkillType = SkillType.ATTACK;
@@ -31,7 +36,23 @@ class SkillBase {
     enemyEffect: number = 0;
     // 飞行特效
     flyEffect: number = 0;
-    
+    // 技能范围
+    range: number = 1;
+    // AI优先级
+    aiLevel: number = 0;
+
+    getatk(attacker: Attribute): AtkInfo {
+        return { AtkType: AtkType.Physics, AtkNum: attacker[AttrIds.Attack] };
+    }
+
+    do() {
+        if (this.cooldown > 0) {
+            this.cando = false;
+            this.cooldownTimer = setTimeout(() => {
+                this.cando = true;
+            }, this.cooldown * 1000);
+        }
+    }
 }
 
 interface AtkInfo {
@@ -55,6 +76,8 @@ export class GongShaJianFa extends SkillBase {
         super();
         this.skillId = SkillIds.GongShaJianFa;
         this.skillAct = SkillActType.passive;
+        this.aiLevel = 1;
+        this.range = 2;
     }
 
     getatk(attacker: Attribute): AtkInfo {
@@ -68,6 +91,8 @@ export class LeiDianShu extends SkillBase {
         super();
         this.skillId = SkillIds.LeiDianShu;
         this.skillAct = SkillActType.active;
+        this.aiLevel = 1;
+        this.range = 10;
     }
 
     getatk(attacker: Attribute): AtkInfo {
@@ -81,6 +106,8 @@ export class LingHunHuoFu extends SkillBase {
         super();
         this.skillId = SkillIds.LingHunHuoFu;
         this.skillAct = SkillActType.active;
+        this.aiLevel = 1;
+        this.range = 10;
     }
 
     getatk(attacker: Attribute): AtkInfo {
@@ -100,16 +127,18 @@ export default class SkillMgr {
         return this._instance;
     }
 
-    skillList: Map<number, SkillBase> = new Map<number, SkillBase>();
-
-    init(){
-        this.skillList.set( SkillIds.NormalAttack, new NormalAttack());
-        this.skillList.set( SkillIds.GongShaJianFa, new GongShaJianFa());
-        this.skillList.set( SkillIds.LeiDianShu, new LeiDianShu());
-        this.skillList.set( SkillIds.LingHunHuoFu, new LingHunHuoFu());
-
-        // let skilldata =  <NormalAttack>this.skillList.get(SkillIds.NormalAttack);
+    skillList = {
+        [SkillIds.NormalAttack]: NormalAttack,
+        [SkillIds.GongShaJianFa]: GongShaJianFa,
+        [SkillIds.LeiDianShu]: LeiDianShu,
+        [SkillIds.LingHunHuoFu]: LingHunHuoFu,
     }
 
+    init() {
 
+    }
+
+    getSkill(skillid: number) {
+        return this.skillList[skillid];
+    }
 }

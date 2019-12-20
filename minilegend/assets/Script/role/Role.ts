@@ -1,8 +1,12 @@
-import { ActState, AttrIds } from "../common/G";
+import { ActState, AttrIds, LivingType } from "../common/G";
 import MapMgr from "../manager/MapMgr";
 import Stage from "../map/Stage";
 import WarriorCtr from "./WarriorCtr";
 import WeaponCtr from "./weaponCtr";
+import LivingMod from "./LivingMod";
+import ObjectMgr from "../manager/ObjectMgr";
+import { degree2Dir } from "../common/gFunc";
+import WarriorMod from "./WarriorMod";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -45,42 +49,90 @@ export default class Role extends cc.Component {
 
     weapon: WeaponCtr = null;
     warrior: WarriorCtr = null;
+    model: WarriorMod = null;
     stage: Stage = null;
+    aiTimer: number = 0;
+    aiDo: number = 0;
+    param: any = null;
+    // 目标
+    target: Role = null;
 
-    onLoad(){
+    onLoad() {
         this.stage = this.node.parent.getComponent(Stage);
         this.warrior = this.node.getChildByName("rolectr").getComponent(WarriorCtr);
+        this.model = this.warrior.model;
         let node = this.node.getChildByName("weapon");
         this.weapon = node.getComponent(WeaponCtr);
-    }
-    start() {
+        this.weapon.resId = 0;
     }
 
-    getWarrior(): WarriorCtr{
+    start() {
+
+    }
+
+    getWarrior(): WarriorCtr {
         return this.warrior;
     }
 
-    enterStage(mapid:number, stageid: number) {
-        this.warrior.model.mapid = mapid;
-        if (this.warrior.model.stageid == stageid) {
+    enterStage(mapid: number, stageid: number) {
+        this.model.mapid = mapid;
+        if (this.model.stageid == stageid) {
             return;
         }
 
-        let mapdata = MapMgr.instance.getMapData(this.warrior.model.mapid);
+        let mapdata = MapMgr.instance.getMapData(this.model.mapid);
         let stagedata = mapdata.stageList[stageid];
         if (stagedata) {
-            this.warrior.model.stageid = stageid;
+            this.model.stageid = stageid;
             let pos = MapMgr.girdPos2pixPos(cc.v2(stagedata.startPos.x, stagedata.startPos.y));
             this.node.setPosition(pos);
         }
     }
 
-    update(dt) {
+    findTarget(targettype: LivingType): Role {
+        let list: Role[] = [];
+        let objlist = ObjectMgr.instance.objectList;
+        for (const _ in objlist) {
+            if (objlist.hasOwnProperty(_)) {
+                const role = objlist[_];
+                if (role.warrior.model.livingType == targettype) {
+                    let len = cc.v2(this.x, this.y).sub(cc.v2(role.x, role.y)).mag();
+                    role.param = len;
+                    list.push(role);
+                }
+            }
+        }
+
+        if (list.length == 0) {
+            return null;
+        }
+        if (list.length == 1) {
+            return list[0];
+        }
+
+        list.sort((a, b) => {
+            return a.param - b.param;
+        });
+
+        return list[0];
+    }
+
+    aiMoveToTarget() {
+        var degree = Math.atan2(this.target.y - this.y, this.target.x - this.x) * 180 / Math.PI;
+        if (degree < 0) {
+            degree = 360 + degree;
+        }
+        console.log("degree", degree);
+
+        this.warrior.move(degree2Dir(degree));
+    }
+
+    checkPos(dt) {
         if (this.warrior.state == ActState.IDLE) {
             return;
         }
 
-        let len = this.warrior.model.attr[AttrIds.Speed] * dt;
+        let len = this.model.attr[AttrIds.Speed] * dt;
         let xie = 0.75;
         let x = 0, y = 0;
         if (this.warrior.dir == 1) {
@@ -106,7 +158,7 @@ export default class Role extends cc.Component {
         let grid = 0;
 
         while (true) {
-            let stagedata = MapMgr.instance.getStageData(this.warrior.model.mapid, this.warrior.model.stageid);
+            let stagedata = MapMgr.instance.getStageData(this.model.mapid, this.model.stageid);
             if (!stagedata) {
                 break;
             }
@@ -176,5 +228,50 @@ export default class Role extends cc.Component {
         }
 
         this.node.setPosition(npos);
+        let gridpos = MapMgr.pixPos2GirdPos(npos);
+        this._x = gridpos.x;
+        this._y = gridpos.y;
+    }
+
+    AiAction(dt) {
+        if (this.model.livingType != LivingType.MONSTER) {
+            return;
+        }
+        this.aiTimer += dt;
+        let dotime = Math.floor(this.aiTimer);
+        if (dotime != this.aiDo) {
+            this.aiDo = dotime;
+            if (this.target == null) {
+                let target = this.findTarget(LivingType.PLAYER);
+                this.target = target;
+            }
+
+            if (this.target == null) {
+                this.warrior.idle();
+                return;
+            }
+
+            let skill = this.model.aiSkill(cc.v2(this.target.x, this.target.y));
+            if (skill == null) {
+                this.aiMoveToTarget();
+                return;
+            }
+            let skillinfo = skill.getatk(this.model.attr);
+
+            let angle = cc.v2(this.x, this.y).signAngle(cc.v2(this.target.x, this.target.y));
+            let degree = angle / Math.PI * 180;
+            if (degree < 0) {
+                degree = 360 + degree;
+            }
+            let dir = degree2Dir(degree);
+            this.warrior.attack(dir);
+            this.target.model.behit(skillinfo);
+            skill.do();
+        }
+    }
+
+    update(dt) {
+        this.checkPos(dt);
+        this.AiAction(dt);
     }
 }

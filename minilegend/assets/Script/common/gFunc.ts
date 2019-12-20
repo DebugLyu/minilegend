@@ -1,12 +1,12 @@
 import { ActState } from "./G";
 
 let ActStateStr = {
-	[ActState.IDLE] : "idle",
-	[ActState.RUN] : "run",
-	[ActState.RATK] : "ratk",
-	[ActState.ATK] : "atk",
-	[ActState.MGC] : "mgc",
-	[ActState.DIE] : "die",
+	[ActState.IDLE]: "idle",
+	[ActState.RUN]: "run",
+	[ActState.RATK]: "ratk",
+	[ActState.ATK]: "atk",
+	[ActState.MGC]: "mgc",
+	[ActState.DIE]: "die",
 }
 
 export function actState2Str(state: ActState) {
@@ -15,22 +15,22 @@ export function actState2Str(state: ActState) {
 
 export function degree2Dir(degree: number): number {
 	let dir = 2;
-	if (degree >= -22.5 && degree < 22.5) {
+	if (degree >= 337.5 || degree < 22.5) {
 		dir = 6;
 	} else if (degree >= 22.5 && degree < 67.5) {
-		dir = 3;
-	} else if (degree >= 67.5 && degree < 112.5) {
-		dir = 2;
-	} else if (degree >= 112.5 && degree < 157.5) {
-		dir = 1;
-	} else if (degree >= 157.5 && degree <= 180 || degree > -180 && degree < -157.5) {
-		dir = 4;
-	} else if (degree > -157.5 && degree < -112.5) {
-		dir = 7;
-	} else if (degree > -112.5 && degree < -67.5) {
-		dir = 8;
-	} else if (degree > -67.5 && degree < -22.5) {
 		dir = 9;
+	} else if (degree >= 67.5 && degree < 112.5) {
+		dir = 8;
+	} else if (degree >= 112.5 && degree < 157.5) {
+		dir = 7;
+	} else if (degree >= 157.5 && degree < 202.5) {
+		dir = 4;
+	} else if (degree >= 202.5 && degree < 247.5) {
+		dir = 1;
+	} else if (degree >= 247.5 && degree < 292.5) {
+		dir = 2;
+	} else if (degree >= 292.5 && degree < 337.5) {
+		dir = 3;
 	}
 	return dir;
 }
@@ -53,9 +53,7 @@ export async function gameAnimation(restype: string, resid: Number, act: ActStat
 				else break;
 			}
 			let curClip = cc.AnimationClip.createWithSpriteFrames(frames, 10);
-			curClip.name = act + String(dir);
-			// curClip.wrapMode = cc.WrapMode.Loop;
-			// role_animation_list[animation_key] = curClip;
+			// curClip.name = resid + String(act) + String(dir);
 			resolve(curClip);
 		});
 	});
@@ -65,9 +63,9 @@ export async function gameMapSpr(mapid: number, x: number, y: number) {
 	let res_key = `map/jpg/${mapid}/${mapid}_${y}_${x}`;
 	return new Promise<cc.SpriteFrame>((resolve, reject) => {
 		cc.loader.loadRes(res_key, cc.SpriteFrame, (err, spr) => {
-			if(err){
+			if (err) {
 				cc.log(err);
-			}else{
+			} else {
 				resolve(spr);
 			}
 		});

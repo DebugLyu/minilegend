@@ -12,4 +12,8 @@ export default class Thing {
         ThingOnlyIdSeed++;
         this.onlyid = ThingOnlyIdSeed;
     }
+
+    init(){
+        
+    }
 }

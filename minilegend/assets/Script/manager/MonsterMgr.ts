@@ -1,5 +1,6 @@
 import Role from "../role/Role";
 import MonsterCtr from "../role/MonsterCtr";
+import ObjectMgr from "./ObjectMgr";
 
 export class MonsterData {
     monid = 0;
@@ -24,7 +25,7 @@ export default class MonsterMgr {
         return this._instance;
     }
 
-    private monsterDataList = new Map<number, MonsterData>(); // { [key: number]: MonsterData } = {};
+    private monsterDataList: { [key: number]: MonsterData } = {};
     private monPrefab: cc.Prefab = null;
 
     init() {
@@ -32,6 +33,10 @@ export default class MonsterMgr {
             this.monsterDataList = data.json;
         });
         cc.loader.loadRes("prefab/role/MonsterRole", cc.Prefab, (error, prefab) => {
+            if(error){
+                console.log(error);
+                return;
+            }
             this.monPrefab = prefab;
         });
     }
@@ -40,18 +45,30 @@ export default class MonsterMgr {
         return this.monsterDataList[monid];
     }
 
-    genMonster(monid: number): cc.Node{
-        if(this.monPrefab == null){
+    genMonster(monid: number, parentNode?: cc.Node, x?: number, y?: number): cc.Node {
+        if (this.monPrefab == null) {
             return;
         }
         let mondata = this.getMonsterData(monid);
-        if(mondata == null){
+        if (mondata == null) {
             return;
         }
-        
+
         let node = cc.instantiate(this.monPrefab);
         let monsterctr = node.getChildByName("rolectr").getComponent(MonsterCtr);
-        monsterctr.resId = mondata.resid;
+        monsterctr.model.setMonData(mondata);
+        let role = node.getComponent(Role);
+        
+        if(parentNode){
+            node.parent = parentNode;
+            ObjectMgr.instance.addObject(role);
+        }
+        if(x){
+            role.x = x;
+        }
+        if(y){
+            role.y = y;
+        }
         
         return node;
     }

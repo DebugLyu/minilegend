@@ -8,30 +8,14 @@ const { ccclass, property, menu } = cc._decorator;
 @ccclass
 @menu("role/MonsterCtr")
 export default class MonsterCtr extends WarriorCtr {
+    model = new MonsterMod(this);
     
-    data:MonsterData = null;
+    start() {
 
-    onLoad(){
-        this.setModel(new MonsterMod(this));
-        super.onLoad();
     }
 
-    start(){
-        
-    }
-    
-    init(data?: MonsterData){
-        if(data){
-            this.data = data;
-            this.resId = data.resid;    
-        }
-    }
 
-    AI(){
-        
-    }
-
-    testCtr(){
+    testCtr() {
         console.log("test monster control");
     }
 }

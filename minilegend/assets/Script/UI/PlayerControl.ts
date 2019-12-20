@@ -13,12 +13,12 @@ export default class PlayerControl extends cc.Component {
     @property(cc.Node)
     controlNode: cc.Node = null;
 
-    _controlSpr: cc.Node = null;
+    controlSpr: cc.Node = null;
 
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
-    private _touchEnable: boolean = false;
+    private touchEnable: boolean = false;
 
     start() {
         this.node.on(cc.Node.EventType.TOUCH_START, this.touchBegan, this);
@@ -26,19 +26,19 @@ export default class PlayerControl extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchEnd, this);
 
-        this._controlSpr = cc.find('spr', this.controlNode);
+        this.controlSpr = cc.find('spr', this.controlNode);
         this.role = PlayerMgr.instance.mainRole;
     }
 
     touchBegan(event) {
-        this._touchEnable = true;
+        this.touchEnable = true;
         let beganPos = event.getLocation();
         let drawPos = this.node.convertToNodeSpaceAR(beganPos);
         this.controlNode.setPosition(drawPos);
     }
 
     touchMove(event) {
-        if (!this._touchEnable) {
+        if (!this.touchEnable) {
             return;
         }
         let beganPos = event.getLocation();
@@ -51,16 +51,20 @@ export default class PlayerControl extends cc.Component {
             drawPos.x = r * drawPos.x / len;
             drawPos.y = r * drawPos.y / len;
         }
-        this._controlSpr.setPosition(drawPos);
+        this.controlSpr.setPosition(drawPos);
         let angle = drawPos.signAngle(cc.v2(1, 0));
         let degree = angle / Math.PI * 180;
-        this.role.getWarrior().move(degree2Dir(degree));
+        if(degree < 0){
+            degree = 360 + degree;
+        }
+        degree = 360 - degree;
+        this.role.warrior.move(degree2Dir(degree));
     }
 
     touchEnd(event) {
-        this._touchEnable = false;
+        this.touchEnable = false;
         this.controlNode.setPosition(0, 0);
-        this._controlSpr.setPosition(0, 0);
+        this.controlSpr.setPosition(0, 0);
         this.role.getWarrior().idle();
     }
 

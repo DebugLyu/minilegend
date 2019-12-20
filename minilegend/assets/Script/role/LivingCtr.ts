@@ -1,16 +1,18 @@
 import { gameAnimation, actState2Str } from "../common/gFunc";
-import livingMod from "./LivingMod";
+import LivingMod from "./LivingMod";
 import { ActState } from "../common/G";
 import WeaponCtr from "./weaponCtr";
+import Role from "./Role";
 
 const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("role/LivingCtr")
 export default class LivingCtr extends cc.Component {
-    protected _model: livingMod = null;
+    model = new LivingMod(this);
+    role:Role = null;
     // 当前状态
-    state: ActState = 0;
+    state: ActState = ActState.IDLE;
     // 当前方向 0：未初始化状态
     dir: number = 0;
     // 资源id
@@ -23,6 +25,7 @@ export default class LivingCtr extends cc.Component {
         return this._resid;
     }
 
+    
     // 武器节点
     @property(WeaponCtr)
     weapon: WeaponCtr = null;
@@ -34,7 +37,19 @@ export default class LivingCtr extends cc.Component {
         if (this.weapon && this.weapon.resId == 0) {
             this.weapon.node.active = false;
         }
+        this.role = this.node.parent.getComponent(Role);
         this.runAction(2, ActState.IDLE);
+    }
+
+    findAnimation(animation: cc.Animation, name: string): cc.AnimationClip{
+        let list = animation.getClips();
+        for (let i = 0; i < list.length; i++) {
+            const ani = list[i];
+            if(ani.name == name){
+                return ani;
+            }
+        }
+        return null;
     }
 
     async runAction(dir?: number, act?: number) {
@@ -50,33 +65,36 @@ export default class LivingCtr extends cc.Component {
 
         this.dir = dir;
         this.state = act;
+        
         let isloop = false;
         if(this.state == ActState.IDLE || this.state == ActState.RUN){
             isloop = true;
         }
-        let curClip = await gameAnimation("role", this.resId, act, dir);
-        curClip.wrapMode = isloop ? cc.WrapMode.Loop : cc.WrapMode.Default;
 
-        if (this.weapon.resId != 0) {
-            let weaponClip = await gameAnimation("weapon", this.weapon.resId, this.state, this.dir);
-            weaponClip.wrapMode = isloop? cc.WrapMode.Loop : cc.WrapMode.Default;
-            this.weapon.node.zIndex = (dir == 1 || dir == 4 || dir == 7) ? -1 : 1;
-            let weaponAni = this.weapon.node.getComponent(cc.Animation);
-            weaponAni.addClip(weaponClip);
-            weaponAni.play(weaponClip.name);
+        let aniname = String(this.resId) + String(this.state) + String(this.dir);
+        let addonani = this.node.getComponent(cc.Animation);
+        let curClip = this.findAnimation(addonani, aniname);
+        if(curClip == null){
+            curClip = await gameAnimation("role", this.resId, act, dir);
+            curClip.name = aniname;
+            curClip.wrapMode = isloop ? cc.WrapMode.Loop : cc.WrapMode.Default;
+            addonani.addClip(curClip);
         }
 
-        let addonani = this.node.getComponent(cc.Animation);
-        addonani.addClip(curClip);
+        if (this.weapon.resId != 0) {
+            let weaponAni = this.weapon.node.getComponent(cc.Animation);
+            aniname = String(this.weapon.resId) + String(this.state) + String(this.dir);
+            let weaponClip = this.findAnimation(weaponAni, aniname);
+            if(weaponClip == null){
+                weaponClip = await gameAnimation("weapon", this.weapon.resId, this.state, this.dir);
+                weaponClip.name = aniname;
+                weaponClip.wrapMode = isloop? cc.WrapMode.Loop : cc.WrapMode.Default;
+                weaponAni.addClip(weaponClip);
+            }    
+            this.weapon.node.zIndex = (dir == 1 || dir == 4 || dir == 7) ? -1 : 1;
+            weaponAni.play(weaponClip.name);
+        }
         addonani.play(curClip.name);
-    }
-
-    setModel(model) {
-        this._model = model;
-    }
-
-    get model(): livingMod {
-        return this._model;
     }
 
     updateAvatar() {
@@ -87,12 +105,10 @@ export default class LivingCtr extends cc.Component {
         if (dir == null) {
             dir = this.dir;
         }
-        this.runAction(dir);
+        this.runAction(dir, ActState.IDLE);
     }
 
-    attack(){
-        this.runAction(this.dir, ActState.ATK);
+    attack(dir?: number){
+        this.runAction(dir, ActState.ATK);
     }
-
-    
 }

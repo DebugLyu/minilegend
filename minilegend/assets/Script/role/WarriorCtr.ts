@@ -7,18 +7,13 @@ const { ccclass, property, menu } = cc._decorator;
 @ccclass
 @menu("role/WarriorCtr")
 export default class WarriorCtr extends LivingCtr {
-
-    get model(): WarriorMod {
-        return <WarriorMod>this._model;
-    }
-
-
+    model:WarriorMod = new WarriorMod(this);
 
     move(dir: number) {
         this.runAction(dir, ActState.RUN);
     }
 
     dead() {
-
+        this.runAction(2, ActState.DIE);
     }
 }

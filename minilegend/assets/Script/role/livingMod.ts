@@ -9,9 +9,12 @@ export default class LivingMod extends Thing {
 
     protected _control: LivingCtr = null;
 
+    param: any = null;
+
     constructor(control?: LivingCtr){
         super();
         this._control = control;
+        this.init();
     }
     
     init() {
