@@ -54,7 +54,7 @@ export async function gameAnimation(restype: string, resid: Number, act: ActStat
 			}
 			let curClip = cc.AnimationClip.createWithSpriteFrames(frames, 10);
 			curClip.name = act + String(dir);
-			curClip.wrapMode = cc.WrapMode.Loop;
+			// curClip.wrapMode = cc.WrapMode.Loop;
 			// role_animation_list[animation_key] = curClip;
 			resolve(curClip);
 		});

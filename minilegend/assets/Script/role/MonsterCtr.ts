@@ -27,6 +27,10 @@ export default class MonsterCtr extends WarriorCtr {
         }
     }
 
+    AI(){
+        
+    }
+
     testCtr(){
         console.log("test monster control");
     }

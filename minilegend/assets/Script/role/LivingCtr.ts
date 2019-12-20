@@ -1,4 +1,4 @@
-import { gameAnimation } from "../common/gFunc";
+import { gameAnimation, actState2Str } from "../common/gFunc";
 import livingMod from "./LivingMod";
 import { ActState } from "../common/G";
 import WeaponCtr from "./weaponCtr";
@@ -43,10 +43,16 @@ export default class LivingCtr extends cc.Component {
 
         this.dir = dir;
         this.state = act;
+        let isloop = false;
+        if(this.state == ActState.IDLE || this.state == ActState.RUN){
+            isloop = true;
+        }
         let curClip = await gameAnimation("role", this.resId, act, dir);
+        curClip.wrapMode = isloop ? cc.WrapMode.Loop : cc.WrapMode.Default;
 
         if (this.weapon.resId != 0) {
             let weaponClip = await gameAnimation("weapon", this.weapon.resId, this.state, this.dir);
+            weaponClip.wrapMode = isloop? cc.WrapMode.Loop : cc.WrapMode.Default;
             this.weapon.node.zIndex = (dir == 1 || dir == 4 || dir == 7) ? -1 : 1;
             let weaponAni = this.weapon.node.getComponent(cc.Animation);
             weaponAni.addClip(weaponClip);
@@ -76,4 +82,10 @@ export default class LivingCtr extends cc.Component {
         }
         this.runAction(dir);
     }
+
+    attack(){
+        this.runAction(this.dir, ActState.ATK);
+    }
+
+    
 }
