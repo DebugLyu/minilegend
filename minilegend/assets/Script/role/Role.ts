@@ -11,6 +11,7 @@ import LivingMod from "./LivingMod";
 import ObjectMgr from "../manager/ObjectMgr";
 import { degree2Dir } from "../common/gFunc";
 import WarriorMod from "./WarriorMod";
+import PlayerMgr from "../manager/PlayerMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -56,6 +57,8 @@ export default class Role extends cc.Component {
     model: WarriorMod = null;
 
     stage: Stage = null;
+
+    unDoAnyThingTimer: number = 0;
     aiTimer: number = 0;
     aiDo: number = 0;
     param: any = null;
@@ -101,6 +104,9 @@ export default class Role extends cc.Component {
         for (const _ in objlist) {
             if (objlist.hasOwnProperty(_)) {
                 const role = objlist[_];
+                if (role.model.onlyid == this.model.onlyid) {
+                    continue;
+                }
                 if (role.warrior.model.isDead == false && role.warrior.model.livingType == targettype) {
                     let len = cc.v2(this.x, this.y).sub(cc.v2(role.x, role.y)).mag();
                     role.param = len;
@@ -123,7 +129,7 @@ export default class Role extends cc.Component {
         return list[0];
     }
 
-    getDir(x: number, y: number): number{
+    getDir(x: number, y: number): number {
         var degree = Math.atan2(y - this.y, x - this.x) * 180 / Math.PI;
         if (degree < 0) {
             degree = 360 + degree;
@@ -248,44 +254,62 @@ export default class Role extends cc.Component {
         this.y = gridpos.y;
     }
 
-    AiAction(dt) {
-        if (this.model.livingType != LivingType.MONSTER) {
+    doAiAction() {
+        if (this.target == null) {
+            let targettype = LivingType.MONSTER;
+            if (this.model.livingType == LivingType.MONSTER) {
+                targettype = LivingType.PLAYER;
+            }
+            let target = this.findTarget(targettype);
+            this.target = target;
+        }
+
+        if (this.target == null) {
+            // this.warrior.idle();
             return;
+        }
+        let target_pos = cc.v2(this.target.x, this.target.y);
+        let self_pos = cc.v2(this.x, this.y);
+        let skill = this.model.aiSkill(target_pos);
+        if (skill == null) {
+            let len = self_pos.sub(target_pos).mag();
+            if (len > 1) {
+                this.aiMoveToTarget();
+            }
+            return;
+        }
+        let skillinfo = skill.getatk(this.model.attr);
+        this.warrior.doSkill(skill, this.getDir(this.target.x, this.target.y));
+        let num = this.target.model.behit(skillinfo);
+        if (num > 0) {
+            this.stage.effectLayer.showHitNum(num, this.target.node.position, null, PlayerMgr.instance.isMainRole(this.model.onlyid));
+        }
+        skill.do();
+        if (this.target && this.target.model.isDead) {
+            this.target = null;
+        }
+    }
+
+    AiAction(dt) {
+        if (this.model.isDead) {
+            return;
+        }
+
+        if (this.model.livingType == LivingType.PLAYER) {
+            this.unDoAnyThingTimer += dt;
+            if (this.unDoAnyThingTimer < 2) {
+                return;
+            }
         }
 
         this.aiTimer += dt;
         let dotime = Math.floor(this.aiTimer / 1);
         if (dotime != this.aiDo) {
+            if (this.aiTimer > 10000) {
+                this.aiTimer = 0;
+            }
             this.aiDo = dotime;
-            if (this.target == null) {
-                let target = this.findTarget(LivingType.PLAYER);
-                this.target = target;
-            }
-
-            if (this.target == null) {
-                this.warrior.idle();
-                return;
-            }   
-            let target_pos = cc.v2(this.target.x, this.target.y);
-            let self_pos = cc.v2(this.x, this.y);
-            let skill = this.model.aiSkill(target_pos);
-            if (skill == null) {
-                let len = self_pos.sub(target_pos).mag();
-                if(len > 1){
-                    this.aiMoveToTarget();
-                }
-                return;
-            }
-            let skillinfo = skill.getatk(this.model.attr);
-            this.warrior.doSkill(skill, this.getDir(this.target.x, this.target.y));
-            let num = this.target.model.behit(skillinfo);
-            if(num > 0){
-                this.stage.effectLayer.showHitNum(num, this.target.node.position);
-            }
-            skill.do();
-            if(this.target && this.target.model.isDead){
-                this.target = null;
-            }
+            this.doAiAction();
         }
     }
 

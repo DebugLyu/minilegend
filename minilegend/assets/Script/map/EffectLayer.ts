@@ -10,7 +10,7 @@ export default class EffectLayer extends cc.Component {
 
     }
 
-    showHitNum(num: number, x: number | cc.Vec2, y?: number) {
+    showHitNum(num: number, x: number | cc.Vec2, y?: number, self?: boolean) {
         let labelnode = cc.instantiate(this.hitNum);
         labelnode.active = true;
         labelnode.parent = this.node;
@@ -23,6 +23,11 @@ export default class EffectLayer extends cc.Component {
         } else {
             labelnode.position = x.add(cc.v2(0 , 50));
         }
+
+        if (self){
+            labelnode.color = cc.color(255, 200, 0);
+        }
+
         labelnode.scale = 2;
 
         labelnode.runAction(cc.sequence(cc.moveBy(0.8, 0, 120), cc.removeSelf(true)));

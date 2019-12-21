@@ -13,9 +13,9 @@ export default class PlayerMgr {
 
 
 	// 玩家数据列表
-	private playerList = new Map<number, PlayerMod>();// {[key:number]: PlayerMod} = {};
+	private playerList:{[key:number]: PlayerMod} = {};
 	// 玩家id列表对应 数据列表
-	private playerPidList = new Map<number, number>();
+	private playerPidList:{[key:number]:number} = {};
 	// main role ctr
 	public mainRole: Role = null;
 
@@ -40,5 +40,9 @@ export default class PlayerMgr {
 		if (this.playerList[pid]) {
 			delete this.playerList[pid];
 		}
+	}
+
+	isMainRole(onlyid: number): boolean {
+		return onlyid == this.mainRole.model.onlyid;
 	}
 }

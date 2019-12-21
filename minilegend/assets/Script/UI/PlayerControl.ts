@@ -61,6 +61,7 @@ export default class PlayerControl extends cc.Component {
         degree = 360 - degree;
 
         if(!this.role.model.isDead && this.role.warrior.state == ActState.IDLE || this.role.warrior.state == ActState.RUN){
+            this.role.unDoAnyThingTimer = 0;
             this.role.warrior.move(degree2Dir(degree));
         }
     }
