@@ -12,5 +12,4 @@ export default class WeaponCtr extends cc.Component {
 		this._resId = v;
 		this.node.active = this._resId != 0;
 	}
-	
 }

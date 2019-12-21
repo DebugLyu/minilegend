@@ -3,6 +3,7 @@ import { ActState, Cell } from "../common/G";
 import Role from "../role/Role";
 import { gameMapSpr } from "../common/gFunc";
 import PlayerMgr from "../manager/PlayerMgr";
+import EffectLayer from "./EffectLayer";
 
 const { ccclass, property, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;
@@ -16,23 +17,19 @@ export default class Stage extends cc.Component {
 	stageId: number = 0;
 	mapData: MapData = null;
 	stageData: StageData = null;
+	effectLayer: EffectLayer = null;
 
 	role:Role = null;
 
 	start() {
 		this.role = PlayerMgr.instance.mainRole;
 
+		this.effectLayer = this.node.getChildByName("EffectLayer").getComponent(EffectLayer);
+
 		RootPos = cc.v2(-cc.winSize.width / 2, -cc.winSize.height / 2);
 		this.node.setPosition(RootPos);
-		// cc.log(root_pos);
 
 		this.checkPlayerPos();
-
-		// TODO: test map
-		// setTimeout(() => {
-		// 	this.loadMap(1001);
-		// }, 2000);
-
 	}
 
 	clearStage() {
@@ -67,7 +64,7 @@ export default class Stage extends cc.Component {
 	}
 
 	update(dt) {
-		if (this.role.warrior.state == ActState.IDLE) {
+		if (this.role.warrior.state != ActState.RUN) {
 			return;
 		}
 		this.checkPlayerPos();

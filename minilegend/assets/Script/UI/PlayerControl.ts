@@ -2,6 +2,7 @@ import { degree2Dir } from "../common/gFunc";
 import PlayerCtr from "../role/playerCtr";
 import Role from "../role/Role";
 import PlayerMgr from "../manager/PlayerMgr";
+import { ActState } from "../common/G";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -58,14 +59,20 @@ export default class PlayerControl extends cc.Component {
             degree = 360 + degree;
         }
         degree = 360 - degree;
-        this.role.warrior.move(degree2Dir(degree));
+
+        if(!this.role.model.isDead && this.role.warrior.state == ActState.IDLE || this.role.warrior.state == ActState.RUN){
+            this.role.warrior.move(degree2Dir(degree));
+        }
     }
 
     touchEnd(event) {
         this.touchEnable = false;
         this.controlNode.setPosition(0, 0);
         this.controlSpr.setPosition(0, 0);
-        this.role.getWarrior().idle();
+
+        if(this.role.warrior.state == ActState.RUN){
+            this.role.getWarrior().idle();
+        }
     }
 
     // update (dt) {}

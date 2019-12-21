@@ -1,3 +1,7 @@
+/**
+ * 地图上 战斗角色 所在的实际节点 
+ *      控制并计算 角色在地图上位置
+ */
 import { ActState, AttrIds, LivingType } from "../common/G";
 import MapMgr from "../manager/MapMgr";
 import Stage from "../map/Stage";
@@ -19,7 +23,7 @@ export default class Role extends cc.Component {
     }
     public set x(v: number) {
         this._x = v;
-        this.node.x = MapMgr.girdX2PixX(v);
+        this.model.x = v;
     }
 
     private _y: number;
@@ -28,7 +32,7 @@ export default class Role extends cc.Component {
     }
     public set y(v: number) {
         this._y = v;
-        this.node.y = MapMgr.girdY2PixY(v)
+        this.model.y = v;
     }
 
     public get pixx(): number {
@@ -50,6 +54,7 @@ export default class Role extends cc.Component {
     weapon: WeaponCtr = null;
     warrior: WarriorCtr = null;
     model: WarriorMod = null;
+
     stage: Stage = null;
     aiTimer: number = 0;
     aiDo: number = 0;
@@ -58,7 +63,7 @@ export default class Role extends cc.Component {
     target: Role = null;
 
     onLoad() {
-        this.stage = this.node.parent.getComponent(Stage);
+        this.stage = this.node.parent.parent.getComponent(Stage);
         this.warrior = this.node.getChildByName("rolectr").getComponent(WarriorCtr);
         this.model = this.warrior.model;
         let node = this.node.getChildByName("weapon");
@@ -92,10 +97,11 @@ export default class Role extends cc.Component {
     findTarget(targettype: LivingType): Role {
         let list: Role[] = [];
         let objlist = ObjectMgr.instance.objectList;
+        // 找到最近的 目标
         for (const _ in objlist) {
             if (objlist.hasOwnProperty(_)) {
                 const role = objlist[_];
-                if (role.warrior.model.livingType == targettype) {
+                if (role.warrior.model.isDead == false && role.warrior.model.livingType == targettype) {
                     let len = cc.v2(this.x, this.y).sub(cc.v2(role.x, role.y)).mag();
                     role.param = len;
                     list.push(role);
@@ -117,19 +123,23 @@ export default class Role extends cc.Component {
         return list[0];
     }
 
-    aiMoveToTarget() {
-        var degree = Math.atan2(this.target.y - this.y, this.target.x - this.x) * 180 / Math.PI;
+    getDir(x: number, y: number): number{
+        var degree = Math.atan2(y - this.y, x - this.x) * 180 / Math.PI;
         if (degree < 0) {
             degree = 360 + degree;
         }
-        this.warrior.move(degree2Dir(degree));
+        return degree2Dir(degree)
+    }
+
+    aiMoveToTarget() {
+        this.warrior.move(this.getDir(this.target.x, this.target.y));
         setTimeout(() => {
             this.warrior.idle();
         }, 300);
     }
 
     checkPos(dt) {
-        if (this.warrior.state == ActState.IDLE) {
+        if (this.warrior.state != ActState.RUN) {
             return;
         }
 
@@ -212,12 +222,12 @@ export default class Role extends cc.Component {
 
         if (npos.x < 0) {
             npos.x = 0;
-        } else if (npos.x > this.node.parent.width) {
-            npos.x = this.node.parent.width;
+        } else if (npos.x > this.stage.node.width) {
+            npos.x = this.stage.node.width;
         } else if (npos.y < 0) {
             npos.y = 0;
-        } else if (npos.y > this.node.parent.height) {
-            npos.y = this.node.parent.height;
+        } else if (npos.y > this.stage.node.height) {
+            npos.y = this.stage.node.height;
         }
 
         if (grid == 0) {
@@ -230,15 +240,18 @@ export default class Role extends cc.Component {
         }
 
         this.node.setPosition(npos);
+        this.node.zIndex = cc.winSize.height - npos.y;
+
         let gridpos = MapMgr.pixPos2GirdPos(npos);
-        this._x = gridpos.x;
-        this._y = gridpos.y;
+        this.x = gridpos.x;
+        this.y = gridpos.y;
     }
 
     AiAction(dt) {
         if (this.model.livingType != LivingType.MONSTER) {
             return;
         }
+
         this.aiTimer += dt;
         let dotime = Math.floor(this.aiTimer / 1);
         if (dotime != this.aiDo) {
@@ -263,16 +276,15 @@ export default class Role extends cc.Component {
                 return;
             }
             let skillinfo = skill.getatk(this.model.attr);
-
-            let angle = self_pos.signAngle(target_pos);
-            let degree = angle / Math.PI * 180;
-            if (degree < 0) {
-                degree = 360 + degree;
+            this.warrior.doSkill(skill, this.getDir(this.target.x, this.target.y));
+            let num = this.target.model.behit(skillinfo);
+            if(num > 0){
+                this.stage.effectLayer.showHitNum(num, this.target.node.position);
             }
-            let dir = degree2Dir(degree);
-            this.warrior.attack(dir);
-            this.target.model.behit(skillinfo);
             skill.do();
+            if(this.target && this.target.model.isDead){
+                this.target = null;
+            }
         }
     }
 

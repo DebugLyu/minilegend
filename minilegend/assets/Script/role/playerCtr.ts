@@ -6,7 +6,7 @@ const { ccclass, menu } = cc._decorator;
 @ccclass
 @menu("role/PlayerCtr")
 export default class PlayerCtr extends WarriorCtr {
-    model = new PlayerMod(this);
+    model:PlayerMod = new PlayerMod(this);
 
     start() {
         // TODO:test 测试用 资源id 设置了 资源id 就可以形成动画了

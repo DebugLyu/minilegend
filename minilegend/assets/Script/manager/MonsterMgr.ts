@@ -6,14 +6,22 @@ import Stage from "../map/Stage";
 export class MonsterData {
     monid = 0;
     name = "未知";
-    resid = 0;
-    hp = 0;
-    atkmin = 0;
-    atkmax = 0;
-    atksp = 1;
-    def = 0;
-    spd = 0;
-    items: [];
+    ResID = 0;
+
+    Hp = 0;// 当前生命值
+	Speed = 240;// 移动速度
+	AtkMin = 0;// 攻击力
+	AtkMax = 0;
+	Defense = 0;// 防御力
+	MatkMin = 0;// 魔法攻击力
+	MatkMax = 0;
+	Mdefense = 0;// 魔法防御力
+	DatkMin = 0;// 道术攻击力
+	DatkMax = 0;
+    Ddefense = 0;// 道术防御力
+    
+    Skills = [];
+    Items = [];
 }
 
 export default class MonsterMgr {
@@ -61,7 +69,7 @@ export default class MonsterMgr {
         let role = node.getComponent(Role);
         
         if(stage){
-            node.parent = stage.node;
+            node.parent = stage.node.getChildByName("RoleLayer");
             ObjectMgr.instance.addObject(role);
             stage.roleEnter(role);
         }

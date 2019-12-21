@@ -46,6 +46,10 @@ export async function gameAnimation(restype: string, resid: Number, act: ActStat
 	let animation_key = `animation/${restype}/${resid}/${actstr}/${dir}`;
 	return new Promise<cc.AnimationClip>((resolve, reject) => {
 		cc.loader.loadRes(animation_key, cc.SpriteAtlas, (err, atlas) => {
+			if (err) {
+				resolve(null);
+				return;
+			}
 			let frames = [];
 			for (let i = 0; ; i++) {
 				let frame = atlas.getSpriteFrame(i);
@@ -70,4 +74,12 @@ export async function gameMapSpr(mapid: number, x: number, y: number) {
 			}
 		});
 	});
+}
+
+export function random(min: number, max?: number): number {
+	if(max == null){
+		max = min;
+		min = 0;
+	}
+	return Math.floor((Math.random() * (max - min)) + min);
 }

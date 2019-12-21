@@ -1,4 +1,5 @@
-import { SkillIds, SkillName, SkillDesc, SkillType, Attribute, AttrIds, AtkType, SkillActType } from "../common/G"
+import { SkillIds, SkillName, SkillDesc, SkillType, Attribute, AttrIds, SkillAtkType, SkillActType } from "../common/G"
+import { random } from "../common/gFunc";
 
 export class SkillBase {
     private _skillId: number = 0;
@@ -12,7 +13,7 @@ export class SkillBase {
     get skillId(): number {
         return this._skillId;
     }
-    cando = false;
+    cando = true;
     // 技能名字
     skillName: string = "";
     // 技能图标
@@ -27,9 +28,11 @@ export class SkillBase {
     level: number = 0;
 
     // 技能类型 0 攻击技能 1 buff技能 2 debuff技能
-    skillType: SkillType = SkillType.ATTACK;
+    type: SkillType = SkillType.ATTACK;
     // 技能主动性 0 主动 1 被动
-    skillAct: SkillActType = SkillActType.active;
+    actType: SkillActType = SkillActType.Active;
+    // 攻击类型
+    atkType: SkillAtkType = SkillAtkType.Physics;
     // 自己身上特效
     selfEffect: number = 0;
     // 敌人身上特效
@@ -42,7 +45,8 @@ export class SkillBase {
     aiLevel: number = 0;
 
     getatk(attacker: Attribute): AtkInfo {
-        return { AtkType: AtkType.Physics, AtkNum: attacker[AttrIds.Attack] };
+        let num = random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
+        return { AtkType: SkillAtkType.Physics, AtkNum: num };
     }
 
     do() {
@@ -67,7 +71,8 @@ export class NormalAttack extends SkillBase {
     }
 
     getatk(attacker: Attribute): AtkInfo {
-        return { AtkType: AtkType.Physics, AtkNum: attacker[AttrIds.Attack] };
+        let num = random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
+        return { AtkType: SkillAtkType.Physics, AtkNum: num };
     }
 }
 
@@ -75,14 +80,15 @@ export class GongShaJianFa extends SkillBase {
     constructor() {
         super();
         this.skillId = SkillIds.GongShaJianFa;
-        this.skillAct = SkillActType.passive;
+        this.actType = SkillActType.Passive;
         this.aiLevel = 1;
         this.range = 2;
     }
 
     getatk(attacker: Attribute): AtkInfo {
-        let atknum = Math.floor(attacker[AttrIds.Attack] * 110 / 100);
-        return { AtkType: AtkType.Physics, AtkNum: atknum };
+        let atknum = random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
+        atknum = Math.floor(atknum * 110 / 100);
+        return { AtkType: SkillAtkType.Physics, AtkNum: atknum };
     }
 }
 
@@ -90,14 +96,14 @@ export class LeiDianShu extends SkillBase {
     constructor() {
         super();
         this.skillId = SkillIds.LeiDianShu;
-        this.skillAct = SkillActType.active;
+        this.actType = SkillActType.Active;
         this.aiLevel = 1;
         this.range = 10;
     }
 
     getatk(attacker: Attribute): AtkInfo {
-        let atknum = 96 + Math.floor(attacker[AttrIds.Mattack]);
-        return { AtkType: AtkType.Physics, AtkNum: atknum };
+        let atknum = 96 + random(attacker[AttrIds.MatkMin], attacker[AttrIds.MatkMax]);
+        return { AtkType: SkillAtkType.Physics, AtkNum: atknum };
     }
 }
 
@@ -105,14 +111,14 @@ export class LingHunHuoFu extends SkillBase {
     constructor() {
         super();
         this.skillId = SkillIds.LingHunHuoFu;
-        this.skillAct = SkillActType.active;
+        this.actType = SkillActType.Active;
         this.aiLevel = 1;
         this.range = 10;
     }
 
     getatk(attacker: Attribute): AtkInfo {
-        let atknum = 96 + Math.floor(attacker[AttrIds.Mattack]);
-        return { AtkType: AtkType.Physics, AtkNum: atknum };
+        let atknum = 80 + random(attacker[AttrIds.DatkMin], attacker[AttrIds.DatkMax]);
+        return { AtkType: SkillAtkType.Physics, AtkNum: atknum };
     }
 }
 

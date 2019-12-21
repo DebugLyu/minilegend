@@ -6,7 +6,7 @@ export const Cell = {
 
 // 地图格子数据
 export const Gird = {
-	width : 40,
+	width: 40,
 	height: 40,
 }
 
@@ -29,8 +29,8 @@ export enum ActState {
 }
 // 技能计算回调
 export interface AtkInfo {
-    AtkType: number,
-    AtkNum: number
+	AtkType: number,
+	AtkNum: number
 }
 
 // 技能类型
@@ -41,8 +41,8 @@ export enum SkillType {
 }
 // 技能主动性
 export enum SkillActType {
-	active = 0,
-	passive,
+	Active = 0,
+	Passive,
 }
 // 技能ID
 export const SkillIds = {
@@ -66,7 +66,7 @@ export const SkillDesc = {
 	[SkillIds.LingHunHuoFu]: "灵魂火符",
 }
 // 技能攻击类型
-export enum AtkType {
+export enum SkillAtkType {
 	Physics = 0, // 物理攻击
 	Magic,// 魔法攻击
 	Taoist,// 道术攻击
@@ -76,22 +76,43 @@ export enum AttrIds {
 	Hp = 0,// 当前生命值
 	MaxHp,// 最大生命值
 	Speed,// 移动速度
-	Attack = 101,// 攻击力
+	AtkMin = 101,// 攻击力
+	AtkMax,
 	Defense,// 防御力
-	Mattack,// 魔法攻击力
+	MatkMin,// 魔法攻击力
+	MatkMax,
 	Mdefense,// 魔法防御力
-	Dattack,// 道术攻击力
+	DatkMin,// 道术攻击力
+	DatkMax,
 	Ddefense,// 道术防御力
 }
 
+export const AttrStr = {
+	[AttrIds.Hp]: "Hp",
+	[AttrIds.MaxHp]: "MaxHp",
+	[AttrIds.Speed]: "Speed",
+	[AttrIds.AtkMin]: "AtkMin",
+	[AttrIds.AtkMax]: "AtkMax",
+	[AttrIds.Defense]: "Defense",
+	[AttrIds.MatkMin]: "MatkMin",
+	[AttrIds.MatkMax]: "MatkMax",
+	[AttrIds.Mdefense]: "Mdefense",
+	[AttrIds.DatkMin]: "DatkMin",
+	[AttrIds.DatkMax]: "DatkMax",
+	[AttrIds.Ddefense]: "Ddefense",
+}
+
 export class Attribute {
-	[AttrIds.Attack]: number = 0;
+	[AttrIds.Hp]: number = 0;
 	[AttrIds.MaxHp]: number = 0;
 	[AttrIds.Speed]: number = 240;
-	[AttrIds.Attack]: number = 0;
+	[AttrIds.AtkMin]: number = 0;
+	[AttrIds.AtkMax]: number = 0;
 	[AttrIds.Defense]: number = 0;
-	[AttrIds.Mattack]: number = 0;
+	[AttrIds.MatkMin]: number = 0;
+	[AttrIds.MatkMax]: number = 0;
 	[AttrIds.Mdefense]: number = 0;
-	[AttrIds.Dattack]: number = 0;
+	[AttrIds.DatkMin]: number = 0;
+	[AttrIds.DatkMax]: number = 0;
 	[AttrIds.Ddefense]: number = 0;
 }

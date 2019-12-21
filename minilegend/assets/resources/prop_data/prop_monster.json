@@ -1,16 +1,21 @@
 {
-    "1000":{
-        "monid": 1000,
-        "name": "羊",
-        "resid": 3800,
-        "hp":100,
-        "atkmin":1,
-        "atkmax":10,
-        "atksp": 1,
-        "def": 1,
-        "spd":30,
-        "skills": [10000],
-        "items":[
+    "1000": {
+        "MonID": 1000,
+        "Name": "羊",
+        "ResID": 400100,
+        "MaxHp": 100,
+        "AtkMin": 1,
+        "AtkMax": 10,
+        "Defense": 1,
+        "MatkMin": 1,
+        "MatkMax": 10,
+        "Mdefense": 1,
+        "DatkMin": 1,
+        "DatkMax": 10,
+        "Ddefense": 1,
+        "Speed": 100,
+        "Skills": [],
+        "Items": [
             [50, 1000001, 1, 10],
             [100, 1000002, 1, 10]
         ]

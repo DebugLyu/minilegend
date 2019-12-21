@@ -1,13 +1,13 @@
 import LivingMod from "./LivingMod";
-import { Attribute, AttrIds, AtkInfo, AtkType } from "../common/G";
-import SkillMgr, { SkillBase } from "../manager/SkillMgr";
+import { Attribute, AttrIds, AtkInfo, SkillAtkType } from "../common/G";
+import SkillMgr, { SkillBase, NormalAttack } from "../manager/SkillMgr";
 import WarriorCtr from "./WarriorCtr";
 
 export default class WarriorMod extends LivingMod {
     // 属性值
     attr: Attribute = new Attribute();
     // 是否死亡
-    isdead: boolean = false;
+    isDead: boolean = false;
     // 技能列表
     skillList: SkillBase[] = [];
     
@@ -23,13 +23,18 @@ export default class WarriorMod extends LivingMod {
         return this.attr[AttrIds.Hp];
     }
 
+    constructor(control?: WarriorCtr){
+        super(control);
+        this.skillList.push(new NormalAttack());
+    }
+
     init(){
         super.init();
     }
 
     dead() {
         this.attr[AttrIds.Hp] = 0;
-        this.isdead = true;
+        this.isDead = true;
         this.control.dead();
     }
 
@@ -45,18 +50,23 @@ export default class WarriorMod extends LivingMod {
 
     behit(atkinfo: AtkInfo){
         let atk = atkinfo.AtkNum;
+        if(atk == 0){
+            return;
+        }
+        
         let def = 0;
-        if(atkinfo.AtkType == AtkType.Physics){
+        if(atkinfo.AtkType == SkillAtkType.Physics){
             def = this.attr[AttrIds.Defense];
         }
-        if(atkinfo.AtkType == AtkType.Magic){
+        if(atkinfo.AtkType == SkillAtkType.Magic){
             def = this.attr[AttrIds.Mdefense];
         }
-        if(atkinfo.AtkType == AtkType.Taoist){
+        if(atkinfo.AtkType == SkillAtkType.Taoist){
             def = this.attr[AttrIds.Ddefense];
         }
         atk = atk - def;
         this.hp -= atk;
+        return atk;
     }
 
     getAttr(attrid: AttrIds): number {
@@ -86,7 +96,7 @@ export default class WarriorMod extends LivingMod {
     }
 
     aiSkill(targetPos:cc.Vec2): SkillBase {
-        let len = cc.v2(this.x, this.y).sub(targetPos).mag();
+        let len = cc.v2(this, this.y).sub(targetPos).mag();
         let list = [];
         // 优先选择 在范围内的
         for (let i = 0; i < this.skillList.length; i++) {

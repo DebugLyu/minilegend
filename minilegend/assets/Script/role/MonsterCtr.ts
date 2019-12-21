@@ -8,8 +8,8 @@ const { ccclass, property, menu } = cc._decorator;
 @ccclass
 @menu("role/MonsterCtr")
 export default class MonsterCtr extends WarriorCtr {
-    model = new MonsterMod(this);
-    
+    model: MonsterMod = new MonsterMod(this);
+
     start() {
 
     }

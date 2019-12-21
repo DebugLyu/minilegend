@@ -8,6 +8,7 @@ import PlayerMgr from "../../manager/PlayerMgr";
 import WarriorCtr from "../../role/WarriorCtr";
 import MonsterCtr from "../../role/MonsterCtr";
 import ObjectMgr from "../../manager/ObjectMgr";
+import { AttrIds } from "../../common/G";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -30,11 +31,24 @@ export default class TestBattle extends cc.Component {
 	}
 
 	start() {
-		
+
 		setTimeout(() => {
 			// if(this.role){
 			// 	this.role.enterMap(1001);
 			// }
+			this.role.model.attr[AttrIds.Hp] = 20;
+			this.role.model.attr[AttrIds.MaxHp] = 20;
+			this.role.model.attr[AttrIds.Speed] = 300;
+			this.role.model.attr[AttrIds.AtkMin] = 5;
+			this.role.model.attr[AttrIds.AtkMax] = 8;
+			this.role.model.attr[AttrIds.Defense] = 2;
+			this.role.model.attr[AttrIds.MatkMin] = 7;
+			this.role.model.attr[AttrIds.MatkMax] = 9;
+			this.role.model.attr[AttrIds.Mdefense] = 3;
+			this.role.model.attr[AttrIds.DatkMin] = 5;
+			this.role.model.attr[AttrIds.DatkMax] = 8;
+			this.role.model.attr[AttrIds.Ddefense] = 4;
+
 			this.role.weapon.resId = 1700;
 			this.stage.loadMap(1001);
 			this.stage.roleEnter(this.role);

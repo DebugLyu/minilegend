@@ -15,6 +15,7 @@ export default class LivingCtr extends cc.Component {
     state: ActState = ActState.IDLE;
     // 当前方向 0：未初始化状态
     dir: number = 0;
+
     // 资源id
     private _resid: number = 0;
     set resId(resid: number) {
@@ -33,6 +34,7 @@ export default class LivingCtr extends cc.Component {
     onLoad() {
 
     }
+
     start() {
         if (this.weapon && this.weapon.resId == 0) {
             this.weapon.node.active = false;
@@ -74,8 +76,20 @@ export default class LivingCtr extends cc.Component {
         let aniname = String(this.resId) + String(this.state) + String(this.dir);
         let addonani = this.node.getComponent(cc.Animation);
         let curClip = this.findAnimation(addonani, aniname);
+        if(!isloop && this.state != ActState.DIE){
+            let finished = ()=>{
+                this.runAction(null, ActState.IDLE);
+                addonani.off('finished', finished );
+            }
+            addonani.on('finished', finished );
+        }
+        
         if(curClip == null){
             curClip = await gameAnimation("role", this.resId, act, dir);
+            if(curClip == null && act == ActState.MGC){
+                this.runAction(dir, ActState.ATK);
+                return;
+            }
             curClip.name = aniname;
             curClip.wrapMode = isloop ? cc.WrapMode.Loop : cc.WrapMode.Default;
             addonani.addClip(curClip);
@@ -106,9 +120,5 @@ export default class LivingCtr extends cc.Component {
             dir = this.dir;
         }
         this.runAction(dir, ActState.IDLE);
-    }
-
-    attack(dir?: number){
-        this.runAction(dir, ActState.ATK);
     }
 }
