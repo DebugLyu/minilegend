@@ -232,7 +232,7 @@ export default class Role extends cc.Component {
         }
 
         if (grid == 0) {
-            this.warrior.idle();
+            // this.warrior.idle();
             return;
         } else if (grid == 1) {
             this.node.opacity = 255;
