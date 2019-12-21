@@ -41,9 +41,12 @@ export function degree2Dir(degree: number): number {
 	 * @param dir 方向id 参考小键盘
 	 */
 // let role_animation_list: cc.AnimationClip[] = [];
-export async function gameAnimation(restype: string, resid: Number, act: ActState, dir: Number) {
-	let actstr = actState2Str(act);
-	let animation_key = `animation/${restype}/${resid}/${actstr}/${dir}`;
+export async function gameAnimation(restype: string, resid: number | string, act?: ActState, dir?: number) {
+	let animation_key = `animation/${restype}/${resid}`;
+	if(restype == "role" || restype == "weapon"){
+		let actstr = actState2Str(act);
+		animation_key += `/${actstr}/${dir}`;
+	}
 	return new Promise<cc.AnimationClip>((resolve, reject) => {
 		cc.loader.loadRes(animation_key, cc.SpriteAtlas, (err, atlas) => {
 			if (err) {
@@ -77,7 +80,7 @@ export async function gameMapSpr(mapid: number, x: number, y: number) {
 }
 
 export function random(min: number, max?: number): number {
-	if(max == null){
+	if (max == null) {
 		max = min;
 		min = 0;
 	}

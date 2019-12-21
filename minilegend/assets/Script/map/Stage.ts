@@ -1,7 +1,7 @@
 import MapMgr, { MapData, StageData } from "../manager/MapMgr";
 import { ActState, Cell } from "../common/G";
 import Role from "../role/Role";
-import { gameMapSpr } from "../common/gFunc";
+import { gameMapSpr, gameAnimation } from "../common/gFunc";
 import PlayerMgr from "../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
 
@@ -56,6 +56,7 @@ export default class Stage extends cc.Component {
 		this.stageId = stageid;
 		let stagedata = this.mapData.stageList[stageid];
 		this.stageData = stagedata;
+		this.addTransport();
 		this.checkMapNode();
 	}
 
@@ -69,6 +70,24 @@ export default class Stage extends cc.Component {
 		}
 		this.checkPlayerPos();
 		this.checkMapNode();
+	}
+
+	async addTransport(){
+		for (let i = 0; i < this.stageData.trancePos.length; i++) {
+			const tinfo = this.stageData.trancePos[i];
+			let node = new cc.Node();
+			node.addComponent(cc.Sprite);
+			let animation = node.addComponent(cc.Animation);
+			let tranClip = await gameAnimation("effect", "transport");
+			tranClip.name = "" + this.stageData.trancePos[0].tomap;
+			tranClip.wrapMode = cc.WrapMode.Loop;
+			animation.addClip(tranClip);
+			animation.play(tranClip.name);
+
+			node.parent = this.node;
+			node.zIndex = 1;
+			node.position = MapMgr.girdPos2pixPos(cc.v2(tinfo.x, tinfo.y));	
+		}
 	}
 
 	checkPlayerPos() {
