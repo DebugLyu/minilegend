@@ -15,7 +15,7 @@ export default class ItemMgr {
 		return this._instance;
 	}
 
-	private itemList = new Map<number, ItemData>();
+	private itemList:{[key:number]: string} = {};
 
 	init() {
 		cc.loader.loadRes("prop_data/prop_item", cc.JsonAsset, (error: Error, resource) => {

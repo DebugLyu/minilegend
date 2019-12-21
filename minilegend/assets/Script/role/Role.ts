@@ -218,6 +218,7 @@ export default class Role extends cc.Component {
             if (tryxy(0, y * len)) {
                 break;
             }
+            break;
         }
 
         if (npos.x < 0) {
