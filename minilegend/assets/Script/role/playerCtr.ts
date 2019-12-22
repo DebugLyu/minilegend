@@ -9,6 +9,7 @@ export default class PlayerCtr extends WarriorCtr {
     model:PlayerMod = new PlayerMod(this);
 
     start() {
+        super.start();
         // TODO:test 测试用 资源id 设置了 资源id 就可以形成动画了
         this.resId = 3800;
     }

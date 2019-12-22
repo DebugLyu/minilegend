@@ -75,7 +75,7 @@ export default class Role extends cc.Component {
     }
 
     start() {
-
+        // this.stage.effectLayer
     }
 
     getWarrior(): WarriorCtr {

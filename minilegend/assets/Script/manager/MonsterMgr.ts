@@ -73,6 +73,7 @@ export default class MonsterMgr {
             ObjectMgr.instance.addObject(role);
             stage.roleEnter(role);
         }
+        
         if(x){
             role.x = x;
         }

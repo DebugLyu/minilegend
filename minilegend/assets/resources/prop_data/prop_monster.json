@@ -3,7 +3,7 @@
         "MonID": 1000,
         "Name": "羊",
         "ResID": 400100,
-        "MaxHp": 100,
+        "MaxHp": 30,
         "AtkMin": 1,
         "AtkMax": 10,
         "Defense": 1,

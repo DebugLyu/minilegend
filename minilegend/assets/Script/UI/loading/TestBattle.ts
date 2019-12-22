@@ -33,12 +33,9 @@ export default class TestBattle extends cc.Component {
 	start() {
 
 		setTimeout(() => {
-			// if(this.role){
-			// 	this.role.enterMap(1001);
-			// }
-			this.role.model.attr[AttrIds.Hp] = 20;
-			this.role.model.attr[AttrIds.MaxHp] = 20;
-			this.role.model.attr[AttrIds.Speed] = 300;
+			this.role.model.attr[AttrIds.Hp] = 30;
+			this.role.model.attr[AttrIds.MaxHp] = 30;
+			this.role.model.attr[AttrIds.Speed] = 240;
 			this.role.model.attr[AttrIds.AtkMin] = 5;
 			this.role.model.attr[AttrIds.AtkMax] = 8;
 			this.role.model.attr[AttrIds.Defense] = 2;
@@ -59,7 +56,6 @@ export default class TestBattle extends cc.Component {
 			// for(let i = 0; i < 5; i++){
 			MonsterMgr.instance.genMonster(1000, this.stage, 10, 7);
 			// }
-
 		}, 3000);
 	}
 }

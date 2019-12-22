@@ -1,3 +1,5 @@
+import RoleEx from "../role/RoleEx";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -6,8 +8,29 @@ export default class EffectLayer extends cc.Component {
     @property(cc.Node)
     hitNum: cc.Node = null;
 
+    @property(cc.Node)
+    roleEx: cc.Node = null;
+
+    roleList: {[key:number]: cc.Node} = {};
+    
     start() {
 
+    }
+
+    addRoleEx(onlyid, role){
+        let roleExNode = cc.instantiate(this.roleEx);
+        roleExNode.parent = this.roleEx.parent;
+        let roleEx = roleExNode.getComponent(RoleEx);
+        roleEx.setRole(role);
+        this.roleList[onlyid] = roleExNode;
+    }
+
+    delRoleEx(onlyid){
+        let node = this.roleList[onlyid];
+        if(node){
+            node.destroy();
+        }
+        delete this.roleList[onlyid];
     }
 
     showHitNum(num: number, x: number | cc.Vec2, y?: number, self?: boolean) {
@@ -30,8 +53,8 @@ export default class EffectLayer extends cc.Component {
 
         labelnode.scale = 2;
 
-        labelnode.runAction(cc.sequence(cc.moveBy(0.8, 0, 120), cc.removeSelf(true)));
-        labelnode.runAction(cc.sequence(cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
+        labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(), cc.moveBy(0.8, 0, 120), cc.removeSelf(true)));
+        labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(),cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
     }
 
     // update (dt) {}

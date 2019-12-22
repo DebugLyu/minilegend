@@ -11,7 +11,7 @@ export default class MonsterCtr extends WarriorCtr {
     model: MonsterMod = new MonsterMod(this);
 
     start() {
-
+        super.start();
     }
 
 

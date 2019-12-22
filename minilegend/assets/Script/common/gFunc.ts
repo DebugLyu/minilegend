@@ -53,9 +53,13 @@ export async function gameAnimation(restype: string, resid: number | string, act
 				resolve(null);
 				return;
 			}
+			let hight = 0;
 			let frames = [];
 			for (let i = 0; ; i++) {
 				let frame = atlas.getSpriteFrame(i);
+				if (hight == 0) {
+					// hight = frame.getTexture().height;
+				}
 				if (frame) frames.push(frame);
 				else break;
 			}
