@@ -12,7 +12,7 @@ export default class WarriorMod extends LivingMod {
     skillList: SkillBase[] = [];
     
     get control(): WarriorCtr{
-        return <WarriorCtr>this._control;
+        return this._control as WarriorCtr;
     }
 
     set hp(hp: number) {

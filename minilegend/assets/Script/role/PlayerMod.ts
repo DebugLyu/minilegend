@@ -6,7 +6,7 @@ export default class PlayerMod extends WarriorMod {
     playerid: number = 0;// 玩家id
    
     get control(): PlayerCtr{
-        return <PlayerCtr>this._control;
+        return this._control as PlayerCtr;
     }
 
     init(){
