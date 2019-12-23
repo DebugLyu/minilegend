@@ -18,20 +18,28 @@ const { ccclass, property, menu } = cc._decorator;
 @ccclass
 @menu("role/Role")
 export default class Role extends cc.Component {
-    private _x: number;
+    private _x: number = -1;
     public get x(): number {
         return this._x;
     }
     public set x(v: number) {
+        // 未初始化状态 可以直接设置 地图实际位置
+        if(this._x == -1){
+            this.node.x = MapMgr.girdX2PixX(v);
+        }
         this._x = v;
         this.model.x = v;
     }
 
-    private _y: number;
+    private _y: number = -1;
     public get y(): number {
         return this._y;
     }
     public set y(v: number) {
+        // 未初始化状态 可以直接设置 地图实际位置
+        if(this._y == -1){
+            this.node.y = MapMgr.girdY2PixY(v);
+        }
         this._y = v;
         this.model.y = v;
     }
@@ -273,7 +281,7 @@ export default class Role extends cc.Component {
         let skill = this.model.aiSkill(target_pos);
         if (skill == null) {
             let len = self_pos.sub(target_pos).mag();
-            if (len > 1) {
+            if (len > 1 && this.model.livingType == LivingType.MONSTER) {
                 this.aiMoveToTarget();
             }
             return;
@@ -295,6 +303,7 @@ export default class Role extends cc.Component {
             return;
         }
 
+        // 如果是玩家角色超过2秒不动，AI操作
         if (this.model.livingType == LivingType.PLAYER) {
             this.unDoAnyThingTimer += dt;
             if (this.unDoAnyThingTimer < 2) {

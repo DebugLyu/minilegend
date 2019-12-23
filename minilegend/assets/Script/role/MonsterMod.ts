@@ -20,9 +20,10 @@ export default class MonsterMod extends WarriorMod {
         // 设置资源id 在场景中表现出来
         this.control.resId = mondata.ResID;
 
+        this.name = mondata.Name;
         // 设置属性
-        this.attr[AttrIds.Hp] = mondata.Hp;
-        this.attr[AttrIds.MaxHp] = mondata.Hp;
+        this.attr[AttrIds.Hp] = mondata.MaxHp;
+        this.attr[AttrIds.MaxHp] = mondata.MaxHp;
         this.attr[AttrIds.Speed] = mondata.Speed;
         this.attr[AttrIds.AtkMin] = mondata.AtkMin;
         this.attr[AttrIds.AtkMax] = mondata.AtkMax;

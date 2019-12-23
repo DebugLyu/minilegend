@@ -33,6 +33,7 @@ export default class TestBattle extends cc.Component {
 	start() {
 
 		setTimeout(() => {
+			this.role.model.name = "测试角色";
 			this.role.model.attr[AttrIds.Hp] = 30;
 			this.role.model.attr[AttrIds.MaxHp] = 30;
 			this.role.model.attr[AttrIds.Speed] = 240;

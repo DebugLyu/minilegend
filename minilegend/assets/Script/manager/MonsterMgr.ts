@@ -5,10 +5,10 @@ import Stage from "../map/Stage";
 
 export class MonsterData {
     monid = 0;
-    name = "未知";
+    Name = "未知";
     ResID = 0;
 
-    Hp = 0;// 当前生命值
+    MaxHp = 0;// 当前生命值
 	Speed = 240;// 移动速度
 	AtkMin = 0;// 攻击力
 	AtkMax = 0;
