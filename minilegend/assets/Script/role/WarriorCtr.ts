@@ -2,6 +2,7 @@ import LivingCtr from "./LivingCtr";
 import WarriorMod from "./WarriorMod";
 import { ActState, SkillType, SkillActType, SkillAtkType } from "../common/G";
 import { SkillBase } from "../manager/SkillMgr";
+import { gameAnimation } from "../common/gFunc";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -45,6 +46,7 @@ export default class WarriorCtr extends LivingCtr {
         this.runAction(2, ActState.DIE);
     }
 
+
     doSkill(skill:SkillBase, dir?: number){
         if (this.model.isDead) {
             return;
@@ -56,5 +58,15 @@ export default class WarriorCtr extends LivingCtr {
             this.magic(dir);   
         }
         // 下面播放 技能在 自身身上的特效
-	}
+        if(skill.selfEffect == 0){
+            return;
+        }
+        this.playEffect(skill.selfEffect);
+    }
+    
+    beHit(skill: SkillBase){
+        if(skill.enemyEffect){
+            this.playEffect(skill.enemyEffect);
+        }
+    }
 }

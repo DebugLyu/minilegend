@@ -10,8 +10,8 @@ export default class WarriorMod extends LivingMod {
     isDead: boolean = false;
     // 技能列表
     skillList: SkillBase[] = [];
-    
-    get control(): WarriorCtr{
+
+    get control(): WarriorCtr {
         return this._control as WarriorCtr;
     }
 
@@ -23,25 +23,25 @@ export default class WarriorMod extends LivingMod {
         return this.attr[AttrIds.Hp];
     }
 
-    constructor(control?: WarriorCtr){
+    constructor(control?: WarriorCtr) {
         super(control);
         this.skillList.push(new NormalAttack());
     }
 
-    init(){
+    init() {
         super.init();
     }
 
     dead() {
         this.attr[AttrIds.Hp] = 0;
-        
+
         this.control.dead();
         this.isDead = true;
     }
 
     checkHp() {
         let maxhp = this.getAttr(AttrIds.MaxHp);
-        if(this.hp > maxhp){
+        if (this.hp > maxhp) {
             this.setAttr(AttrIds.Hp, maxhp);
         }
         if (this.hp <= 0) {
@@ -49,32 +49,29 @@ export default class WarriorMod extends LivingMod {
         }
     }
 
-    behit(atkinfo: AtkInfo){
-        let atk = atkinfo.AtkNum;
-        if(atk == 0){
+    beHit(atknum: number, skill: SkillBase) {
+        if (atknum == 0) {
             return;
         }
-        
+
         let def = 0;
-        if(atkinfo.AtkType == SkillAtkType.Physics){
+        if (skill.atkType == SkillAtkType.Physics) {
             def = this.attr[AttrIds.Defense];
-        }
-        if(atkinfo.AtkType == SkillAtkType.Magic){
+        } else if (skill.atkType == SkillAtkType.Magic) {
             def = this.attr[AttrIds.Mdefense];
-        }
-        if(atkinfo.AtkType == SkillAtkType.Taoist){
+        } else if (skill.atkType == SkillAtkType.Taoist) {
             def = this.attr[AttrIds.Ddefense];
         }
-        atk = atk - def;
-        this.hp -= atk;
-        return atk;
+        atknum -= def;
+        this.hp -= atknum;
+        return atknum;
     }
 
     getAttr(attrid: AttrIds): number {
         return this.attr[attrid];
     }
 
-    setAttr(attrid: AttrIds, num: number){
+    setAttr(attrid: AttrIds, num: number) {
         this.attr[attrid] = num;
     }
 
@@ -86,38 +83,43 @@ export default class WarriorMod extends LivingMod {
         }
     }
 
-    getSkill(skillid: number){
+    getSkill(skillid: number) {
         for (let i = 0; i < this.skillList.length; i++) {
             const skill = this.skillList[i];
-            if(skill.skillId == skillid){
+            if (skill.skillId == skillid) {
                 return skill;
             }
         }
         return null;
     }
 
-    aiSkill(targetPos:cc.Vec2): SkillBase {
+    aiSkill(targetPos: cc.Vec2): SkillBase {
         let len = cc.v2(this, this.y).sub(targetPos).mag();
         let list = [];
         // 优先选择 在范围内的
         for (let i = 0; i < this.skillList.length; i++) {
             const skill = this.skillList[i];
-            if(skill.range >= len && skill.cando){
+            if (skill.range >= len && skill.cando) {
                 list.push(skill);
             }
         }
 
-        if(list.length > 0){
-            if(list.length == 1){
+        if (list.length > 0) {
+            if (list.length == 1) {
                 return list[0];
             }
 
-            list.sort((a, b)=>{
+            list.sort((a, b) => {
                 return a.aiLevel - b.aiLevel;
             });
 
             return list[0];
         }
         return null;
+    }
+
+    relive(){
+        this.attr[AttrIds.Hp] = this.attr[AttrIds.MaxHp];
+        this.isDead = false;
     }
 }

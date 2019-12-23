@@ -1,6 +1,7 @@
 {
   "ver": "1.2.4",
-  "uuid": "216f899d-a70f-48fa-be8b-2d8decd5638a",
+  "uuid": "bb3110c6-094a-4c55-99ca-7648d0e49d66",
+  "rawTextureUuid": "80dbb318-a3dc-41c5-aa54-dcc3f347cc5d",
   "size": {
     "width": 256,
     "height": 512
@@ -9,7 +10,8 @@
   "subMetas": {
     "0.png": {
       "ver": "1.0.4",
-      "uuid": "dafaa749-de53-479e-9c88-ca76766c0b92",
+      "uuid": "cd1f1934-2b68-43dc-b1e2-c9a796b8f35a",
+      "rawTextureUuid": "80dbb318-a3dc-41c5-aa54-dcc3f347cc5d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -30,7 +32,8 @@
     },
     "1.png": {
       "ver": "1.0.4",
-      "uuid": "e16d737e-bca8-4b8f-a649-5a49f0f943de",
+      "uuid": "0493b212-576e-475d-9ca0-3d5d6b4b25ea",
+      "rawTextureUuid": "80dbb318-a3dc-41c5-aa54-dcc3f347cc5d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": true,
@@ -51,7 +54,8 @@
     },
     "2.png": {
       "ver": "1.0.4",
-      "uuid": "90bc2fb3-b208-4e82-b257-79b443f8899a",
+      "uuid": "2cc09810-1eb0-4900-a16f-425f3401a51c",
+      "rawTextureUuid": "80dbb318-a3dc-41c5-aa54-dcc3f347cc5d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": true,
@@ -72,7 +76,8 @@
     },
     "3.png": {
       "ver": "1.0.4",
-      "uuid": "2dde8a60-d985-4ae7-8caa-9360de1f313f",
+      "uuid": "e264b9e0-02d5-4537-a47c-9aa4a902e522",
+      "rawTextureUuid": "80dbb318-a3dc-41c5-aa54-dcc3f347cc5d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -93,7 +98,8 @@
     },
     "4.png": {
       "ver": "1.0.4",
-      "uuid": "2ced3dfe-0c9c-417b-aaf6-ab3da45ba3a2",
+      "uuid": "6da51ca4-e8d2-42ab-b97e-97938dd62120",
+      "rawTextureUuid": "80dbb318-a3dc-41c5-aa54-dcc3f347cc5d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -114,7 +120,8 @@
     },
     "5.png": {
       "ver": "1.0.4",
-      "uuid": "e6e1d347-a94f-436e-98c4-0d4c84dece2a",
+      "uuid": "6da054b7-e861-4b1c-b3b1-14bcd15d3a2d",
+      "rawTextureUuid": "80dbb318-a3dc-41c5-aa54-dcc3f347cc5d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

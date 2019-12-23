@@ -34,7 +34,7 @@ export default class MonsterMod extends WarriorMod {
         this.attr[AttrIds.DatkMin] = mondata.DatkMin;
         this.attr[AttrIds.DatkMax] = mondata.DatkMax;
         this.attr[AttrIds.Ddefense] = mondata.Ddefense;
-
+        this.initSkill(mondata.Skills);
     }
 
     montest(){

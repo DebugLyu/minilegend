@@ -37,16 +37,16 @@ export class SkillBase {
     selfEffect: number = 0;
     // 敌人身上特效
     enemyEffect: number = 0;
-    // 飞行特效
+    enemyEffOffset: cc.Vec2 = cc.Vec2.ZERO;
+    // 飞行特效 如果没有飞行特效，不存在子弹，技能是必中的
     flyEffect: number = 0;
     // 技能范围
     range: number = 1;
     // AI优先级
     aiLevel: number = 0;
 
-    getatk(attacker: Attribute): AtkInfo {
-        let num = random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
-        return { AtkType: SkillAtkType.Physics, AtkNum: num };
+    getatk(attacker: Attribute): number {
+        return random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
     }
 
     do() {
@@ -60,19 +60,20 @@ export class SkillBase {
 }
 
 interface AtkInfo {
+    SkillId: number,
     AtkType: number,
-    AtkNum: number
+    AtkNum: number,
 }
 
 export class NormalAttack extends SkillBase {
     constructor() {
         super();
         this.skillId = SkillIds.NormalAttack;
+        this.range = 2;
     }
 
-    getatk(attacker: Attribute): AtkInfo {
-        let num = random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
-        return { AtkType: SkillAtkType.Physics, AtkNum: num };
+    getatk(attacker: Attribute): number {
+        return random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
     }
 }
 
@@ -82,13 +83,13 @@ export class GongShaJianFa extends SkillBase {
         this.skillId = SkillIds.GongShaJianFa;
         this.actType = SkillActType.Passive;
         this.aiLevel = 1;
-        this.range = 2;
+        this.range = 3;
     }
 
-    getatk(attacker: Attribute): AtkInfo {
+    getatk(attacker: Attribute): number {
         let atknum = random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
         atknum = Math.floor(atknum * 110 / 100);
-        return { AtkType: SkillAtkType.Physics, AtkNum: atknum };
+        return atknum;
     }
 }
 
@@ -99,11 +100,13 @@ export class LeiDianShu extends SkillBase {
         this.actType = SkillActType.Active;
         this.aiLevel = 1;
         this.range = 10;
+        this.selfEffect = 200011;
+        this.enemyEffect = 20001;
+        this.enemyEffOffset = cc.v2(0, 110);
     }
 
-    getatk(attacker: Attribute): AtkInfo {
-        let atknum = 96 + random(attacker[AttrIds.MatkMin], attacker[AttrIds.MatkMax]);
-        return { AtkType: SkillAtkType.Physics, AtkNum: atknum };
+    getatk(attacker: Attribute): number {
+        return 96 + random(attacker[AttrIds.MatkMin], attacker[AttrIds.MatkMax]);
     }
 }
 
@@ -116,9 +119,8 @@ export class LingHunHuoFu extends SkillBase {
         this.range = 10;
     }
 
-    getatk(attacker: Attribute): AtkInfo {
-        let atknum = 80 + random(attacker[AttrIds.DatkMin], attacker[AttrIds.DatkMax]);
-        return { AtkType: SkillAtkType.Physics, AtkNum: atknum };
+    getatk(attacker: Attribute): number {
+        return 80 + random(attacker[AttrIds.DatkMin], attacker[AttrIds.DatkMax]);
     }
 }
 

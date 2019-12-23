@@ -2,6 +2,7 @@ import Stage from "../../map/Stage";
 import MonsterMgr from "../../manager/MonsterMgr";
 import { random } from "../../common/gFunc";
 import MapMgr from "../../manager/MapMgr";
+import PlayerMgr from "../../manager/PlayerMgr";
 
 const { ccclass, property } = cc._decorator;
 
@@ -12,11 +13,18 @@ export default class TestLayer extends cc.Component {
 
 
     start() {
-        let btnnode = this.node.getChildByName("addmonster");
-        btnnode.on("click", this.onAddMonsterClicked, this);
+        let addmonster = this.node.getChildByName("addmonster");
+        addmonster.on("click", this.onAddMonsterClicked, this);
+        let relive = this.node.getChildByName("relive");
+        relive.on("click", this.relive, this);
     }
 
     // update (dt) {}
+    relive(e, d) {
+        let role = PlayerMgr.instance.mainRole;
+        role.relive();
+    }
+
     onAddMonsterClicked(e, d) {
         let random_x = random(this.stage.stageData.lines);;
         let random_y = random(this.stage.stageData.rows);;

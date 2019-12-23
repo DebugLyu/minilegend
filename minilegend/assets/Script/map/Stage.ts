@@ -19,7 +19,7 @@ export default class Stage extends cc.Component {
 	stageData: StageData = null;
 	effectLayer: EffectLayer = null;
 
-	role:Role = null;
+	role: Role = null;
 
 	start() {
 		this.role = PlayerMgr.instance.mainRole;
@@ -60,7 +60,7 @@ export default class Stage extends cc.Component {
 		this.checkMapNode();
 	}
 
-	roleEnter(role: Role){
+	roleEnter(role: Role) {
 		role.enterStage(this.mapId, this.stageId);
 	}
 
@@ -72,11 +72,34 @@ export default class Stage extends cc.Component {
 		this.checkMapNode();
 	}
 
-	async addTransport(){
+	async playEffect(effectid: number,x: number, y: number) {
+		let clip = await gameAnimation("effect", effectid);
+		if(clip == null){
+			return;
+		}
+		let node = new cc.Node();
+		let sprite = node.addComponent(cc.Sprite);
+		sprite.trim = false;
+		sprite.sizeMode = cc.Sprite.SizeMode.RAW;
+		let animation = node.addComponent(cc.Animation);
+		clip.name = "eff" + effectid;
+		animation.addClip(clip);
+		animation.play(clip.name);
+		animation.on("finished", () => {
+			node.destroy();
+		})
+		node.parent = this.node;
+		node.zIndex = 1;
+		node.position = cc.v2(x, y);
+	}
+
+	async addTransport() {
 		for (let i = 0; i < this.stageData.trancePos.length; i++) {
 			const tinfo = this.stageData.trancePos[i];
 			let node = new cc.Node();
-			node.addComponent(cc.Sprite);
+			let sprite = node.addComponent(cc.Sprite);
+			sprite.trim = false;
+			sprite.sizeMode = cc.Sprite.SizeMode.RAW;
 			let animation = node.addComponent(cc.Animation);
 			let tranClip = await gameAnimation("effect", "transport");
 			tranClip.name = "" + this.stageData.trancePos[0].tomap;
@@ -86,7 +109,7 @@ export default class Stage extends cc.Component {
 
 			node.parent = this.node;
 			node.zIndex = 1;
-			node.position = MapMgr.girdPos2pixPos(cc.v2(tinfo.x, tinfo.y));	
+			node.position = MapMgr.girdPos2pixPos(cc.v2(tinfo.x, tinfo.y));
 		}
 	}
 

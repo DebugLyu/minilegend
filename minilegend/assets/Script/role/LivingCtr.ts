@@ -15,7 +15,8 @@ export default class LivingCtr extends cc.Component {
     state: ActState = ActState.IDLE;
     // 当前方向 0：未初始化状态
     dir: number = 0;
-    // 像素高度，用于记录大致的 血条位置
+    // 像素大小，用于记录碰撞包围盒 和 血条 称号等 高度
+    pixWidth: number = 0;
     pixHight: number = 0;
 
     // 资源id
@@ -33,6 +34,7 @@ export default class LivingCtr extends cc.Component {
     @property(WeaponCtr)
     weapon: WeaponCtr = null;
 
+    effectAni: cc.Animation = null;
     onLoad() {
 
     }
@@ -42,6 +44,7 @@ export default class LivingCtr extends cc.Component {
             this.weapon.node.active = false;
         }
         this.role = this.node.parent.getComponent(Role);
+        this.effectAni = this.node.getChildByName("animation").getComponent(cc.Animation);
         // this.runAction(2, ActState.IDLE);
     }
 
@@ -56,8 +59,21 @@ export default class LivingCtr extends cc.Component {
         return null;
     }
 
+    async playEffect(effectid: number) {
+        let clip = this.findAnimation(this.effectAni, "eff" + effectid);
+        if (clip == null) {
+            clip = await gameAnimation("effect", effectid);
+            clip.name = "eff" + effectid;
+            this.effectAni.addClip(clip);
+        }
+        if (clip == null) {
+            return;
+        }
+        this.effectAni.play("eff" + effectid);
+    }
+
     async runAction(dir?: number, act?: number) {
-        if (this.resId == 0){
+        if (this.resId == 0) {
             return;
         }
         if (dir == null) {
@@ -115,13 +131,15 @@ export default class LivingCtr extends cc.Component {
         }
         addonani.play(curClip.name);
 
-        if (this.pixHight == 0) {
+        if (this.pixHight == 0 || this.pixWidth == 0) {
             this.scheduleOnce(() => {
                 let sprite = this.node.getComponent(cc.Sprite);
                 let t = sprite.spriteFrame.getRect();
                 this.pixHight = t.height;
+                this.pixWidth = t.width;
                 if (sprite.spriteFrame.isRotated) {
                     this.pixHight = t.width;
+                    this.pixWidth = t.height;
                 }
                 this.role.stage.effectLayer.addRoleEx(this.model.onlyid, this.role);
                 console.log("pixHight", this.pixHight);

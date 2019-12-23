@@ -24,7 +24,7 @@ export default class Role extends cc.Component {
     }
     public set x(v: number) {
         // 未初始化状态 可以直接设置 地图实际位置
-        if(this._x == -1){
+        if (this._x == -1) {
             this.node.x = MapMgr.girdX2PixX(v);
         }
         this._x = v;
@@ -37,7 +37,7 @@ export default class Role extends cc.Component {
     }
     public set y(v: number) {
         // 未初始化状态 可以直接设置 地图实际位置
-        if(this._y == -1){
+        if (this._y == -1) {
             this.node.y = MapMgr.girdY2PixY(v);
         }
         this._y = v;
@@ -125,8 +125,7 @@ export default class Role extends cc.Component {
 
         if (list.length == 0) {
             return null;
-        }
-        if (list.length == 1) {
+        } else if (list.length == 1) {
             return list[0];
         }
 
@@ -146,10 +145,13 @@ export default class Role extends cc.Component {
     }
 
     aiMoveToTarget() {
+        if (this.warrior.state != ActState.IDLE) {
+            return;
+        }
         this.warrior.move(this.getDir(this.target.x, this.target.y));
-        setTimeout(() => {
-            this.warrior.idle();
-        }, 300);
+        // setTimeout(() => {
+        //     this.warrior.idle();
+        // }, 300);
     }
 
     checkPos(dt) {
@@ -273,9 +275,9 @@ export default class Role extends cc.Component {
         }
 
         if (this.target == null) {
-            // this.warrior.idle();
             return;
         }
+
         let target_pos = cc.v2(this.target.x, this.target.y);
         let self_pos = cc.v2(this.x, this.y);
         let skill = this.model.aiSkill(target_pos);
@@ -286,15 +288,23 @@ export default class Role extends cc.Component {
             }
             return;
         }
-        let skillinfo = skill.getatk(this.model.attr);
+        let atknum = skill.getatk(this.model.attr);
         this.warrior.doSkill(skill, this.getDir(this.target.x, this.target.y));
-        let num = this.target.model.behit(skillinfo);
-        if (num > 0) {
-            this.stage.effectLayer.showHitNum(num, this.target.node.position, null, PlayerMgr.instance.isMainRole(this.model.onlyid));
-        }
         skill.do();
-        if (this.target && this.target.model.isDead) {
-            this.target = null;
+        // 如果技能是 带飞行的 须等技能碰撞
+        if (skill.flyEffect == 0) {
+            let num = this.target.model.beHit(atknum, skill);
+            // this.target.warrior.beHit(skill);
+            let epos = MapMgr.girdPos2pixPos(cc.v2(this.target.x, this.target.y)).add(skill.enemyEffOffset);
+            this.stage.playEffect(skill.enemyEffect, epos.x, epos.y);
+            if (num > 0) {
+                this.stage.effectLayer.showHitNum(num, this.target.node.position, null, PlayerMgr.instance.isMainRole(this.model.onlyid));
+            }
+            if (this.target && this.target.model.isDead) {
+                this.target = null;
+            }
+        } else {
+
         }
     }
 
@@ -325,5 +335,10 @@ export default class Role extends cc.Component {
     update(dt) {
         this.checkPos(dt);
         this.AiAction(dt);
+    }
+
+    relive() {
+        this.model.relive();
+        this.warrior.idle();
     }
 }
