@@ -8,7 +8,7 @@ import Stage from "../map/Stage";
 import WarriorCtr from "./WarriorCtr";
 import WeaponCtr from "./weaponCtr";
 import ObjectMgr from "../manager/ObjectMgr";
-import { getDir } from "../common/gFunc";
+import { getDir, getAngle } from "../common/gFunc";
 import WarriorMod from "./WarriorMod";
 import PlayerMgr from "../manager/PlayerMgr";
 
@@ -296,6 +296,8 @@ export default class Role extends cc.Component {
             }
         } else {
             // 带飞行特效 要创建碰撞体
+            let angle = getAngle(this.pixx, this.pixy, this.target.pixx, this.target.pixy);
+            this.stage.effectLayer.addFlyEffect(skill.flyEffect, this.pixx, this.pixy, skill.flySpeed, angle, skill.skillId, this.model.onlyid);
         }
     }
 

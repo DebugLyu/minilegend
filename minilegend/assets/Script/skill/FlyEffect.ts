@@ -10,6 +10,7 @@ export default class FlyEffect extends cc.Component {
     attack: number = 0;
     speed: number = 0;
     loaded: boolean = false;
+    angle: number = 0;
 
     start() {
 

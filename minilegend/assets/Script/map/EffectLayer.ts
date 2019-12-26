@@ -1,5 +1,5 @@
 import RoleEx from "../role/RoleEx";
-import { getPrefab, gameAnimation } from "../common/gFunc";
+import { getPrefab, gameAnimation, getNextPos } from "../common/gFunc";
 import FlyEffect from "../skill/FlyEffect";
 
 const { ccclass, property } = cc._decorator;
@@ -64,7 +64,7 @@ export default class EffectLayer extends cc.Component {
         labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(), cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
     }
 
-    addFlyEffect(effectid: number, speed: number, angle: number, skillid?: number, ownid?: number) {
+    addFlyEffect(effectid: number, pixx: number, pixy:number, speed: number, angle: number, skillid?: number, ownid?: number) {
         let flyEff = cc.instantiate(this.flyEffect);
         let flySpt = flyEff.getComponent(FlyEffect);
         flySpt.effectOnlyId = EffectSeedID;
@@ -72,7 +72,7 @@ export default class EffectLayer extends cc.Component {
         flySpt.skillid = skillid ? skillid : 0;
         flySpt.owner = ownid ? ownid : 0;
 
-        flyEff.rotation = angle;
+        flyEff.angle = angle - 90;
         let runaction = async () => {
             let clip = await gameAnimation("effect", effectid);
             let animation = flyEff.getComponent(cc.Animation);
@@ -81,18 +81,34 @@ export default class EffectLayer extends cc.Component {
             animation.play(clip.name);
         }
         runaction();
+        flyEff.parent = this.node;
+        flyEff.x = pixx;
+        flyEff.y = pixy; 
         this.flyEffectList[flySpt.effectOnlyId] = flySpt;
+        EffectSeedID++;
     }
 
-    delFlyEffect(effectOnlyId: number){
+    delFlyEffect(effectOnlyId: number) {
         let flyeffect = this.flyEffectList[effectOnlyId];
-        if (flyeffect){
-            flyeffect.destroy(); 
+        if (flyeffect) {
+            flyeffect.destroy();
             delete this.flyEffectList[effectOnlyId];
         }
     }
-    
-    update (dt) {
 
+    update(dt) {
+        this.checkFlyEffectPos(dt);
+    }
+
+    checkFlyEffectPos(dt) {
+        for (const onlyid in this.flyEffectList) {
+            if (this.flyEffectList.hasOwnProperty(onlyid)) {
+                const flyEffect = this.flyEffectList[onlyid];
+                let spd = flyEffect.speed;
+                let len = spd * dt;
+                let nextpos = getNextPos(flyEffect.node.position, len, flyEffect.angle);
+                flyEffect.node.position = nextpos;
+            }
+        }
     }
 }

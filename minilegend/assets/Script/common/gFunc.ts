@@ -79,12 +79,12 @@ export async function gameMapSpr(mapid: number, x: number, y: number) {
 	});
 }
 
-export async function getPrefab(pname:string) {
+export async function getPrefab(pname: string) {
 	return new Promise<cc.Prefab>((resolve, reject) => {
 		cc.loader.loadRes("/prefab/" + pname, cc.Prefab, (error, prefab) => {
-			if(error){
+			if (error) {
 				resolve(null);
-				console.error("Prefab: "+ pname + " not found!");
+				console.error("Prefab: " + pname + " not found!");
 				return;
 			}
 			resolve(prefab);
@@ -110,4 +110,10 @@ export function getAngle(x1: number, y1: number, x2: number, y2: number): number
 
 export function getDir(x1: number, y1: number, x2: number, y2: number): number {
 	return degree2Dir(getAngle(x1, y1, x2, y2));
+}
+
+export function getNextPos(curpos: cc.Vec2, len: number, angle: number): cc.Vec2 {
+	let x1 = curpos.x + len * Math.cos(angle * Math.PI / 180);
+	let y1 = curpos.y + len * Math.sin(angle * Math.PI / 180);
+	return cc.v2(x1, y1);
 }
