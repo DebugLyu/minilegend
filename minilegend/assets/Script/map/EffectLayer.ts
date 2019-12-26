@@ -92,7 +92,7 @@ export default class EffectLayer extends cc.Component {
     delFlyEffect(effectOnlyId: number) {
         let flyeffect = this.flyEffectList[effectOnlyId];
         if (flyeffect) {
-            flyeffect.destroy();
+            flyeffect.node.destroy();
             delete this.flyEffectList[effectOnlyId];
         }
     }
@@ -106,8 +106,10 @@ export default class EffectLayer extends cc.Component {
             if (this.flyEffectList.hasOwnProperty(onlyid)) {
                 const flyEffect = this.flyEffectList[onlyid];
                 let curpos = flyEffect.node.position;
-                if (curpos.x > cc.winSize.width || curpos.x < 0 ||
-                    curpos.y > cc.winSize.height || curpos.y < 0) {
+                let maxx = cc.winSize.width + (-this.node.parent.x) + 50;
+                let maxy = cc.winSize.height + (-this.node.parent.y) + 50;
+                if (curpos.x > maxx || curpos.x < -50 ||
+                    curpos.y > maxy || curpos.y < -50) {
                     this.delFlyEffect(flyEffect.effectOnlyId);
                     return;
                 }

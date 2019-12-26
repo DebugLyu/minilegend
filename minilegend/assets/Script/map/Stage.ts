@@ -20,6 +20,7 @@ export default class Stage extends cc.Component {
 	effectLayer: EffectLayer = null;
 
 	role: Role = null;
+	roleList:{[key:number]: Role} = {};
 
 	start() {
 		this.role = PlayerMgr.instance.mainRole;
@@ -62,6 +63,21 @@ export default class Stage extends cc.Component {
 
 	roleEnter(role: Role) {
 		role.enterStage(this.mapId, this.stageId);
+		this.roleList[role.model.onlyid] = role;
+	}
+
+	roleExit(role: number | Role){
+		let onlyid = 0;
+		if(typeof role === "number"){
+			onlyid = role;
+		}
+		if(role instanceof Role){
+			onlyid = role.model.onlyid;
+		}
+		let r = this.roleList[onlyid];
+		if(r){
+			delete this.roleList[onlyid];
+		}
 	}
 
 	update(dt) {

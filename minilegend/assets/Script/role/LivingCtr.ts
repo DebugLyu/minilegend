@@ -100,13 +100,13 @@ export default class LivingCtr extends cc.Component {
 
         let aniname = String(this.resId) + String(this.state) + String(this.dir);
         let addonani = this.node.getComponent(cc.Animation);
+        addonani.off("finished");
+        addonani.stop();
         let curClip = this.findAnimation(addonani, aniname);
         if (!isloop && this.state != ActState.DIE) {
-            let finished = () => {
+            addonani.once('finished', () => {
                 this.runAction(null, ActState.IDLE);
-                addonani.off('finished', finished);
-            }
-            addonani.on('finished', finished);
+            });
         }
 
         if (curClip == null) {

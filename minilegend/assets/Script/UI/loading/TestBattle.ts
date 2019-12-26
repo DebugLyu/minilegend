@@ -5,9 +5,6 @@ import SkillMgr from "../../manager/SkillMgr";
 import ItemMgr from "../../manager/ItemMgr";
 import Stage from "../../map/Stage";
 import PlayerMgr from "../../manager/PlayerMgr";
-import WarriorCtr from "../../role/WarriorCtr";
-import MonsterCtr from "../../role/MonsterCtr";
-import ObjectMgr from "../../manager/ObjectMgr";
 import { AttrIds } from "../../common/G";
 
 const { ccclass, property, menu } = cc._decorator;
@@ -50,7 +47,6 @@ export default class TestBattle extends cc.Component {
 			this.role.weapon.resId = 1700;
 			this.stage.loadMap(1001);
 			this.stage.roleEnter(this.role);
-			ObjectMgr.instance.addObject(this.role);
 		}, 2000);
 
 		setTimeout(() => {

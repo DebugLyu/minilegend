@@ -72,7 +72,7 @@ export default class PlayerControl extends cc.Component {
         this.controlSpr.setPosition(0, 0);
 
         if(this.role.warrior.state == ActState.RUN){
-            this.role.getWarrior().idle();
+            this.role.warrior.idle();
         }
     }
 

@@ -1,6 +1,5 @@
 import Role from "../role/Role";
 import MonsterCtr from "../role/MonsterCtr";
-import ObjectMgr from "./ObjectMgr";
 import Stage from "../map/Stage";
 
 export class MonsterData {
@@ -70,10 +69,9 @@ export default class MonsterMgr {
         
         if(stage){
             node.parent = stage.node.getChildByName("RoleLayer");
-            ObjectMgr.instance.addObject(role);
             stage.roleEnter(role);
         }
-        
+
         if(x){
             role.x = x;
         }

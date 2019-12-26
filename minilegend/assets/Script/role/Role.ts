@@ -7,7 +7,6 @@ import MapMgr from "../manager/MapMgr";
 import Stage from "../map/Stage";
 import WarriorCtr from "./WarriorCtr";
 import WeaponCtr from "./weaponCtr";
-import ObjectMgr from "../manager/ObjectMgr";
 import { getDir, getAngle } from "../common/gFunc";
 import WarriorMod from "./WarriorMod";
 import PlayerMgr from "../manager/PlayerMgr";
@@ -106,7 +105,7 @@ export default class Role extends cc.Component {
 
     findTarget(targettype: LivingType): Role {
         let list: Role[] = [];
-        let objlist = ObjectMgr.instance.objectList;
+        let objlist = this.stage.roleList;
         // 找到最近的 目标
         for (const _ in objlist) {
             if (objlist.hasOwnProperty(_)) {
@@ -140,6 +139,12 @@ export default class Role extends cc.Component {
             return;
         }
         this.warrior.move(getDir(this.x, this.y, this.target.x, this.target.y));
+        this.node.runAction(cc.sequence(
+            cc.delayTime(1),
+            cc.callFunc(() => {
+                this.warrior.idle();
+            }),
+        ));
         // setTimeout(() => {
         //     this.warrior.idle();
         // }, 300);
@@ -321,7 +326,9 @@ export default class Role extends cc.Component {
                 this.aiTimer = 0;
             }
             this.aiDo = dotime;
-            this.doAiAction();
+            if (this.warrior.state == ActState.IDLE) {
+                this.doAiAction();
+            }
         }
     }
 
@@ -336,11 +343,11 @@ export default class Role extends cc.Component {
     }
 
     clean() {
-        ObjectMgr.instance.delObject(this);
-        if(this.model.isPlayer()){
+        if (this.model.isPlayer()) {
             PlayerMgr.instance.delPlayer(this.model.onlyid);
         }
         this.stage.effectLayer.delRoleEx(this.model.onlyid);
-        this.destroy();
+        this.stage.roleExit(this);
+        this.node.destroy();
     }
 }
