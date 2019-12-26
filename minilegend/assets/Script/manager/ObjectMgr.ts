@@ -25,7 +25,7 @@ export default class ObjectMgr {
 				delete this.objectList[obj];
 			}
 		}else{
-			let onlyid = obj.warrior.model.onlyid;
+			let onlyid = obj.model.onlyid;
 			if (this.objectList[onlyid]) {
 				delete this.objectList[onlyid];
 			}

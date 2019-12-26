@@ -43,7 +43,7 @@ export function degree2Dir(degree: number): number {
 // let role_animation_list: cc.AnimationClip[] = [];
 export async function gameAnimation(restype: string, resid: number | string, act?: ActState, dir?: number) {
 	let animation_key = `animation/${restype}/${resid}`;
-	if(restype == "role" || restype == "weapon"){
+	if (restype == "role" || restype == "weapon") {
 		let actstr = actState2Str(act);
 		animation_key += `/${actstr}/${dir}`;
 	}
@@ -79,10 +79,35 @@ export async function gameMapSpr(mapid: number, x: number, y: number) {
 	});
 }
 
+export async function getPrefab(pname:string) {
+	return new Promise<cc.Prefab>((resolve, reject) => {
+		cc.loader.loadRes("/prefab/" + pname, cc.Prefab, (error, prefab) => {
+			if(error){
+				resolve(null);
+				console.error("Prefab: "+ pname + " not found!");
+				return;
+			}
+			resolve(prefab);
+		});
+	});
+}
+
 export function random(min: number, max?: number): number {
 	if (max == null) {
 		max = min;
 		min = 0;
 	}
 	return Math.floor((Math.random() * (max - min)) + min);
+}
+
+export function getAngle(x1: number, y1: number, x2: number, y2: number): number {
+	var degree = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+	if (degree < 0) {
+		degree = 360 + degree;
+	}
+	return degree;
+}
+
+export function getDir(x1: number, y1: number, x2: number, y2: number): number {
+	return degree2Dir(getAngle(x1, y1, x2, y2));
 }

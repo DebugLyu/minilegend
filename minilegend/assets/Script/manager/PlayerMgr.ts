@@ -36,9 +36,9 @@ export default class PlayerMgr {
 		return null;
 	}
 
-	delPlayer(pid: number) {
-		if (this.playerList[pid]) {
-			delete this.playerList[pid];
+	delPlayer(onlyid: number) {
+		if (this.playerList[onlyid]) {
+			delete this.playerList[onlyid];
 		}
 	}
 

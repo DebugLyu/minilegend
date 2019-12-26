@@ -1,6 +1,10 @@
 import RoleEx from "../role/RoleEx";
+import { getPrefab, gameAnimation } from "../common/gFunc";
+import FlyEffect from "../skill/FlyEffect";
 
 const { ccclass, property } = cc._decorator;
+
+let EffectSeedID = 10000;
 
 @ccclass
 export default class EffectLayer extends cc.Component {
@@ -11,26 +15,29 @@ export default class EffectLayer extends cc.Component {
     @property(cc.Node)
     roleEx: cc.Node = null;
 
-    roleList: {[key:number]: cc.Node} = {};
-    
-    start() {
+    flyEffect: cc.Prefab = null;
 
+    flyEffectList: { [key: number]: FlyEffect } = {};
+    roleExList: { [key: number]: cc.Node } = {};
+
+    async start() {
+        this.flyEffect = await getPrefab("effect/FlyEffect");
     }
 
-    addRoleEx(onlyid, role){
+    addRoleEx(onlyid, role) {
         let roleExNode = cc.instantiate(this.roleEx);
         roleExNode.parent = this.roleEx.parent;
         let roleEx = roleExNode.getComponent(RoleEx);
         roleEx.setRole(role);
-        this.roleList[onlyid] = roleExNode;
+        this.roleExList[onlyid] = roleExNode;
     }
 
-    delRoleEx(onlyid){
-        let node = this.roleList[onlyid];
-        if(node){
+    delRoleEx(onlyid) {
+        let node = this.roleExList[onlyid];
+        if (node) {
             node.destroy();
         }
-        delete this.roleList[onlyid];
+        delete this.roleExList[onlyid];
     }
 
     showHitNum(num: number, x: number | cc.Vec2, y?: number, self?: boolean) {
@@ -44,18 +51,48 @@ export default class EffectLayer extends cc.Component {
             labelnode.x = x;
             labelnode.y = y + 50;
         } else {
-            labelnode.position = x.add(cc.v2(0 , 50));
+            labelnode.position = x.add(cc.v2(0, 50));
         }
 
-        if (self){
+        if (self) {
             labelnode.color = cc.color(255, 200, 0);
         }
 
         labelnode.scale = 2;
 
         labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(), cc.moveBy(0.8, 0, 120), cc.removeSelf(true)));
-        labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(),cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
+        labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(), cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
     }
 
-    // update (dt) {}
+    addFlyEffect(effectid: number, speed: number, angle: number, skillid?: number, ownid?: number) {
+        let flyEff = cc.instantiate(this.flyEffect);
+        let flySpt = flyEff.getComponent(FlyEffect);
+        flySpt.effectOnlyId = EffectSeedID;
+        flySpt.speed = speed;
+        flySpt.skillid = skillid ? skillid : 0;
+        flySpt.owner = ownid ? ownid : 0;
+
+        flyEff.rotation = angle;
+        let runaction = async () => {
+            let clip = await gameAnimation("effect", effectid);
+            let animation = flyEff.getComponent(cc.Animation);
+            animation.addClip(clip);
+            clip.name = "flyEffect" + effectid;
+            animation.play(clip.name);
+        }
+        runaction();
+        this.flyEffectList[flySpt.effectOnlyId] = flySpt;
+    }
+
+    delFlyEffect(effectOnlyId: number){
+        let flyeffect = this.flyEffectList[effectOnlyId];
+        if (flyeffect){
+            flyeffect.destroy(); 
+            delete this.flyEffectList[effectOnlyId];
+        }
+    }
+    
+    update (dt) {
+
+    }
 }

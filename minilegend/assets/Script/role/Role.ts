@@ -7,9 +7,8 @@ import MapMgr from "../manager/MapMgr";
 import Stage from "../map/Stage";
 import WarriorCtr from "./WarriorCtr";
 import WeaponCtr from "./weaponCtr";
-import LivingMod from "./LivingMod";
 import ObjectMgr from "../manager/ObjectMgr";
-import { degree2Dir } from "../common/gFunc";
+import { getDir } from "../common/gFunc";
 import WarriorMod from "./WarriorMod";
 import PlayerMgr from "../manager/PlayerMgr";
 
@@ -136,19 +135,11 @@ export default class Role extends cc.Component {
         return list[0];
     }
 
-    getDir(x: number, y: number): number {
-        var degree = Math.atan2(y - this.y, x - this.x) * 180 / Math.PI;
-        if (degree < 0) {
-            degree = 360 + degree;
-        }
-        return degree2Dir(degree)
-    }
-
     aiMoveToTarget() {
         if (this.warrior.state != ActState.IDLE) {
             return;
         }
-        this.warrior.move(this.getDir(this.target.x, this.target.y));
+        this.warrior.move(getDir(this.x, this.y, this.target.x, this.target.y));
         // setTimeout(() => {
         //     this.warrior.idle();
         // }, 300);
@@ -289,7 +280,7 @@ export default class Role extends cc.Component {
             return;
         }
         let atknum = skill.getatk(this.model.attr);
-        this.warrior.doSkill(skill, this.getDir(this.target.x, this.target.y));
+        this.warrior.doSkill(skill, getDir(this.x, this.y, this.target.x, this.target.y));
         skill.do();
         // 如果技能是 带飞行的 须等技能碰撞
         if (skill.flyEffect == 0) {
@@ -305,8 +296,6 @@ export default class Role extends cc.Component {
             }
         } else {
             // 带飞行特效 要创建碰撞体
-            let node = new cc.Node();
-            node.group = "dfa";
         }
     }
 
@@ -342,5 +331,14 @@ export default class Role extends cc.Component {
     relive() {
         this.model.relive();
         this.warrior.idle();
+    }
+
+    clean() {
+        ObjectMgr.instance.delObject(this);
+        if(this.model.isPlayer()){
+            PlayerMgr.instance.delPlayer(this.model.onlyid);
+        }
+        this.stage.effectLayer.delRoleEx(this.model.onlyid);
+        this.destroy();
     }
 }

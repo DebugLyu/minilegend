@@ -20,4 +20,16 @@ export default class LivingMod extends Thing {
     init() {
         this.livingType = LivingType.OBJECT;
     }
+
+    isMonster() {
+        return this.livingType == LivingType.MONSTER;
+    }
+
+    isNpc() {
+        return this.livingType == LivingType.NPC;
+    }
+
+    isPlayer(){
+        return this.livingType == LivingType.PLAYER;
+    }
 }

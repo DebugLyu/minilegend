@@ -1,6 +1,6 @@
 import LivingCtr from "./LivingCtr";
 import WarriorMod from "./WarriorMod";
-import { ActState, SkillType, SkillActType, SkillAtkType } from "../common/G";
+import { ActState, SkillType, SkillActType, SkillAtkType, LivingType } from "../common/G";
 import { SkillBase } from "../manager/SkillMgr";
 import { gameAnimation } from "../common/gFunc";
 
@@ -44,6 +44,11 @@ export default class WarriorCtr extends LivingCtr {
             return;
         }
         this.runAction(2, ActState.DIE);
+        if(this.model.isMonster()){
+            this.scheduleOnce(() => {
+                this.role.clean();
+            }, 2)
+        }
     }
 
 
