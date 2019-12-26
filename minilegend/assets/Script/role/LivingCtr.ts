@@ -45,6 +45,9 @@ export default class LivingCtr extends cc.Component {
         }
         this.role = this.node.parent.getComponent(Role);
         this.effectAni = this.node.getChildByName("animation").getComponent(cc.Animation);
+        this.effectAni.on("finished", () => {
+            this.effectAni.node.active = false;
+        });
         // this.runAction(2, ActState.IDLE);
     }
 
@@ -60,6 +63,7 @@ export default class LivingCtr extends cc.Component {
     }
 
     async playEffect(effectid: number) {
+        this.effectAni.node.active = true;
         let clip = this.findAnimation(this.effectAni, "eff" + effectid);
         if (clip == null) {
             clip = await gameAnimation("effect", effectid);
@@ -114,6 +118,21 @@ export default class LivingCtr extends cc.Component {
             curClip.name = aniname;
             curClip.wrapMode = isloop ? cc.WrapMode.Loop : cc.WrapMode.Default;
             addonani.addClip(curClip);
+            if (this.pixHight == 0 || this.pixWidth == 0) {
+                // let sprite = this.node.getComponent(cc.Sprite);
+                let spriteFrame = curClip.curveData.comps["cc.Sprite"].spriteFrame[0].value;
+                let t = spriteFrame.getRect();
+                this.pixHight = t.height;
+                this.pixWidth = t.width;
+                if (spriteFrame.isRotated()) {
+                    this.pixHight = t.width;
+                    this.pixWidth = t.height;
+                }
+                this.role.stage.effectLayer.addRoleEx(this.model.onlyid, this.role);
+                this.effectAni.node.y = this.pixHight / 2;
+            }
+
+
         }
 
         if (this.weapon.resId != 0) {
@@ -130,7 +149,7 @@ export default class LivingCtr extends cc.Component {
             weaponAni.play(weaponClip.name);
         }
         addonani.play(curClip.name);
-
+/*
         if (this.pixHight == 0 || this.pixWidth == 0) {
             this.scheduleOnce(() => {
                 let sprite = this.node.getComponent(cc.Sprite);
@@ -144,8 +163,9 @@ export default class LivingCtr extends cc.Component {
                 this.role.stage.effectLayer.addRoleEx(this.model.onlyid, this.role);
                 console.log("pixHight", this.pixHight);
             }, 0);
-
         }
+
+*/
     }
 
     updateAvatar() {

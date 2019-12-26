@@ -304,7 +304,9 @@ export default class Role extends cc.Component {
                 this.target = null;
             }
         } else {
-
+            // 带飞行特效 要创建碰撞体
+            let node = new cc.Node();
+            node.group = "dfa";
         }
     }
 

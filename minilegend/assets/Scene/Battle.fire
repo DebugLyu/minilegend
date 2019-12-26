@@ -180,7 +180,7 @@
       "array": [
         0,
         0,
-        760.3703045227372,
+        262.4056973466849,
         0,
         0,
         0,
@@ -796,12 +796,12 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
+      "width": 512,
+      "height": 512
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": 0.5,
+      "x": 0.55,
       "y": 0.5
     },
     "_trs": {
@@ -848,13 +848,17 @@
   },
   {
     "__type__": "cc.Sprite",
-    "_name": "",
+    "_name": "animation<Sprite>",
     "_objFlags": 0,
     "node": {
       "__id__": 17
     },
     "_enabled": true,
-    "_materials": [],
+    "_materials": [
+      {
+        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+      }
+    ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": null,

@@ -129,6 +129,9 @@ export class LingHunHuoFu extends SkillBase {
         this.actType = SkillActType.Active;
         this.aiLevel = 1;
         this.range = 10;
+        this.selfEffect = 200011;
+        this.flyEffect = 20001;
+        this.enemyEffect = 20001;
     }
 
     getatk(attacker: Attribute): number {
