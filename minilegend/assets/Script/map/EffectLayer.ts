@@ -64,13 +64,14 @@ export default class EffectLayer extends cc.Component {
         labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(), cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
     }
 
-    addFlyEffect(effectid: number, pixx: number, pixy:number, speed: number, angle: number, skillid?: number, ownid?: number) {
+    addFlyEffect(effectid: number, pixx: number, pixy: number, speed: number, angle: number, skillid?: number, ownid?: number) {
         let flyEff = cc.instantiate(this.flyEffect);
         let flySpt = flyEff.getComponent(FlyEffect);
         flySpt.effectOnlyId = EffectSeedID;
         flySpt.speed = speed;
         flySpt.skillid = skillid ? skillid : 0;
         flySpt.owner = ownid ? ownid : 0;
+        flySpt.angle = angle;
 
         flyEff.angle = angle - 90;
         let runaction = async () => {
@@ -83,7 +84,7 @@ export default class EffectLayer extends cc.Component {
         runaction();
         flyEff.parent = this.node;
         flyEff.x = pixx;
-        flyEff.y = pixy; 
+        flyEff.y = pixy;
         this.flyEffectList[flySpt.effectOnlyId] = flySpt;
         EffectSeedID++;
     }
@@ -104,6 +105,12 @@ export default class EffectLayer extends cc.Component {
         for (const onlyid in this.flyEffectList) {
             if (this.flyEffectList.hasOwnProperty(onlyid)) {
                 const flyEffect = this.flyEffectList[onlyid];
+                let curpos = flyEffect.node.position;
+                if (curpos.x > cc.winSize.width || curpos.x < 0 ||
+                    curpos.y > cc.winSize.height || curpos.y < 0) {
+                    this.delFlyEffect(flyEffect.effectOnlyId);
+                    return;
+                }
                 let spd = flyEffect.speed;
                 let len = spd * dt;
                 let nextpos = getNextPos(flyEffect.node.position, len, flyEffect.angle);

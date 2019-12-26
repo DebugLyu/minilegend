@@ -53,6 +53,7 @@ export class SkillBase {
     // 飞行特效 如果没有飞行特效，不存在子弹，技能是必中的
     flyEffect: number = 0;
     flySpeed: number = 500;
+    bounce: number = 0;// 飞行子弹 弹射次数
     // 技能范围
     range: number = 2;
     // AI优先级
