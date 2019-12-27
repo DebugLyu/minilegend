@@ -124,15 +124,13 @@ export default class LivingCtr extends cc.Component {
                 let t = spriteFrame.getRect();
                 this.pixHight = t.height;
                 this.pixWidth = t.width;
-                if (spriteFrame.isRotated()) {
-                    this.pixHight = t.width;
-                    this.pixWidth = t.height;
-                }
-                this.role.stage.effectLayer.addRoleEx(this.model.onlyid, this.role);
+                // if (spriteFrame.isRotated()) {
+                //     this.pixHight = t.width;
+                //     this.pixWidth = t.height;
+                // }
+                this.role.setRoleSize(cc.size(this.pixWidth, this.pixHight));
                 this.effectAni.node.y = this.pixHight / 2;
             }
-
-
         }
 
         if (this.weapon.resId != 0) {

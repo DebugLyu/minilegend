@@ -10,6 +10,7 @@ import WeaponCtr from "./weaponCtr";
 import { getDir, getAngle } from "../common/gFunc";
 import WarriorMod from "./WarriorMod";
 import PlayerMgr from "../manager/PlayerMgr";
+import FlyEffect from "../skill/FlyEffect";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -81,11 +82,14 @@ export default class Role extends cc.Component {
     }
 
     start() {
-        // this.stage.effectLayer
+        this.node.group = "role";
     }
 
-    getWarrior(): WarriorCtr {
-        return this.warrior;
+    setRoleSize(size: cc.Size) {
+        let box = this.node.getComponent(cc.BoxCollider);
+        box.size.width = size.width * 0.8;
+        box.size.height = size.height * 0.8;
+        this.stage.effectLayer.addRoleEx(this.model.onlyid, this);
     }
 
     enterStage(mapid: number, stageid: number) {
@@ -140,14 +144,11 @@ export default class Role extends cc.Component {
         }
         this.warrior.move(getDir(this.x, this.y, this.target.x, this.target.y));
         this.node.runAction(cc.sequence(
-            cc.delayTime(1),
+            cc.delayTime(.9),
             cc.callFunc(() => {
                 this.warrior.idle();
             }),
         ));
-        // setTimeout(() => {
-        //     this.warrior.idle();
-        // }, 300);
     }
 
     checkPos(dt) {
@@ -284,9 +285,9 @@ export default class Role extends cc.Component {
             }
             return;
         }
-        let atknum = skill.getatk(this.model.attr);
         this.warrior.doSkill(skill, getDir(this.x, this.y, this.target.x, this.target.y));
         skill.do();
+        let atknum = skill.getatk(this.model.attr);
         // 如果技能是 带飞行的 须等技能碰撞
         if (skill.flyEffect == 0) {
             let num = this.target.model.beHit(atknum, skill);
@@ -296,13 +297,14 @@ export default class Role extends cc.Component {
             if (num > 0) {
                 this.stage.effectLayer.showHitNum(num, this.target.node.position, null, PlayerMgr.instance.isMainRole(this.model.onlyid));
             }
-            if (this.target && this.target.model.isDead) {
-                this.target = null;
-            }
         } else {
             // 带飞行特效 要创建碰撞体
             let angle = getAngle(this.pixx, this.pixy, this.target.pixx, this.target.pixy);
-            this.stage.effectLayer.addFlyEffect(skill.flyEffect, this.pixx, this.pixy, skill.flySpeed, angle, skill.skillId, this.model.onlyid);
+            let flyeffect = this.stage.effectLayer.addFlyEffect(skill.flyEffect, this.pixx, this.pixy, skill.flySpeed, angle);
+            flyeffect.owner = this.model.onlyid;
+            flyeffect.skill = skill;
+            flyeffect.attack = atknum;
+            flyeffect.targetLivingType = this.target.model.livingType;
         }
     }
 
@@ -320,7 +322,7 @@ export default class Role extends cc.Component {
         }
 
         this.aiTimer += dt;
-        let dotime = Math.floor(this.aiTimer / 1);
+        let dotime = Math.floor(this.aiTimer / 2);
         if (dotime != this.aiDo) {
             if (this.aiTimer > 10000) {
                 this.aiTimer = 0;
@@ -332,7 +334,14 @@ export default class Role extends cc.Component {
         }
     }
 
+    checkTarget(){
+        if(this.target && this.target.model.isDead){
+            this.target = null;
+        }
+    }
+
     update(dt) {
+        this.checkTarget();
         this.checkPos(dt);
         this.AiAction(dt);
     }
@@ -342,12 +351,54 @@ export default class Role extends cc.Component {
         this.warrior.idle();
     }
 
-    clean() {
+    /**     
+     * @param destroy 是否清除节点
+     *  不清除 即为 隐藏节点 
+     *      适用于 怪物从场景移除，但不从场景管理中删除，可以随时调取数据
+     *  清除 删除节点，清理场景
+     *      适用于 玩家离开场景 
+     * 
+     */
+    clean(destroy: boolean = false) {
         if (this.model.isPlayer()) {
             PlayerMgr.instance.delPlayer(this.model.onlyid);
         }
         this.stage.effectLayer.delRoleEx(this.model.onlyid);
         this.stage.roleExit(this);
-        this.node.destroy();
+        if(destroy){
+            this.node.destroy();
+        }else{
+            this.node.active = false;
+        } 
+    }
+
+    /**
+ * 当碰撞产生的时候调用
+ * @param  {Collider} other 产生碰撞的另一个碰撞组件
+ * @param  {Collider} self  产生碰撞的自身的碰撞组件
+ */
+    onCollisionEnter(other:cc.BoxCollider, self:cc.BoxCollider) {
+        // 碰撞系统会计算出碰撞组件在世界坐标系下的相关的值，并放到 world 这个属性里面
+        // var world = self.world;
+        // 碰撞组件的 aabb 碰撞框
+        // var aabb = world.aabb;
+        // 节点碰撞前上一帧 aabb 碰撞框的位置
+        // var preAabb = world.preAabb;
+        // 碰撞框的世界矩阵
+        // var t = world.transform;
+        // 以下属性为圆形碰撞组件特有属性
+        // var r = world.radius;
+        // var p = world.position;
+        // 以下属性为 矩形 和 多边形 碰撞组件特有属性
+        // var ps = world.points;
+        let flyeffect = other.node.getComponent(FlyEffect);
+        if(this.model.livingType != flyeffect.targetLivingType){
+            return;
+        }
+        this.warrior.beHit(flyeffect.skill);
+        let num = this.model.beHit(flyeffect.attack, flyeffect.skill);
+        if (num > 0) {
+            this.stage.effectLayer.showHitNum(num, this.node.position, null, PlayerMgr.instance.isMainRole(flyeffect.owner));
+        }
     }
 }

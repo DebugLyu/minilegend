@@ -20,7 +20,7 @@ export default class Stage extends cc.Component {
 	effectLayer: EffectLayer = null;
 
 	role: Role = null;
-	roleList:{[key:number]: Role} = {};
+	roleList: { [key: number]: Role } = {};
 
 	start() {
 		this.role = PlayerMgr.instance.mainRole;
@@ -44,6 +44,16 @@ export default class Stage extends cc.Component {
 			}
 		}
 		this.nodeArray = [];
+
+		for (const onlyid in this.roleList) {
+			if (this.roleList.hasOwnProperty(onlyid)) {
+				const role = this.roleList[onlyid];
+				if (!PlayerMgr.instance.isMainRole(role.model.onlyid)) {
+					role.clean(true);
+				}
+			}
+		}
+		this.roleList = {};
 	}
 
 	loadMap(mapid: number): void {
@@ -74,16 +84,16 @@ export default class Stage extends cc.Component {
 		if(role instanceof Role){
 			onlyid = role.model.onlyid;
 		}
-		let r = this.roleList[onlyid];
+		let r = this.roleList[onlyid ];
 		if(r){
-			delete this.roleList[onlyid];
+			delete this.roleList[onlyid ];
 		}
 	}
-
+  
 	update(dt) {
 		if (this.role.warrior.state != ActState.RUN) {
 			return;
-		}
+		}  
 		this.checkPlayerPos();
 		this.checkMapNode();
 	}
@@ -98,12 +108,12 @@ export default class Stage extends cc.Component {
 		sprite.trim = false;
 		sprite.sizeMode = cc.Sprite.SizeMode.RAW;
 		let animation = node.addComponent(cc.Animation);
-		clip.name = "eff" + effectid;
+		clip.name = "eff " + effectid;
 		animation.addClip(clip);
 		animation.play(clip.name);
 		animation.on("finished", () => {
 			node.destroy();
-		})
+		});
 		node.parent = this.node;
 		node.zIndex = 1;
 		node.position = cc.v2(x, y);

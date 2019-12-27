@@ -30,7 +30,7 @@ export default class RoleEx extends cc.Component {
 
     setRole(role: Role) {
         this.role = role;
-        this.hpBar.node.y = this.role.warrior.pixHight + 10;
+        this.hpBar.node.y = this.role.warrior.pixHight * 0.8;
         this.nameLabel.node.y = -20;
         this.nameLabel.string = role.model.name;
         this.hpBar.progress = role.model.attr[AttrIds.Hp] / role.model.attr[AttrIds.MaxHp];

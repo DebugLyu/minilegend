@@ -52,8 +52,9 @@ export class SkillBase {
     enemyEffOffset: cc.Vec2 = cc.Vec2.ZERO;
     // 飞行特效 如果没有飞行特效，不存在子弹，技能是必中的
     flyEffect: number = 0;
-    flySpeed: number = 500;
+    flySpeed: number = 200;
     bounce: number = 0;// 飞行子弹 弹射次数
+    collideTimes: number = 0;
     // 技能范围
     range: number = 2;
     // AI优先级
@@ -134,6 +135,9 @@ export class LingHunHuoFu extends SkillBase {
         this.selfEffect = 5100;
         this.flyEffect = 5111;
         this.enemyEffect = 5112;
+        this.flySpeed = 500;
+        this.cooldownTimer = 0;
+        this.bounce = 0;
     }
 
     getatk(attacker: Attribute): number {

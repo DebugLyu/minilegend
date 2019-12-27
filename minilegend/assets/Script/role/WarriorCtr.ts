@@ -70,8 +70,5 @@ export default class WarriorCtr extends LivingCtr {
     }
     
     beHit(skill: SkillBase){
-        if(skill.enemyEffect){
-            this.playEffect(skill.enemyEffect);
-        }
     }
 }

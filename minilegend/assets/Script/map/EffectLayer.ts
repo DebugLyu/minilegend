@@ -42,7 +42,8 @@ export default class EffectLayer extends cc.Component {
 
     showHitNum(num: number, x: number | cc.Vec2, y?: number, self?: boolean) {
         let labelnode = cc.instantiate(this.hitNum);
-        labelnode.active = true;
+        labelnode.scale = 0.01;//  .setParent = 0;
+        // labelnode.active = true;
         labelnode.parent = this.node;
         let label = labelnode.getComponent(cc.Label);
         label.string = "-" + num;
@@ -58,42 +59,37 @@ export default class EffectLayer extends cc.Component {
             labelnode.color = cc.color(255, 200, 0);
         }
 
-        labelnode.scale = 2;
+        // labelnode.scale = 2;
 
-        labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(), cc.moveBy(0.8, 0, 120), cc.removeSelf(true)));
-        labelnode.runAction(cc.sequence(cc.hide(), cc.delayTime(.2), cc.show(), cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
+        labelnode.runAction(cc.sequence(cc.delayTime(.2), cc.moveBy(0.8, 0, 120), cc.removeSelf(true)));
+        labelnode.runAction(cc.sequence(cc.scaleTo(.2, 2), cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
     }
 
-    addFlyEffect(effectid: number, pixx: number, pixy: number, speed: number, angle: number, skillid?: number, ownid?: number) {
+    addFlyEffect(effectid: number, pixx: number, pixy: number, speed: number, angle: number): FlyEffect {
         let flyEff = cc.instantiate(this.flyEffect);
         let flySpt = flyEff.getComponent(FlyEffect);
         flySpt.effectOnlyId = EffectSeedID;
         flySpt.speed = speed;
-        flySpt.skillid = skillid ? skillid : 0;
-        flySpt.owner = ownid ? ownid : 0;
         flySpt.angle = angle;
 
         flyEff.angle = angle - 90;
-        let runaction = async () => {
-            let clip = await gameAnimation("effect", effectid);
-            let animation = flyEff.getComponent(cc.Animation);
-            animation.addClip(clip);
-            clip.name = "flyEffect" + effectid;
-            animation.play(clip.name);
-        }
-        runaction();
+        flySpt.playEffect(effectid);
         flyEff.parent = this.node;
         flyEff.x = pixx;
         flyEff.y = pixy;
         this.flyEffectList[flySpt.effectOnlyId] = flySpt;
+        flySpt.effectLayer = this;
         EffectSeedID++;
+        return flySpt;
     }
 
-    delFlyEffect(effectOnlyId: number) {
+    delFlyEffect(effectOnlyId: number, cleanup: boolean = true) {
         let flyeffect = this.flyEffectList[effectOnlyId];
         if (flyeffect) {
-            flyeffect.node.destroy();
             delete this.flyEffectList[effectOnlyId];
+            if (cleanup) {
+                flyeffect.node.destroy();
+            }
         }
     }
 
@@ -105,13 +101,16 @@ export default class EffectLayer extends cc.Component {
         for (const onlyid in this.flyEffectList) {
             if (this.flyEffectList.hasOwnProperty(onlyid)) {
                 const flyEffect = this.flyEffectList[onlyid];
+                if (!flyEffect.isLife) {
+                    continue;
+                }
                 let curpos = flyEffect.node.position;
                 let maxx = cc.winSize.width + (-this.node.parent.x) + 50;
                 let maxy = cc.winSize.height + (-this.node.parent.y) + 50;
                 if (curpos.x > maxx || curpos.x < -50 ||
                     curpos.y > maxy || curpos.y < -50) {
                     this.delFlyEffect(flyEffect.effectOnlyId);
-                    return;
+                    continue;
                 }
                 let spd = flyEffect.speed;
                 let len = spd * dt;

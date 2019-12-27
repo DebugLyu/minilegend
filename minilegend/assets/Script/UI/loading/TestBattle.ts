@@ -29,6 +29,11 @@ export default class TestBattle extends cc.Component {
 
 	start() {
 
+		var manager = cc.director.getCollisionManager();
+		manager.enabled = true;
+		// manager.enabledDebugDraw = true;
+		// manager.enabledDrawBoundingBox = true;
+		
 		setTimeout(() => {
 			this.role.model.name = "测试角色";
 			this.role.model.attr[AttrIds.Hp] = 50000;
