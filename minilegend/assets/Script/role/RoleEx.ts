@@ -30,9 +30,12 @@ export default class RoleEx extends cc.Component {
 
     setRole(role: Role) {
         this.role = role;
+        // 设置血条高度
         this.hpBar.node.y = this.role.warrior.pixHight * 0.8;
+        // 名字位置
         this.nameLabel.node.y = -20;
         this.nameLabel.string = role.model.name;
+        // 血量现实
         this.hpBar.progress = role.model.attr[AttrIds.Hp] / role.model.attr[AttrIds.MaxHp];
     }
 
