@@ -14,7 +14,7 @@ export default class LivingCtr extends cc.Component {
     // 当前状态
     state: ActState = ActState.IDLE;
     // 当前方向 0：未初始化状态
-    dir: number = 0;
+    dir: number = 2;
     // 像素大小，用于记录碰撞包围盒 和 血条 称号等 高度
     pixWidth: number = 0;
     pixHight: number = 0;
@@ -49,6 +49,7 @@ export default class LivingCtr extends cc.Component {
             this.effectAni.node.active = false;
         });
         // this.runAction(2, ActState.IDLE);
+        this.updateAvatar();
     }
 
     findAnimation(animation: cc.Animation, name: string): cc.AnimationClip {
@@ -76,10 +77,7 @@ export default class LivingCtr extends cc.Component {
         this.effectAni.play("eff" + effectid);
     }
 
-    async runAction(dir?: number, act?: number) {
-        if (this.resId == 0) {
-            return;
-        }
+    runAction(dir?: number, act?: number) {
         if (dir == null) {
             dir = this.dir;
         }
@@ -92,7 +90,17 @@ export default class LivingCtr extends cc.Component {
 
         this.dir = dir;
         this.state = act;
+        this.updateAvatar();
+    }
 
+    async updateAvatar() {
+        if(this.role == null){
+            return;
+        }
+
+        if (this.resId == 0) {
+            return;
+        }
         let isloop = false;
         if (this.state == ActState.IDLE || this.state == ActState.RUN) {
             isloop = true;
@@ -110,9 +118,9 @@ export default class LivingCtr extends cc.Component {
         }
 
         if (curClip == null) {
-            curClip = await getAnimation("role", this.resId, act, dir);
-            if (curClip == null && act == ActState.MGC) {
-                this.runAction(dir, ActState.ATK);
+            curClip = await getAnimation("role", this.resId, this.state, this.dir);
+            if (curClip == null && this.state == ActState.MGC) {
+                this.runAction(this.dir, ActState.ATK);
                 return;
             }
             curClip.name = aniname;
@@ -143,31 +151,29 @@ export default class LivingCtr extends cc.Component {
                 weaponClip.wrapMode = isloop ? cc.WrapMode.Loop : cc.WrapMode.Default;
                 weaponAni.addClip(weaponClip);
             }
-            this.weapon.node.zIndex = (dir == 1 || dir == 4 || dir == 7) ? -1 : 1;
+            this.weapon.node.zIndex = (this.dir == 1 || this.dir == 4 || this.dir == 7) ? -1 : 1;
             weaponAni.play(weaponClip.name);
         }
         addonani.play(curClip.name);
-/*
-        if (this.pixHight == 0 || this.pixWidth == 0) {
-            this.scheduleOnce(() => {
-                let sprite = this.node.getComponent(cc.Sprite);
-                let t = sprite.spriteFrame.getRect();
-                this.pixHight = t.height;
-                this.pixWidth = t.width;
-                if (sprite.spriteFrame.isRotated) {
-                    this.pixHight = t.width;
-                    this.pixWidth = t.height;
+        /*
+                if (this.pixHight == 0 || this.pixWidth == 0) {
+                    this.scheduleOnce(() => {
+                        let sprite = this.node.getComponent(cc.Sprite);
+                        let t = sprite.spriteFrame.getRect();
+                        this.pixHight = t.height;
+                        this.pixWidth = t.width;
+                        if (sprite.spriteFrame.isRotated) {
+                            this.pixHight = t.width;
+                            this.pixWidth = t.height;
+                        }
+                        this.role.stage.effectLayer.addRoleEx(this.model.onlyid, this.role);
+                        console.log("pixHight", this.pixHight);
+                    }, 0);
                 }
-                this.role.stage.effectLayer.addRoleEx(this.model.onlyid, this.role);
-                console.log("pixHight", this.pixHight);
-            }, 0);
-        }
-
-*/
-    }
-
-    updateAvatar() {
-        this.runAction();
+        
+        
+                this.runAction();
+        */
     }
 
     idle(dir: number = null) {

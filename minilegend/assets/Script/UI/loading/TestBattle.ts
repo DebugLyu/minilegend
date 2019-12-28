@@ -6,6 +6,7 @@ import ItemMgr from "../../manager/ItemMgr";
 import Stage from "../../map/Stage";
 import PlayerMgr from "../../manager/PlayerMgr";
 import { AttrIds } from "../../common/G";
+import PlayerMod from "../../role/PlayerMod";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -23,7 +24,7 @@ export default class TestBattle extends cc.Component {
 		MonsterMgr.instance.init();
 		SkillMgr.instance.init();
 		ItemMgr.instance.init();
-
+		
 		PlayerMgr.instance.mainRole = this.role;// addPlayer(this.role);
 	}
 
@@ -39,8 +40,8 @@ export default class TestBattle extends cc.Component {
 			this.role.model.attr[AttrIds.Hp] = 50000;
 			this.role.model.attr[AttrIds.MaxHp] = 50000;
 			this.role.model.attr[AttrIds.Speed] = 240;
-			this.role.model.attr[AttrIds.AtkMin] = 5;
-			this.role.model.attr[AttrIds.AtkMax] = 8;
+			this.role.model.attr[AttrIds.AtkMin] = 1;
+			this.role.model.attr[AttrIds.AtkMax] = 100;
 			this.role.model.attr[AttrIds.Defense] = 2;
 			this.role.model.attr[AttrIds.MatkMin] = 7;
 			this.role.model.attr[AttrIds.MatkMax] = 9;
@@ -51,13 +52,6 @@ export default class TestBattle extends cc.Component {
 
 			this.role.weapon.resId = 1700;
 			this.stage.loadMap(1001);
-			this.stage.roleEnter(this.role);
 		}, 2000);
-
-		setTimeout(() => {
-			// for(let i = 0; i < 5; i++){
-			MonsterMgr.instance.genMonster(1000, this.stage, 10, 7);
-			// }
-		}, 3000);
 	}
 }

@@ -97,20 +97,14 @@ export default class Role extends cc.Component {
         this.warrior.idle();
         this.stage.effectLayer.addRoleEx(this.model.onlyid, this);
     }
-    
+
     enterStage(mapid: number, stageid: number) {
         this.model.mapid = mapid;
         if (this.model.stageid == stageid) {
             return;
         }
 
-        let mapdata = MapMgr.instance.getMapData(this.model.mapid);
-        let stagedata = mapdata.stageList[stageid];
-        if (stagedata) {
-            this.model.stageid = stageid;
-            let pos = MapMgr.girdPos2pixPos(cc.v2(stagedata.startPos.x, stagedata.startPos.y));
-            this.node.setPosition(pos);
-        }
+        this.model.stageid = stageid;
     }
 
     findTarget(targettype: LivingType): Role {
@@ -268,6 +262,7 @@ export default class Role extends cc.Component {
     }
 
     doAiAction() {
+        this.checkTarget();
         if (this.target == null) {
             let targettype = LivingType.MONSTER;
             if (this.model.livingType == LivingType.MONSTER) {
@@ -322,7 +317,7 @@ export default class Role extends cc.Component {
         // 如果是玩家角色超过2秒不动，AI操作
         if (this.model.livingType == LivingType.PLAYER) {
             this.unDoAnyThingTimer += dt;
-            if (this.unDoAnyThingTimer < 2) {
+            if (this.unDoAnyThingTimer < 0.5) {
                 return;
             }
         }
@@ -340,20 +335,26 @@ export default class Role extends cc.Component {
         }
     }
 
-    checkTarget(){
+    checkTarget() {
         // TODO: 优化目标选择
-        if(this.target && this.target.model.isDead){
+        if (this.target && this.target.model.isDead) {
             this.target = null;
         }
     }
 
     update(dt) {
-        // 检查目标
-        this.checkTarget();
         this.checkPos(dt);
         this.AiAction(dt);
     }
 
+    die() {
+        if (this.model.isMonster()) {
+            this.scheduleOnce(() => {
+                this.clean();
+            }, 2)
+        }
+        cc.game.emit("RoleDie", this);
+    }
     /**     
      * @param destroy 是否清除节点
      *  不清除 即为 隐藏节点 
@@ -366,13 +367,11 @@ export default class Role extends cc.Component {
         if (this.model.isPlayer()) {
             PlayerMgr.instance.delPlayer(this.model.onlyid);
         }
-        this.stage.effectLayer.delRoleEx(this.model.onlyid);
-        this.stage.roleExit(this);
-        if(destroy){
+        if (destroy) {
             this.node.destroy();
-        }else{
+        } else {
             this.node.active = false;
-        } 
+        }
     }
 
     /**
@@ -380,7 +379,7 @@ export default class Role extends cc.Component {
  * @param  {Collider} other 产生碰撞的另一个碰撞组件
  * @param  {Collider} self  产生碰撞的自身的碰撞组件
  */
-    onCollisionEnter(other:cc.BoxCollider, self:cc.BoxCollider) {
+    onCollisionEnter(other: cc.BoxCollider, self: cc.BoxCollider) {
         // 碰撞系统会计算出碰撞组件在世界坐标系下的相关的值，并放到 world 这个属性里面
         // var world = self.world;
         // 碰撞组件的 aabb 碰撞框
@@ -395,7 +394,7 @@ export default class Role extends cc.Component {
         // 以下属性为 矩形 和 多边形 碰撞组件特有属性
         // var ps = world.points;
         let flyeffect = other.node.getComponent(FlyEffect);
-        if(this.model.livingType != flyeffect.targetLivingType){
+        if (this.model.livingType != flyeffect.targetLivingType) {
             return;
         }
         this.warrior.beHit(flyeffect.skill);

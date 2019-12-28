@@ -33,10 +33,13 @@ export default class WarriorMod extends LivingMod {
     }
 
     dead() {
+        if(this.isDead){
+            return;
+        }
         this.attr[AttrIds.Hp] = 0;
 
-        this.control.dead();
         this.isDead = true;
+        this.control.dead();
     }
 
     checkHp() {

@@ -43,8 +43,8 @@ export default class EffectLayer extends cc.Component {
     showHitNum(num: number, x: number | cc.Vec2, y?: number, self?: boolean) {
         let labelnode = cc.instantiate(this.hitNum);
         labelnode.scale = 0.01;//  .setParent = 0;
-        // labelnode.active = true;
         labelnode.parent = this.node;
+        labelnode.zIndex = 9;
         let label = labelnode.getComponent(cc.Label);
         label.string = "-" + num;
 

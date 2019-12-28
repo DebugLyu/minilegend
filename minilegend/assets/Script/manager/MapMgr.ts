@@ -9,9 +9,11 @@ export class StageData {
 	grid_height: number = 0;
 	rows: number = 0;
 	lines: number = 0;
+	boss: boolean = false;
 	name: string = "";
 	startPos: { x: number, y: number } = { x: 0, y: 0 };
 	trancePos: { tomap: number, x: number, y: number }[] = [];
+	monster:[{monid:number, x:number, y: number}][] = [];
 	mapInfo: number[][] = [];
 }
 

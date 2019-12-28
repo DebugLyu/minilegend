@@ -40,15 +40,8 @@ export default class WarriorCtr extends LivingCtr {
     }
 
     dead() {
-        if (this.model.isDead) {
-            return;
-        }
         this.runAction(2, ActState.DIE);
-        if(this.model.isMonster()){
-            this.scheduleOnce(() => {
-                this.role.clean();
-            }, 2)
-        }
+        this.role.die();
     }
 
 

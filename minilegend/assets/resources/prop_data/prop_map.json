@@ -13,7 +13,26 @@
 				"grid_height": 40,
 				"rows": 48,
 				"lines": 16,
+				"boss": false,
 				"name": "测试场景1",
+				"monster": [
+					[{
+							"monid": 1000,
+							"x": 10,
+							"y": 7
+						},
+						{
+							"monid": 1000,
+							"x": 8,
+							"y": 7
+						}
+					],
+					[{
+						"monid": 1000,
+						"x": 3,
+						"y": 5
+					}]
+				],
 				"startPos": {
 					"x": 8,
 					"y": 5
@@ -77,21 +96,26 @@
 			"9998": {
 				"stageid": 9998,
 				"resid": 9999,
+				"width": 640,
 				"height": 1920,
 				"grid_width": 40,
 				"grid_height": 40,
 				"rows": 48,
 				"lines": 16,
+				"boss": true,
 				"name": "测试场景2",
+				"monster": [
+					[{
+						"monid": 1000,
+						"x": 3,
+						"y": 5
+					}]
+				],
 				"startPos": {
 					"x": 5,
 					"y": 8
 				},
-				"trancePos": [{
-					"tomap": 9999,
-					"x": 30,
-					"y": 29
-				}],
+				"trancePos": [],
 				"mapInfo": [
 					[0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 2, 2],
 					[0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 2],
