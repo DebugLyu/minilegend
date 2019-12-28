@@ -92,6 +92,12 @@ export default class Role extends cc.Component {
         this.stage.effectLayer.addRoleEx(this.model.onlyid, this);
     }
 
+    relive() {
+        this.model.relive();
+        this.warrior.idle();
+        this.stage.effectLayer.addRoleEx(this.model.onlyid, this);
+    }
+    
     enterStage(mapid: number, stageid: number) {
         this.model.mapid = mapid;
         if (this.model.stageid == stageid) {
@@ -335,20 +341,17 @@ export default class Role extends cc.Component {
     }
 
     checkTarget(){
+        // TODO: 优化目标选择
         if(this.target && this.target.model.isDead){
             this.target = null;
         }
     }
 
     update(dt) {
+        // 检查目标
         this.checkTarget();
         this.checkPos(dt);
         this.AiAction(dt);
-    }
-
-    relive() {
-        this.model.relive();
-        this.warrior.idle();
     }
 
     /**     

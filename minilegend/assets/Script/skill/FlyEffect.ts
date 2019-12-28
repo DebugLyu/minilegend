@@ -1,4 +1,4 @@
-import { gameAnimation } from "../common/gFunc";
+import { getAnimation } from "../common/gFunc";
 import EffectLayer from "../map/EffectLayer";
 import Role from "../role/Role";
 import { LivingType } from "../common/G";
@@ -48,7 +48,7 @@ export default class FlyEffect extends cc.Component {
             return;
         }
         this.flyEffect = effectid;
-        let clip = await gameAnimation("effect", effectid);
+        let clip = await getAnimation("effect", effectid);
         if (this.node == null) {
             return;
         }
@@ -79,7 +79,7 @@ export default class FlyEffect extends cc.Component {
         let node = new cc.Node();
         node.addComponent(cc.Sprite);
         let animation = node.addComponent(cc.Animation);
-        let clip = await gameAnimation("effect", effectid);
+        let clip = await getAnimation("effect", effectid);
         clip.name = "eff" + effectid;
         clip.wrapMode = cc.WrapMode.Normal;
         animation.addClip(clip);

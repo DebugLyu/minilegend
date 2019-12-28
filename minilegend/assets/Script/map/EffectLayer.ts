@@ -1,5 +1,5 @@
 import RoleEx from "../role/RoleEx";
-import { getPrefab, gameAnimation, getNextPos } from "../common/gFunc";
+import { getPrefab, getAnimation, getNextPos } from "../common/gFunc";
 import FlyEffect from "../skill/FlyEffect";
 
 const { ccclass, property } = cc._decorator;

@@ -1,7 +1,7 @@
 import MapMgr, { MapData, StageData } from "../manager/MapMgr";
 import { ActState, Cell } from "../common/G";
 import Role from "../role/Role";
-import { gameMapSpr, gameAnimation } from "../common/gFunc";
+import { getMapSpr, getAnimation } from "../common/gFunc";
 import PlayerMgr from "../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
 
@@ -99,7 +99,7 @@ export default class Stage extends cc.Component {
 	}
 
 	async playEffect(effectid: number,x: number, y: number) {
-		let clip = await gameAnimation("effect", effectid);
+		let clip = await getAnimation("effect", effectid);
 		if(clip == null){
 			return;
 		}
@@ -127,7 +127,7 @@ export default class Stage extends cc.Component {
 			sprite.trim = false;
 			sprite.sizeMode = cc.Sprite.SizeMode.RAW;
 			let animation = node.addComponent(cc.Animation);
-			let tranClip = await gameAnimation("effect", "transport");
+			let tranClip = await getAnimation("effect", "transport");
 			tranClip.name = "" + this.stageData.trancePos[0].tomap;
 			tranClip.wrapMode = cc.WrapMode.Loop;
 			animation.addClip(tranClip);
@@ -192,7 +192,7 @@ export default class Stage extends cc.Component {
 					if (node == null) {
 						let node = new cc.Node();
 						let spr = node.addComponent(cc.Sprite);
-						spr.spriteFrame = await gameMapSpr(stagedata.resid, x, y);
+						spr.spriteFrame = await getMapSpr(stagedata.resid, x, y);
 						node.setPosition(cc.v2(posx, posy));
 						node.parent = this.node;
 						node.zIndex = -1;

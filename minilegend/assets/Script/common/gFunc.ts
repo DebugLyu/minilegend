@@ -41,7 +41,7 @@ export function degree2Dir(degree: number): number {
 	 * @param dir 方向id 参考小键盘
 	 */
 // let role_animation_list: cc.AnimationClip[] = [];
-export async function gameAnimation(restype: string, resid: number | string, act?: ActState, dir?: number) {
+export async function getAnimation(restype: string, resid: number | string, act?: ActState, dir?: number) {
 	let animation_key = `animation/${restype}/${resid}`;
 	if (restype == "role" || restype == "weapon") {
 		let actstr = actState2Str(act);
@@ -66,7 +66,7 @@ export async function gameAnimation(restype: string, resid: number | string, act
 	});
 }
 
-export async function gameMapSpr(mapid: number, x: number, y: number) {
+export async function getMapSpr(mapid: number, x: number, y: number) {
 	let res_key = `map/jpg/${mapid}/${mapid}_${y}_${x}`;
 	return new Promise<cc.SpriteFrame>((resolve, reject) => {
 		cc.loader.loadRes(res_key, cc.SpriteFrame, (err, spr) => {
@@ -91,7 +91,18 @@ export async function getPrefab(pname: string) {
 		});
 	});
 }
-
+export async function getPropData(pname: string) {
+	return new Promise<cc.Prefab>((resolve, reject) => {
+		cc.loader.loadRes("/prop_data/" + pname, cc.JsonAsset, (error, jsondata:cc.JsonAsset) => {
+			if (error) {
+				resolve(null);
+				console.error("JSON: " + pname + " Error!");
+				return;
+			}
+			resolve(jsondata.json);
+		});
+	});
+}
 export function random(min: number, max?: number): number {
 	if (max == null) {
 		max = min;

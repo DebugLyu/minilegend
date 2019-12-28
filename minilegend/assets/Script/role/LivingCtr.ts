@@ -1,4 +1,4 @@
-import { gameAnimation, actState2Str } from "../common/gFunc";
+import { getAnimation, actState2Str } from "../common/gFunc";
 import LivingMod from "./LivingMod";
 import { ActState } from "../common/G";
 import WeaponCtr from "./weaponCtr";
@@ -66,7 +66,7 @@ export default class LivingCtr extends cc.Component {
         this.effectAni.node.active = true;
         let clip = this.findAnimation(this.effectAni, "eff" + effectid);
         if (clip == null) {
-            clip = await gameAnimation("effect", effectid);
+            clip = await getAnimation("effect", effectid);
             clip.name = "eff" + effectid;
             this.effectAni.addClip(clip);
         }
@@ -110,7 +110,7 @@ export default class LivingCtr extends cc.Component {
         }
 
         if (curClip == null) {
-            curClip = await gameAnimation("role", this.resId, act, dir);
+            curClip = await getAnimation("role", this.resId, act, dir);
             if (curClip == null && act == ActState.MGC) {
                 this.runAction(dir, ActState.ATK);
                 return;
@@ -138,7 +138,7 @@ export default class LivingCtr extends cc.Component {
             aniname = String(this.weapon.resId) + String(this.state) + String(this.dir);
             let weaponClip = this.findAnimation(weaponAni, aniname);
             if (weaponClip == null) {
-                weaponClip = await gameAnimation("weapon", this.weapon.resId, this.state, this.dir);
+                weaponClip = await getAnimation("weapon", this.weapon.resId, this.state, this.dir);
                 weaponClip.name = aniname;
                 weaponClip.wrapMode = isloop ? cc.WrapMode.Loop : cc.WrapMode.Default;
                 weaponAni.addClip(weaponClip);
