@@ -1,3 +1,8 @@
+/**
+ *  场景管理
+ *      用于控制场景移动，添加特效，地图块加载等
+ */
+
 import MapMgr, { StageData } from "../manager/MapMgr";
 import { ActState, Cell } from "../common/G";
 import Role from "../role/Role";

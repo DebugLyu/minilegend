@@ -1,3 +1,9 @@
+/**
+ * 战斗相关
+ * 		控制战斗的  怪物波次、场景切换等
+ */
+
+
 import { getPrefab } from "../common/gFunc";
 import Stage from "./Stage";
 import MapMgr, { MapData, StageData } from "../manager/MapMgr";
