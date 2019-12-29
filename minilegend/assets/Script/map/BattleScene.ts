@@ -21,6 +21,7 @@ export default class BattleScene extends cc.Component {
 	get isBossStage(): boolean {
 		return this.stageData.boss;
 	}
+	role:Role = null;
 	roleLayer:cc.Node = null;
 	// 角色列表
 	roleList: { [key: number]: Role } = {};
@@ -39,7 +40,12 @@ export default class BattleScene extends cc.Component {
 		this.roleLayer = this.stage.node.getChildByName("RoleLayer");
 		cc.game.on("RoleDie", this.onRoleDie, this);
 		this.init();
-	}
+        cc.game.on("MainRole", this.setMainRole, this);
+    }
+
+    setMainRole(role:Role){
+        this.role = role;
+    }
 
 	async init(){
 		this.endBattle = await getPrefab("battle/EndBattle");
@@ -52,9 +58,18 @@ export default class BattleScene extends cc.Component {
 	}
 	
 	loadStage(stageid){
+		this.stageId = stageid;
         this.stageData = this.mapData.stageList[stageid];
 		this.stage.changeStage(this.stageData);
+		this.wave = 0;
 		this.checkWave();
+		if(this.role){
+			// 重置主角色的位置，拉回起始点
+            this.role.x = -1;
+            this.role.y = -1;
+
+			this.roleEnter(this.role);
+		}
 	}
 
 	getMonsterNum(): number {
@@ -99,9 +114,7 @@ export default class BattleScene extends cc.Component {
 
 	roleEnter(role: Role) {
 		role.enterStage(this.mapId, this.stageId);
-		this.stage.effectLayer.addRoleEx(role.model.onlyid, role);
 		this.roleList[role.model.onlyid] = role;
-
 		
 		if (PlayerMgr.instance.isMainRole(role.model.onlyid)) {
 			role.x = this.stageData.startPos.x;
@@ -145,11 +158,11 @@ export default class BattleScene extends cc.Component {
 	checkTransport() {
         if (this.isFinish) {
 			let mainrole = PlayerMgr.instance.mainRole;
-            for (const stageid in this.stageData.trancePos) {
-				let trpos = this.stageData.trancePos[stageid];
+            for (const _ in this.stageData.trancePos) {
+				let trpos = this.stageData.trancePos[_];
 				let trrect = cc.rect(trpos.x - 1, trpos.y - 1, 3, 5);
                 if (trrect.contains(cc.v2(mainrole.x, mainrole.y))) {
-                    this.loadStage(Number(stageid));
+                    this.loadStage(Number(trpos.tomap));
                     return;
                 }
             }

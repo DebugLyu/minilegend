@@ -15,24 +15,28 @@ let OutRand = 1;
 export default class Stage extends cc.Component {
     nodeArray: cc.Node[][] = [];
     stageId: number = 0;
-	stageData: StageData = null;
+    stageData: StageData = null;
     effectLayer: EffectLayer = null;
 
     // 主角色
     role: Role = null;
 
     battleScene: BattleScene = null;
-    transportList: { [key: number]: cc.Rect } = {};
+    transportList: { [key: number]: cc.Node } = {};
 
 
     start() {
-        this.role = PlayerMgr.instance.mainRole;
 
         this.battleScene = cc.find("Canvas").getComponent(BattleScene);
         this.effectLayer = this.node.getChildByName("EffectLayer").getComponent(EffectLayer);
 
         RootPos = cc.v2(-cc.winSize.width / 2, -cc.winSize.height / 2);
 
+        cc.game.on("MainRole", this.setMainRole, this);
+    }
+
+    setMainRole(role:Role){
+        this.role = role;
     }
 
     clearStage() {
@@ -46,11 +50,16 @@ export default class Stage extends cc.Component {
             }
         }
         this.nodeArray = [];
+        
+        for (const _ in this.transportList) {
+            if (this.transportList.hasOwnProperty(_)) {
+                const transport = this.transportList[_];
+                transport.destroy();
+            }
+        }
+        this.transportList = {};
 
-		this.role.x = -1;
-		this.role.y = -1;
-
-		this.effectLayer.cleanAllEffect();
+        this.effectLayer.cleanAllEffect();
     }
 
     changeStage(stageData: StageData) {
@@ -64,9 +73,9 @@ export default class Stage extends cc.Component {
     }
 
     update(dt) {
-		if(this.role == null){
-			return;
-		}
+        if (this.role == null) {
+            return;
+        }
         if (this.role.warrior.state != ActState.RUN) {
             return;
         }
@@ -114,11 +123,14 @@ export default class Stage extends cc.Component {
             node.parent = this.node;
             node.zIndex = 1;
             node.position = MapMgr.girdPos2pixPos(cc.v2(tinfo.x, tinfo.y));
-            this.transportList[tinfo.tomap] = cc.rect(tinfo.x, tinfo.y, 3, 5);
+            this.transportList[tinfo.tomap] = node; 
         }
     }
 
     checkPlayerPos() {
+        if(this.role == null){
+            return;
+        }
         let ppos = this.role.node.position;
         let topos = cc.v2(-ppos.x, -ppos.y);
         if (topos.x > RootPos.x) {

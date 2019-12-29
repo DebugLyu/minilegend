@@ -28,7 +28,7 @@ export default class RoleEx extends cc.Component {
 
     }
 
-    setRole(role: Role) {
+    updateRole(role: Role) {
         this.role = role;
         // 设置血条高度
         this.hpBar.node.y = this.role.warrior.pixHight * 0.8;

@@ -28,7 +28,7 @@ export default class EffectLayer extends cc.Component {
         let roleExNode = cc.instantiate(this.roleEx);
         roleExNode.parent = this.roleEx.parent;
         let roleEx = roleExNode.getComponent(RoleEx);
-        roleEx.setRole(role);
+        roleEx.updateRole(role);
         this.roleExList[onlyid] = roleExNode;
     }
 

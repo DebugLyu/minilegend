@@ -74,28 +74,24 @@ export default class Role extends cc.Component {
     // 目标
     target: Role = null;
 
-    onLoad(){
-        this.node.group = "role";
-        this.init();
-    }
-
     start() {
     }
-    
+    // 创建节点后 必须调用 init方法！！！ 
     init() {
+        this.node.group = "role";
         this.battleScene = cc.find("Canvas").getComponent(BattleScene);
         this.stage = this.battleScene.stage;
         this.warrior = this.node.getChildByName("rolectr").getComponent(WarriorCtr);
         this.model = this.warrior.model;
         let node = this.node.getChildByName("weapon");
         this.weapon = node.getComponent(WeaponCtr);
-        this.weapon.resId = 0;
     }
 
     setRoleSize(size: cc.Size) {
         let box = this.node.getComponent(cc.BoxCollider);
         box.size.width = size.width * 0.8;
         box.size.height = size.height * 0.8;
+		this.stage.effectLayer.addRoleEx(this.model.onlyid, this);
     }
 
     relive() {

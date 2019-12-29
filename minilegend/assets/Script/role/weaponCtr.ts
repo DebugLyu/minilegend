@@ -4,7 +4,7 @@ const { ccclass, property, menu } = cc._decorator;
 @menu("role/WarriorCtr")
 export default class WeaponCtr extends cc.Component {
 	
-	private _resId : number;
+	private _resId : number = 0;
 	public get resId() : number {
 		return this._resId;
 	}

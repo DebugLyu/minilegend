@@ -17,7 +17,16 @@ export default class PlayerMgr {
 	// 玩家id列表对应 数据列表
 	private playerPidList:{[key:number]:number} = {};
 	// main role ctr
-	public mainRole: Role = null;
+	private _mainRole: Role = null;
+	
+	public get mainRole() : Role {
+		return this._mainRole;
+	}
+	public set mainRole(v : Role) {
+		this._mainRole = v;
+		cc.game.emit("MainRole", v);
+	}
+	
 
 	addPlayer(player: PlayerMod) {
 		this.playerList[player.onlyid] = player;

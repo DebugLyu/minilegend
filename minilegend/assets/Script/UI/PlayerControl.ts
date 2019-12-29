@@ -28,10 +28,17 @@ export default class PlayerControl extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchEnd, this);
 
         this.controlSpr = cc.find('spr', this.controlNode);
-        this.role = PlayerMgr.instance.mainRole;
+        cc.game.on("MainRole", this.setMainRole, this);
+    }
+
+    setMainRole(role:Role){
+        this.role = role;
     }
 
     touchBegan(event) {
+        if(this.role == null){
+            return;
+        }
         this.touchEnable = true;
         let beganPos = event.getLocation();
         let drawPos = this.node.convertToNodeSpaceAR(beganPos);

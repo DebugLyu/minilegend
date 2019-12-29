@@ -45,6 +45,9 @@ export default class TestBattle extends cc.Component {
 			let playerprefab = await getPrefab("role/PlayerRole");
 			let rolenode = cc.instantiate(playerprefab);
 			this.role = rolenode.getComponent(Role);
+			this.role.init();
+			this.role.weapon.resId = 1700;
+			this.role.warrior.resId = 3800;
 
 			PlayerMgr.instance.mainRole = this.role;
 
@@ -62,7 +65,6 @@ export default class TestBattle extends cc.Component {
 			this.role.model.attr[AttrIds.DatkMax] = 8;
 			this.role.model.attr[AttrIds.Ddefense] = 4;
 
-			this.role.weapon.resId = 1700;
 			this.battleScene.roleEnter(this.role);
 		}, 3000);
 	}
