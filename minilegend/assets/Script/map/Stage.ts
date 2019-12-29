@@ -1,12 +1,12 @@
-import MapMgr, { MapData, StageData } from "../manager/MapMgr";
-import { ActState, Cell, LivingType } from "../common/G";
+import MapMgr, { StageData } from "../manager/MapMgr";
+import { ActState, Cell } from "../common/G";
 import Role from "../role/Role";
 import { getMapSpr, getAnimation } from "../common/gFunc";
 import PlayerMgr from "../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
-import MonsterMgr from "../manager/MonsterMgr";
+import BattleScene from "./BattleScene";
 
-const { ccclass, property, menu } = cc._decorator;
+const { ccclass, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;
 let OutRand = 1;
 
@@ -14,40 +14,25 @@ let OutRand = 1;
 @menu("map/stage")
 export default class Stage extends cc.Component {
     nodeArray: cc.Node[][] = [];
-    mapId: number = 0;
     stageId: number = 0;
-    // 副本数据
-    mapData: MapData = null;
-    stageData: StageData = null;
+	stageData: StageData = null;
     effectLayer: EffectLayer = null;
 
     // 主角色
     role: Role = null;
-    // 角色列表
-    roleList: { [key: number]: Role } = {};
-    get isBossStage(): boolean {
-        return this.stageData.boss;
-    }
-    // 关卡 怪物波次
-    wave: number = 0;
-    // 当前关卡是否完成
-    get isFinish(): boolean {
-        return this.wave == this.stageData.monster.length && this.wave == this.stageData.monster.length;
-    }
 
+    battleScene: BattleScene = null;
     transportList: { [key: number]: cc.Rect } = {};
 
-    @property(cc.Node)
-    passStage: cc.Node = null;
 
     start() {
         this.role = PlayerMgr.instance.mainRole;
 
+        this.battleScene = cc.find("Canvas").getComponent(BattleScene);
         this.effectLayer = this.node.getChildByName("EffectLayer").getComponent(EffectLayer);
 
         RootPos = cc.v2(-cc.winSize.width / 2, -cc.winSize.height / 2);
 
-        cc.game.on("RoleDie", this.onRoleDie, this);
     }
 
     clearStage() {
@@ -62,110 +47,26 @@ export default class Stage extends cc.Component {
         }
         this.nodeArray = [];
 
-        for (const onlyid in this.roleList) {
-            if (this.roleList.hasOwnProperty(onlyid)) {
-                const role = this.roleList[onlyid];
-                if (PlayerMgr.instance.isMainRole(role.model.onlyid)) {
-                    role.x = -1;
-                    role.y = -1;
-                }else{
-                    this.effectLayer.delRoleEx(role.model.onlyid);
-                    role.clean(true);
-                }
-            }
-        }
-        this.roleList = {};
+		this.role.x = -1;
+		this.role.y = -1;
+
+		this.effectLayer.cleanAllEffect();
     }
 
-    loadMap(mapid: number): void {
-        this.mapId = mapid;
-        this.mapData = MapMgr.instance.getMapData(mapid);
-        this.loadStage(this.mapData.startStage);
-    }
-
-    loadStage(stageid: number) {
+    changeStage(stageData: StageData) {
         this.clearStage();
-        this.stageId = stageid;
-        this.stageData = this.mapData.stageList[stageid];
+        this.stageId = stageData.stageid;
+        this.stageData = stageData;
 
         this.node.setPosition(RootPos);
-        this.roleEnter(this.role);
         this.checkPlayerPos();
         this.checkMapNode();
-        this.wave = 0;
-        this.checkWave();
     }
-
-    getMonsterNum(): number {
-        let n = 0;
-        for (const onlyid in this.roleList) {
-            if (this.roleList.hasOwnProperty(onlyid)) {
-                const role = this.roleList[onlyid];
-                if (role.model.livingType == LivingType.MONSTER) {
-                    n++;
-                }
-            }
-        }
-        return n;
-    }
-
-    nextWave() {
-        let monsterlist = this.stageData.monster[this.wave - 1];
-        for (const moninfo of monsterlist) {
-            MonsterMgr.instance.genMonster(moninfo.monid, this, moninfo.x, moninfo.y);
-        }
-    }
-
-    checkWave() {
-        if (this.getMonsterNum() > 0) {
-            return;
-        }
-        if (this.wave == this.stageData.monster.length) {
-            if(this.isBossStage){
-                // TODO 过关
-                this.onPassStage();
-                return;
-            }
-            this.addTransport();
-            return;
-        }
-        setTimeout(() => {
-            this.wave++;
-            this.nextWave();
-        }, 3 * 1000);
-    }
-
-    roleEnter(role: Role) {
-        role.enterStage(this.mapId, this.stageId);
-        this.roleList[role.model.onlyid] = role;
-
-        if(this.role.model.onlyid == role.model.onlyid){
-            this.role.x = this.stageData.startPos.x;
-            this.role.y = this.stageData.startPos.y;
-        }
-    }
-
-    roleExit(role: number | Role) {
-        let onlyid = 0;
-        if (typeof role === "number") {
-            onlyid = role;
-        }
-        if (role instanceof Role) {
-            onlyid = role.model.onlyid;
-        }
-        let r = this.roleList[onlyid];
-        if (r) {
-            delete this.roleList[onlyid];
-        }
-    }
-
 
     update(dt) {
-        if(this.mapData == null){
-            return;
-        }
-
-        this.checkTransport();
+		if(this.role == null){
+			return;
+		}
         if (this.role.warrior.state != ActState.RUN) {
             return;
         }
@@ -195,17 +96,6 @@ export default class Stage extends cc.Component {
     }
 
 
-    checkTransport() {
-        if (this.isFinish) {
-            for (const stageid in this.transportList) {
-                let trrect = this.transportList[stageid];
-                if (trrect.contains(cc.v2(this.role.x, this.role.y))) {
-                    this.loadStage(Number(stageid));
-                    return;
-                }
-            }
-        }
-    }
 
     async addTransport() {
         for (let i = 0; i < this.stageData.trancePos.length; i++) {
@@ -292,15 +182,5 @@ export default class Stage extends cc.Component {
         }
     }
 
-    onRoleDie(role: Role) {
-        this.effectLayer.delRoleEx(role.model.onlyid);
-        this.roleExit(role);
-        if (role.model.livingType == LivingType.MONSTER) {
-            this.checkWave();
-        }
-    }
 
-    onPassStage(){
-        this.passStage.active = true;
-    }
 }

@@ -1,5 +1,5 @@
 import RoleEx from "../role/RoleEx";
-import { getPrefab, getAnimation, getNextPos } from "../common/gFunc";
+import { getPrefab, getNextPos } from "../common/gFunc";
 import FlyEffect from "../skill/FlyEffect";
 
 const { ccclass, property } = cc._decorator;
@@ -38,6 +38,24 @@ export default class EffectLayer extends cc.Component {
             node.destroy();
         }
         delete this.roleExList[onlyid];
+    }
+
+    cleanAllEffect(){
+        for (const onlyid in this.roleExList) {
+            if (this.roleExList.hasOwnProperty(onlyid)) {
+                const roleEx = this.roleExList[onlyid];
+                roleEx.destroy();
+            }
+        }
+        this.roleExList = {};
+
+        for (const eid in this.flyEffectList) {
+            if (this.flyEffectList.hasOwnProperty(eid)) {
+                const flyeffect = this.flyEffectList[eid];
+                flyeffect.node.destroy();
+            }
+        }
+        this.flyEffectList = {};
     }
 
     showHitNum(num: number, x: number | cc.Vec2, y?: number, self?: boolean) {

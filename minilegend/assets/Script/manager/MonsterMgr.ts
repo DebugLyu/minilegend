@@ -1,6 +1,7 @@
 import Role from "../role/Role";
 import MonsterCtr from "../role/MonsterCtr";
 import Stage from "../map/Stage";
+import BattleScene from "../map/BattleScene";
 
 export class MonsterData {
     monid = 0;
@@ -53,7 +54,7 @@ export default class MonsterMgr {
         return this.monsterDataList[monid];
     }
 
-    genMonster(monid: number, stage?: Stage, x?: number, y?: number): cc.Node {
+    genMonster(monid: number, btlScene?: BattleScene, x?: number, y?: number): cc.Node {
         if (this.monPrefab == null) {
             return;
         }
@@ -66,10 +67,9 @@ export default class MonsterMgr {
         let monsterctr = node.getChildByName("rolectr").getComponent(MonsterCtr);
         monsterctr.model.setMonData(mondata);
         let role = node.getComponent(Role);
-        
-        if(stage){
-            node.parent = stage.node.getChildByName("RoleLayer");
-            stage.roleEnter(role);
+        role.init(); 
+        if(btlScene){
+            btlScene.roleEnter(role);
         }
 
         if(x){

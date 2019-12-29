@@ -7,24 +7,26 @@ import Stage from "../../map/Stage";
 import PlayerMgr from "../../manager/PlayerMgr";
 import { AttrIds } from "../../common/G";
 import PlayerMod from "../../role/PlayerMod";
+import BattleScene from "../../map/BattleScene";
+import { getPrefab } from "../../common/gFunc";
 
 const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
 @menu("ui/TestBattle")
 export default class TestBattle extends cc.Component {
-	@property(Role)
 	role: Role = null;
-
 	@property(Stage)
 	stage: Stage = null;
+	@property(BattleScene)
+	battleScene: BattleScene = null;
 
 	onLoad() {
 		MapMgr.instance.init();
 		MonsterMgr.instance.init();
 		SkillMgr.instance.init();
 		ItemMgr.instance.init();
-		
+
 		PlayerMgr.instance.mainRole = this.role;// addPlayer(this.role);
 	}
 
@@ -34,8 +36,18 @@ export default class TestBattle extends cc.Component {
 		manager.enabled = true;
 		// manager.enabledDebugDraw = true;
 		// manager.enabledDrawBoundingBox = true;
-		
 		setTimeout(() => {
+			this.battleScene.loadMap(1001);
+		}, 2000);
+
+		setTimeout(async () => {
+
+			let playerprefab = await getPrefab("role/PlayerRole");
+			let rolenode = cc.instantiate(playerprefab);
+			this.role = rolenode.getComponent(Role);
+
+			PlayerMgr.instance.mainRole = this.role;
+
 			this.role.model.name = "测试角色";
 			this.role.model.attr[AttrIds.Hp] = 50000;
 			this.role.model.attr[AttrIds.MaxHp] = 50000;
@@ -51,7 +63,7 @@ export default class TestBattle extends cc.Component {
 			this.role.model.attr[AttrIds.Ddefense] = 4;
 
 			this.role.weapon.resId = 1700;
-			this.stage.loadMap(1001);
-		}, 2000);
+			this.battleScene.roleEnter(this.role);
+		}, 3000);
 	}
 }

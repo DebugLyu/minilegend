@@ -11,6 +11,7 @@ import { getDir, getAngle } from "../common/gFunc";
 import WarriorMod from "./WarriorMod";
 import PlayerMgr from "../manager/PlayerMgr";
 import FlyEffect from "../skill/FlyEffect";
+import BattleScene from "../map/BattleScene";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -63,6 +64,7 @@ export default class Role extends cc.Component {
     warrior: WarriorCtr = null;
     model: WarriorMod = null;
 
+    battleScene: BattleScene = null;
     stage: Stage = null;
 
     unDoAnyThingTimer: number = 0;
@@ -72,8 +74,17 @@ export default class Role extends cc.Component {
     // 目标
     target: Role = null;
 
-    onLoad() {
-        this.stage = this.node.parent.parent.getComponent(Stage);
+    onLoad(){
+        this.node.group = "role";
+        this.init();
+    }
+
+    start() {
+    }
+    
+    init() {
+        this.battleScene = cc.find("Canvas").getComponent(BattleScene);
+        this.stage = this.battleScene.stage;
         this.warrior = this.node.getChildByName("rolectr").getComponent(WarriorCtr);
         this.model = this.warrior.model;
         let node = this.node.getChildByName("weapon");
@@ -81,15 +92,10 @@ export default class Role extends cc.Component {
         this.weapon.resId = 0;
     }
 
-    start() {
-        this.node.group = "role";
-    }
-
     setRoleSize(size: cc.Size) {
         let box = this.node.getComponent(cc.BoxCollider);
         box.size.width = size.width * 0.8;
         box.size.height = size.height * 0.8;
-        this.stage.effectLayer.addRoleEx(this.model.onlyid, this);
     }
 
     relive() {
@@ -105,11 +111,13 @@ export default class Role extends cc.Component {
         }
 
         this.model.stageid = stageid;
+
+       
     }
 
     findTarget(targettype: LivingType): Role {
         let list: Role[] = [];
-        let objlist = this.stage.roleList;
+        let objlist = this.battleScene.roleList;
         // 找到最近的 目标
         for (const _ in objlist) {
             if (objlist.hasOwnProperty(_)) {

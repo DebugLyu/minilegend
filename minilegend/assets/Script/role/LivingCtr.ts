@@ -23,6 +23,7 @@ export default class LivingCtr extends cc.Component {
     private _resid: number = 0;
     set resId(resid: number) {
         this._resid = resid;
+        this.pixHight = 0;
         this.updateAvatar();
     }
     get resId(): number {
@@ -94,7 +95,7 @@ export default class LivingCtr extends cc.Component {
     }
 
     async updateAvatar() {
-        if(this.role == null){
+        if (this.role == null) {
             return;
         }
 
