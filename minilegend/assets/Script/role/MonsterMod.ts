@@ -1,7 +1,9 @@
 import WarriorMod from "./WarriorMod";
 import MonsterCtr from "./MonsterCtr";
-import { LivingType, AttrIds } from "../common/G";
+import { LivingType, AttrIds, dropInfo } from "../common/G";
 import { MonsterData } from "../manager/MonsterMgr";
+import { random } from "../common/gFunc";
+
 
 export default class MonsterMod extends WarriorMod {
     data: MonsterData = null;
@@ -10,12 +12,17 @@ export default class MonsterMod extends WarriorMod {
         return this._control as MonsterCtr;
     }
 
-    init(){
+    private _dropList: dropInfo[] = [];
+    public get dropList(): dropInfo[] {
+        return this._dropList;
+    }
+
+    init() {
         super.init();
         this.livingType = LivingType.MONSTER;
     }
-    
-    setMonData(mondata:MonsterData){
+
+    setMonData(mondata: MonsterData) {
         this.data = mondata;
         // 设置资源id 在场景中表现出来
         this.control.resId = mondata.ResID;
@@ -35,9 +42,29 @@ export default class MonsterMod extends WarriorMod {
         this.attr[AttrIds.DatkMax] = mondata.DatkMax;
         this.attr[AttrIds.Ddefense] = mondata.Ddefense;
         this.initSkill(mondata.Skills);
+
+        this.initDropItem();
     }
 
-    montest(){
+    initDropItem() {
+        let itemlist = this.data.Items;
+        let r = random(this.data.DropNum);
+        for (let i = 0; i < r; i++) {
+            let rand = random(0, 100);
+            for (let iteminfo of itemlist) {
+                let gailv = iteminfo[0];
+                if (rand < gailv) {
+                    let itemid = iteminfo[1];
+                    let min = iteminfo[2];
+                    let max = iteminfo[3];
+                    let num = random(min, max);
+                    this.dropList.push({itemid: itemid, num: num});
+                }
+            }
+        }
+    }
+
+    montest() {
         // this.control.testCtr();
     }
 }

@@ -1,15 +1,17 @@
 /**
  *  场景管理
  *      用于控制场景移动，添加特效，地图块加载等
+ *      掉落物品
  */
 
 import MapMgr, { StageData } from "../manager/MapMgr";
-import { ActState, Cell } from "../common/G";
+import { ActState, Cell, dropInfo } from "../common/G";
 import Role from "../role/Role";
-import { getMapSpr, getAnimation } from "../common/gFunc";
+import { getMapSpr, getAnimation, getItemAtlas, getNextPos, getAngle, random, getTexture } from "../common/gFunc";
 import PlayerMgr from "../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
 import BattleScene from "./BattleScene";
+import ItemMgr from "../manager/ItemMgr";
 
 const { ccclass, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;
@@ -29,6 +31,11 @@ export default class Stage extends cc.Component {
     battleScene: BattleScene = null;
     transportList: { [key: number]: cc.Node } = {};
 
+    itemAtlas: cc.SpriteAtlas = null;
+    isFinish: boolean = false;
+    itemLight: cc.Texture2D = null;
+
+    dropList: cc.Node[] = []; // 掉落的实物
 
     start() {
 
@@ -38,9 +45,15 @@ export default class Stage extends cc.Component {
         RootPos = cc.v2(-cc.winSize.width / 2, -cc.winSize.height / 2);
 
         cc.game.on("MainRole", this.setMainRole, this);
+        this.init();
     }
 
-    setMainRole(role:Role){
+    async init() {
+        this.itemAtlas = await getItemAtlas();
+        this.itemLight = await getTexture("item/light");
+    }
+
+    setMainRole(role: Role) {
         this.role = role;
     }
 
@@ -55,7 +68,7 @@ export default class Stage extends cc.Component {
             }
         }
         this.nodeArray = [];
-        
+
         for (const _ in this.transportList) {
             if (this.transportList.hasOwnProperty(_)) {
                 const transport = this.transportList[_];
@@ -63,6 +76,11 @@ export default class Stage extends cc.Component {
             }
         }
         this.transportList = {};
+
+        for (const itemnode of this.dropList) {
+            itemnode.destroy();
+        }
+        this.dropList = [];
 
         this.effectLayer.cleanAllEffect();
     }
@@ -75,9 +93,12 @@ export default class Stage extends cc.Component {
         this.node.setPosition(RootPos);
         this.checkPlayerPos();
         this.checkMapNode();
+        this.isFinish = false;
+        this.dropList = [];
     }
 
     update(dt) {
+        this.checkDropItem();
         if (this.role == null) {
             return;
         }
@@ -128,12 +149,12 @@ export default class Stage extends cc.Component {
             node.parent = this.node;
             node.zIndex = 1;
             node.position = MapMgr.girdPos2pixPos(cc.v2(tinfo.x, tinfo.y));
-            this.transportList[tinfo.tomap] = node; 
+            this.transportList[tinfo.tomap] = node;
         }
     }
 
-    checkPlayerPos() {
-        if(this.role == null){
+    private checkPlayerPos() {
+        if (this.role == null) {
             return;
         }
         let ppos = this.role.node.position;
@@ -154,7 +175,7 @@ export default class Stage extends cc.Component {
         this.node.setPosition(topos);
     }
 
-    async checkMapNode() {
+    private async checkMapNode() {
         let stagedata = this.stageData;
         let winsize = cc.winSize;
 
@@ -199,5 +220,115 @@ export default class Stage extends cc.Component {
         }
     }
 
+    getEmptyCell(gridpos: cc.Vec2): cc.Vec2 {
+        let isEmptyCell = (gpos: cc.Vec2) => {
+            let ppos = MapMgr.girdPos2pixPos(gpos);
+            for (const dropitem of this.dropList) {
+                if (dropitem.x == ppos.x && dropitem.y == ppos.y) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        let isVaidCell = (gpos) => {
+            if (gpos.y < 0 || gpos.y > this.stageData.mapInfo.length - 1) {
+                return false;
+            }
+            if (gpos.x < 0 || gpos.x > this.stageData.mapInfo[gpos.y].length - 1) {
+                return false;
+            }
+            return this.stageData.mapInfo[gpos.y][gpos.x] > 0;
+        }
+        if (isEmptyCell(gridpos) && isVaidCell(gridpos)) {
+            return gridpos;
+        }
 
+        let range = 1;
+        while (true) {
+            for (let x = -range; x <= range; x ++) {
+                for (let y = -range; y <= range; y ++) {
+                    if (Math.abs(x) < range && Math.abs(y) < range) {
+                        continue;
+                    }
+                    let tmppos = gridpos.add(cc.v2(x, y));
+                    if ((isEmptyCell(tmppos) && isVaidCell(tmppos))) {
+                        return tmppos;
+                    }
+                }
+            }
+            range++;
+            if (range >= 8) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    flyDropItem() {
+        for (let i = 0; i < this.dropList.length; i++) {
+            let itemnode = this.dropList[i];
+            let node = new cc.Node();
+            let motionstreak = node.addComponent(cc.MotionStreak);
+            motionstreak.texture = this.itemLight;
+            motionstreak.stroke = 16;
+            node.parent = itemnode;
+            motionstreak.scheduleOnce(() => {
+                motionstreak.fadeTime = 0.3;
+            });
+            let act = [], act2 = [];
+            act[act.length] = cc.moveBy(0.2, 0, 20);
+            let p1 = cc.v2(itemnode.x, itemnode.y);
+            let p2 = cc.v2(itemnode.x + random(600) - 300, itemnode.y + random(500) - 300);
+            let p3 = cc.v2(this.role.pixx, this.role.pixy);
+
+            act[act.length] = cc.bezierTo(0.8, [p1, p2, p3]).easing(cc.easeOut(3));
+            act2[act2.length] = cc.delayTime(0.6);
+            act2[act2.length] = cc.callFunc(() => {
+                itemnode.stopAllActions();
+                if (i == this.dropList.length - 1) {
+                    this.isFinish = true;
+                }
+            });
+            itemnode.runAction(cc.sequence(act));
+            itemnode.runAction(cc.sequence(act2));
+        }
+    }
+
+    dropItem(itemlist: dropInfo[], gridpos: cc.Vec2) {
+        for (const iteminfo of itemlist) {
+            let pos = this.getEmptyCell(gridpos);
+            if (pos == null) {
+                console.log("Error: drop item too match");
+                break;
+            }
+            let itemdata = ItemMgr.instance.getItemData(iteminfo.itemid);
+            let node = new cc.Node();
+            let sprite = node.addComponent(cc.Sprite);
+            sprite.spriteFrame = this.itemAtlas.getSpriteFrame(String(itemdata.icon));
+            node.position = MapMgr.girdPos2pixPos(pos);
+            node.parent = this.effectLayer.node;
+            node.scale = 20 / sprite.spriteFrame.getRect().width;
+            node.name = "pos:" + pos.x + "|" + pos.y;
+
+            this.dropList.push(node);
+        }
+    }
+
+    private checkDropItem() {
+        if (this.isFinish) {
+            let mainrole = PlayerMgr.instance.mainRole;
+            for (let i = 0; i < this.dropList.length; i++) {
+                let itemnode = this.dropList[i];
+                let angle = getAngle(itemnode.x, itemnode.y, mainrole.pixx, mainrole.pixy + 30);
+                let topos = getNextPos(itemnode.position, 8, angle);
+                itemnode.x = topos.x;
+                itemnode.y = topos.y;
+                if (Math.abs(itemnode.x - mainrole.pixx) < 30 &&
+                    Math.abs(itemnode.y - 30 - mainrole.pixy) < 30) {
+                    itemnode.destroy();
+                    this.dropList.splice(i, 1);
+                }
+            }
+        }
+    }
 }

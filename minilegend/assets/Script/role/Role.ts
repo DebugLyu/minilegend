@@ -12,6 +12,7 @@ import WarriorMod from "./WarriorMod";
 import PlayerMgr from "../manager/PlayerMgr";
 import FlyEffect from "../skill/FlyEffect";
 import BattleScene from "../map/BattleScene";
+import MonsterMod from "./MonsterMod";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -107,8 +108,6 @@ export default class Role extends cc.Component {
         }
 
         this.model.stageid = stageid;
-
-       
     }
 
     findTarget(targettype: LivingType): Role {
@@ -353,6 +352,9 @@ export default class Role extends cc.Component {
 
     die() {
         if (this.model.isMonster()) {
+            // 掉落物品
+            let list = (this.model as MonsterMod).dropList;
+            this.battleScene.dropItem(list, cc.v2(this.x, this.y));
             this.scheduleOnce(() => {
                 this.clean();
             }, 2)

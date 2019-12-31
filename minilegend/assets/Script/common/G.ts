@@ -116,3 +116,8 @@ export class Attribute {
 	[AttrIds.DatkMax]: number = 0;
 	[AttrIds.Ddefense]: number = 0;
 }
+
+export interface dropInfo {
+    itemid: number,
+    num: number,
+}

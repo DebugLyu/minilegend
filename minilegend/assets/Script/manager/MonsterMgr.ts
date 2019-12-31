@@ -20,8 +20,9 @@ export class MonsterData {
 	DatkMax = 0;
     Ddefense = 0;// 道术防御力
     
-    Skills = [];
-    Items = [];
+    Skills = []; // 技能
+    Items = []; // 物品掉落列表
+    DropNum = 1 // 物品掉落数量
 }
 
 export default class MonsterMgr {

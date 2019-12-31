@@ -93,7 +93,7 @@ export async function getPrefab(pname: string) {
 }
 export async function getPropData(pname: string) {
 	return new Promise<cc.Prefab>((resolve, reject) => {
-		cc.loader.loadRes("/prop_data/" + pname, cc.JsonAsset, (error, jsondata:cc.JsonAsset) => {
+		cc.loader.loadRes("/prop_data/" + pname, cc.JsonAsset, (error, jsondata: cc.JsonAsset) => {
 			if (error) {
 				resolve(null);
 				console.error("JSON: " + pname + " Error!");
@@ -103,6 +103,33 @@ export async function getPropData(pname: string) {
 		});
 	});
 }
+
+export async function getItemAtlas() {
+	return new Promise<cc.SpriteAtlas>((resolve, reject) => {
+		cc.loader.loadRes("item/ItemIcon", cc.SpriteAtlas, (error, atlas: cc.SpriteAtlas) => {
+			if (error) {
+				console.error("ItemIcon Error!");
+				resolve(null);
+				return;
+			}
+			resolve(atlas);
+		});
+	});
+}
+
+export async function getTexture(path: string) {
+	return new Promise<cc.Texture2D>((resolve, reject) => {
+		cc.loader.loadRes(path, cc.Texture2D, (error, texture: cc.Texture2D) => {
+			if (error) {
+				console.error("Texture Path:" + path + " Error!");
+				resolve(null);
+				return;
+			}
+			resolve(texture);
+		});
+	});
+}
+
 export function random(min: number, max?: number): number {
 	if (max == null) {
 		max = min;
@@ -127,4 +154,24 @@ export function getNextPos(curpos: cc.Vec2, len: number, angle: number): cc.Vec2
 	let x1 = curpos.x + len * Math.cos(angle * Math.PI / 180);
 	let y1 = curpos.y + len * Math.sin(angle * Math.PI / 180);
 	return cc.v2(x1, y1);
+}
+
+export function toChineseNum(num: number): string {
+	let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']; //changeNum[0] = "零"
+	let unit = ["", "十", "百", "千", "万"];
+	let getWan = (temp) => {
+		let strArr = temp.toString().split("").reverse();
+		let newNum = "";
+		for (var i = 0; i < strArr.length; i++) {
+			newNum = (i == 0 && strArr[i] == 0 ? "" : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? "" : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;
+		}
+		return newNum;
+	}
+	let overWan = Math.floor(num / 10000);
+	let noWan = num % 10000;
+	let noWanStr = "";
+	if (noWan.toString().length < 4) {
+		noWanStr = "0" + noWan;
+	}
+	return overWan ? getWan(overWan) + "万" + getWan(noWanStr) : getWan(num);
 }
