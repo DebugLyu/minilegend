@@ -11,6 +11,7 @@ import Role from "../role/Role";
 import { LivingType, dropInfo } from "../common/G";
 import MonsterMgr from "../manager/MonsterMgr";
 import PlayerMgr from "../manager/PlayerMgr";
+import EndBattle from "./EndBattle";
 
 const { ccclass, property, menu } = cc._decorator;
 @ccclass
@@ -208,6 +209,8 @@ export default class BattleScene extends cc.Component {
 	private onMissionComplete() {
 		let endBattle = cc.instantiate(this.endBattle);
 		endBattle.parent = this.node;
+		let endbtl = endBattle.getComponent(EndBattle);
+		endbtl.addItemList(this.dropItemList);
 	}
 
 	update() {
