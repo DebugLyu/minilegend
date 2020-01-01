@@ -1,6 +1,7 @@
 import { getAnimation, getItemAtlas } from "../common/gFunc"
 import { dropInfo } from "../common/G";
 import ItemMgr from "../manager/ItemMgr";
+import GameSceneMgr from "../manager/GameSceneMgr";
 
 const {ccclass, property} = cc._decorator;
 
@@ -47,5 +48,8 @@ export default class EndBattle extends cc.Component {
         }
     }
 
+    onExitClicked(e, d){
+        GameSceneMgr.ChangeScene("Main");
+    }
     // update (dt) {}
 }

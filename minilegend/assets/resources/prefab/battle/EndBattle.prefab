@@ -33,14 +33,14 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 32
+        "__id__": 33
       },
       {
-        "__id__": 33
+        "__id__": 34
       }
     ],
     "_prefab": {
-      "__id__": 34
+      "__id__": 35
     },
     "_opacity": 255,
     "_color": {
@@ -53,7 +53,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 640,
-      "height": 960
+      "height": 1136
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -65,7 +65,7 @@
       "ctor": "Float64Array",
       "array": [
         320,
-        480,
+        568,
         0,
         0,
         0,
@@ -120,7 +120,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 640,
-      "height": 960
+      "height": 1136
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -272,7 +272,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        318,
+        379.6,
         0,
         0,
         0,
@@ -412,7 +412,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 510,
-      "height": 5.6875
+      "height": 2.84375
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -823,7 +823,7 @@
     "_layoutSize": {
       "__type__": "cc.Size",
       "width": 510,
-      "height": 5.6875
+      "height": 2.84375
     },
     "_resize": 1,
     "_N$layoutType": 3,
@@ -878,7 +878,7 @@
       }
     ],
     "_prefab": {
-      "__id__": 31
+      "__id__": 32
     },
     "_opacity": 255,
     "_color": {
@@ -1101,7 +1101,11 @@
     "_grayMaterial": null,
     "duration": 0.1,
     "zoomScale": 0.9,
-    "clickEvents": [],
+    "clickEvents": [
+      {
+        "__id__": 31
+      }
+    ],
     "_N$interactable": true,
     "_N$enableAutoGrayEffect": false,
     "_N$transition": 3,
@@ -1156,6 +1160,16 @@
     "_N$disabledSprite": null,
     "_N$target": null,
     "_id": ""
+  },
+  {
+    "__type__": "cc.ClickEvent",
+    "target": {
+      "__id__": 1
+    },
+    "component": "",
+    "_componentId": "0a967eQGddC16Nqe8ACOYFv",
+    "handler": "onExitClicked",
+    "customEventData": ""
   },
   {
     "__type__": "cc.PrefabInfo",
