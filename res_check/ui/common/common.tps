@@ -169,6 +169,11 @@
             <filename>btn_small_sel.png</filename>
             <filename>btn_table01_sel.png</filename>
             <filename>img_title_rolelist.png</filename>
+            <filename>btn_list01_sel.png</filename>
+            <filename>btn_list01.png</filename>
+            <filename>img_money.png</filename>
+            <filename>img_vcoin.png</filename>
+            <filename>img_map_npc.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
