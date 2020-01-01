@@ -1,6 +1,7 @@
 import RoleEx from "../role/RoleEx";
 import { getPrefab, getNextPos } from "../common/gFunc";
 import FlyEffect from "../skill/FlyEffect";
+import PlayerMgr from "../manager/PlayerMgr";
 
 const { ccclass, property } = cc._decorator;
 
@@ -43,6 +44,10 @@ export default class EffectLayer extends cc.Component {
     cleanAllEffect(){
         for (const onlyid in this.roleExList) {
             if (this.roleExList.hasOwnProperty(onlyid)) {
+                // 永远不会删除主角的 扩展
+                if(PlayerMgr.instance.isMainRole(Number(onlyid))){
+                    continue;
+                }
                 const roleEx = this.roleExList[onlyid];
                 roleEx.destroy();
             }

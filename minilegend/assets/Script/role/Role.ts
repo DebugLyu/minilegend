@@ -373,6 +373,8 @@ export default class Role extends cc.Component {
         if (this.model.isPlayer()) {
             PlayerMgr.instance.delPlayer(this.model.onlyid);
         }
+		this.stage.effectLayer.delRoleEx(this.model.onlyid);
+		this.battleScene.roleExit(this);
         if (destroy) {
             this.node.destroy();
         } else {

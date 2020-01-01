@@ -107,7 +107,7 @@ export default class BattleScene extends cc.Component {
 		for (const onlyid in this.roleList) {
 			if (this.roleList.hasOwnProperty(onlyid)) {
 				const role = this.roleList[onlyid];
-				if (role.model.livingType == LivingType.MONSTER) {
+				if (role.model.isDead == false && role.model.livingType == LivingType.MONSTER) {
 					n++;
 				}
 			}
@@ -199,8 +199,6 @@ export default class BattleScene extends cc.Component {
 	}
 
 	onRoleDie(role: Role) {
-		this.stage.effectLayer.delRoleEx(role.model.onlyid);
-		this.roleExit(role);
 		if (role.model.livingType == LivingType.MONSTER) {
 			this.checkWave();
 		}

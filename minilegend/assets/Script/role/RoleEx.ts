@@ -12,6 +12,9 @@ export default class RoleEx extends cc.Component {
     @property(cc.Label)
     nameLabel: cc.Label = null;
 
+    @property(cc.Label)
+    hpLabel: cc.Label = null;
+
 
     private _name: string;
     public get name(): string {
@@ -35,8 +38,6 @@ export default class RoleEx extends cc.Component {
         // 名字位置
         this.nameLabel.node.y = -20;
         this.nameLabel.string = role.model.name;
-        // 血量现实
-        this.hpBar.progress = role.model.attr[AttrIds.Hp] / role.model.attr[AttrIds.MaxHp];
     }
 
     update(dt) {
@@ -50,6 +51,7 @@ export default class RoleEx extends cc.Component {
     checkHp() {
         let hp = this.role.model.attr[AttrIds.Hp];
         let maxhp = this.role.model.attr[AttrIds.MaxHp];
+        this.hpLabel.string = this.role.model.attr[AttrIds.Hp] + "/" + this.role.model.attr[AttrIds.MaxHp];
         this.hpBar.progress = this.role.model.attr[AttrIds.Hp] / this.role.model.attr[AttrIds.MaxHp];
         this.hpBar.node.active = hp != maxhp;
     }
