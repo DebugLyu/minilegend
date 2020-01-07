@@ -1,7 +1,9 @@
 // test.ts
+import PlayerMgr from "./Player/PlayerMgr";
 
 function aa(param: number) {
 	let t = 1000;
+	PlayerMgr.instance
 	return new Promise<number>((resolve, reject) => {
 		let a = t + param;
 		resolve(a);
