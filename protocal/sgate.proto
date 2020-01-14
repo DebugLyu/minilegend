@@ -1,0 +1,13 @@
+
+package commander.sgate;
+syntax = "proto3";
+
+message ReqServer {
+	string ip = 1;
+	int32 port = 2;
+	int32 kind = 3;
+}
+
+message ResServer {
+	int32 id = 1;
+}

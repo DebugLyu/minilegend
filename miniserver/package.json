@@ -1,0 +1,23 @@
+{
+  "name": "miniserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/ws": "^6.0.4",
+    "bufferutil": "^4.0.1",
+    "byte-buffer": "^1.0.3",
+    "express": "^4.17.1",
+    "protobufjs": "^6.8.8",
+    "utf-8-validate": "^5.0.2",
+    "ws": "^7.2.1"
+  },
+  "devDependencies": {
+    "tsconfig-paths": "^3.9.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
