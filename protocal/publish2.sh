@@ -1,0 +1,1 @@
+pbts -o protocal.d.ts protocal.js

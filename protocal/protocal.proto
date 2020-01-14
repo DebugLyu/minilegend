@@ -1,0 +1,11 @@
+
+package protocal;
+syntax = "proto3";
+
+message register {
+	int32 kind = 1;
+}
+
+message resRegister {
+	int32 agentid = 1;
+}

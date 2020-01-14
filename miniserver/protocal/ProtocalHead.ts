@@ -1,0 +1,1 @@
+export const server_register = 1000;

@@ -77,8 +77,9 @@ export class Packet {
 
 	static decode(buffer: ArrayBuffer): Packet {
 		let bytebuffer = new Uint8Array(buffer);
-		let head = bytes2int32(bytebuffer.slice(0, 4));
-		let pk: Packet = new Packet(head, bytebuffer.slice(12));
+		let len = bytes2int32(bytebuffer.slice(0, 4));
+		let head = bytes2int32(bytebuffer.slice(4, 8));
+		let pk: Packet = new Packet(head, bytebuffer.slice(8));
 		return pk;
 	}
 }

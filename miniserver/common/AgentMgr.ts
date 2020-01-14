@@ -1,5 +1,5 @@
 import WebSocket = require("ws");
-import { GateAgent } from "./GateAgent";
+import { Agent } from "./Agent";
 
 let agent_seed_id = 100001;
 
@@ -9,8 +9,8 @@ interface WsConfig {
 	protocal?: [],
 }
 
-class GateAgentMgr {
-	private agentList = new Map<number, GateAgent>();
+class AgentMgr {
+	private agentList = new Map<number, Agent>();
 	
 	constructor() {
 		this.agentList.clear();
@@ -19,23 +19,23 @@ class GateAgentMgr {
 	start(config: WsConfig) {
 		let server = new WebSocket.Server({ port: config.port });
 		server.on("connection", (ws: WebSocket) => {
-			let agent = new GateAgent(agent_seed_id, ws);
+			let agent = new Agent(agent_seed_id, ws);
 			this.addAgent(agent);
 			agent_seed_id++;
 		});
 	}
 
-	addAgent(agent: GateAgent) {
+	addAgent(agent: Agent) {
 		this.agentList.set(agent.agentId, agent);
 	}
 
-	delAgent(agent: GateAgent | number) {
+	delAgent(agent: Agent | number) {
 		if (typeof agent == "number") {
 			if (this.agentList.has(agent)) {
 				this.agentList.delete(agent);
 			}
 		}
-		if (agent instanceof GateAgent) {
+		if (agent instanceof Agent) {
 			if (this.agentList.has(agent.agentId)) {
 				this.agentList.delete(agent.agentId);
 			}
@@ -43,7 +43,7 @@ class GateAgentMgr {
 	}
 
 	update(){
-		this.agentList.forEach((agent: GateAgent, key:number) => {
+		this.agentList.forEach((agent: Agent) => {
 			agent.update();
 			if(!agent.isopen){
 				this.delAgent(agent);
@@ -52,4 +52,4 @@ class GateAgentMgr {
 	}
 }
 
-export let gateAgentMgr:GateAgentMgr = new GateAgentMgr();
+export let agentMgr:AgentMgr = new AgentMgr();

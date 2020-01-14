@@ -1,20 +1,21 @@
 
 import WebSocket = require("ws");
-import { Packet } from "../Packet";
-import { commander } from "../protocal/sgate";
+import { Packet } from "../protocal/Packet";
+import { protocal } from "../protocal/protocal";
+import { G } from "../util/G";
 
-export class GateAgent {
+export class Agent {
 	// 添加自定义内容
 	[x: string]: any;
 
 	agentId: number = 0;
 	ws: WebSocket | null = null;
-	handles: {[key:number] : (agent:GateAgent, pk: Packet) => void} = {};
+	handles: { [key: number]: (agent: Agent, pk: Packet) => void } = {};
 
 	pingtime: number = 0;
 	isopen: boolean = false;
 
-	kind:number = 0;
+	kind: number = 0;
 	ip: string = "";
 	port: number = 0;
 
@@ -26,9 +27,6 @@ export class GateAgent {
 	}
 
 	init() {
-		let msglist: {[key:number] : (agent:GateAgent, pk: Packet) => void} = require("./protocal/gate_c");
-		this.handles = msglist;
-
 		this.ws?.on("open", () => {
 			console.log("this.ws? on open");
 			this.isopen = true;
@@ -51,37 +49,49 @@ export class GateAgent {
 		this.ws?.on("pong", (data: Buffer) => {
 
 		});
-
 		this.ws?.on("message", (data: WebSocket.Data) => {
 			if (data instanceof ArrayBuffer) {
-				let pk = Packet.decode(data);
-				let func = this.handles[pk.head];
-				if(func != null){
-					func(this, pk);
-				}
-				if (pk.head < 10000) {
-
-				} else {
-					// 转送到其他服务器
-
+				let pk: Packet = Packet.decode(data);
+				if (pk) {
+					if (pk.head == 1000) {
+						let reg = protocal.register.decode(pk.data as Uint8Array);
+						if (reg.kind == G.AgentKind.Server) {
+							this.regServer();
+						} else {
+							this.regClient();
+						}
+					}
 				}
 			}
 		});
 	}
 
-	update(){
+	regServer() {
+
+	}
+
+	regClient() {
+
+	}
+
+	regHandles(handles: {}) {
+
+	}
+
+	update() {
 		this.pingtime++;
 		if (this.pingtime > 30) {
 			this.close();
 		}
 	}
 
-	close(){
+	close() {
 		this.isopen = false;
 		this.ws?.close();
 	}
 
-	ReqServer(pk:commander.sgate.ReqServer){
-		this.kind = pk.kind;
+
+	ServerRegister(reg: protocal.register) {
+
 	}
 }
