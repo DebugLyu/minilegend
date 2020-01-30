@@ -8,9 +8,9 @@ let cpusnum = os.cpus().length;
 let gateN = cpusnum > 4 ? 4 : cpusnum;
 
 if(cluster.isMaster){
-    for (let i = 0; i < gateN; i++) {
+    // for (let i = 0; i < gateN; i++) {
         cluster.fork();
-    }
+    // }
 }else{
     agentMgr.start(GateConfig);
 }

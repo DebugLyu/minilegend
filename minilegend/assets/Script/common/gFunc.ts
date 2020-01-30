@@ -92,7 +92,7 @@ export async function getPrefab(pname: string) {
 	});
 }
 export async function getPropData(pname: string) {
-	return new Promise<cc.Prefab>((resolve, reject) => {
+	return new Promise<JSON>((resolve, reject) => {
 		cc.loader.loadRes("/prop_data/" + pname, cc.JsonAsset, (error, jsondata: cc.JsonAsset) => {
 			if (error) {
 				resolve(null);
