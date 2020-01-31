@@ -1,7 +1,7 @@
 import PlayerMod from "../role/PlayerMod";
 import Role from "../role/Role";
 
-class __PlayerMgr__ {
+class PlayerMgr {
 	// 玩家数据列表
 	private playerList:{[key:number]: PlayerMod} = {};
 	// 玩家id列表对应 数据列表
@@ -46,5 +46,5 @@ class __PlayerMgr__ {
 	}
 }
 
-let playerMgr = new __PlayerMgr__();
+let playerMgr = new PlayerMgr();
 export default playerMgr;

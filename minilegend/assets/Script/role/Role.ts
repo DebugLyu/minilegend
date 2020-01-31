@@ -185,7 +185,7 @@ export default class Role extends cc.Component {
         let grid = 0;
 
         while (true) {
-            let stagedata = MapMgr.instance.getStageData(this.model.mapid, this.model.stageid);
+            let stagedata = MapMgr.getStageData(this.model.mapid, this.model.stageid);
             if (!stagedata) {
                 break;
             }
@@ -299,7 +299,7 @@ export default class Role extends cc.Component {
             let epos = MapMgr.girdPos2pixPos(cc.v2(this.target.x, this.target.y)).add(skill.enemyEffOffset);
             this.stage.playEffect(skill.enemyEffect, epos.x, epos.y);
             if (num > 0) {
-                this.stage.effectLayer.showHitNum(num, this.target.node.position, null, PlayerMgr.instance.isMainRole(this.model.onlyid));
+                this.stage.effectLayer.showHitNum(num, this.target.node.position, null, PlayerMgr.isMainRole(this.model.onlyid));
             }
         } else {
             // 带飞行特效 要创建碰撞体
@@ -371,7 +371,7 @@ export default class Role extends cc.Component {
      */
     clean(destroy: boolean = false) {
         if (this.model.isPlayer()) {
-            PlayerMgr.instance.delPlayer(this.model.onlyid);
+            PlayerMgr.delPlayer(this.model.onlyid);
         }
 		this.stage.effectLayer.delRoleEx(this.model.onlyid);
 		this.battleScene.roleExit(this);
@@ -408,7 +408,7 @@ export default class Role extends cc.Component {
         this.warrior.beHit(flyeffect.skill);
         let num = this.model.beHit(flyeffect.attack, flyeffect.skill);
         if (num > 0) {
-            this.stage.effectLayer.showHitNum(num, this.node.position, null, PlayerMgr.instance.isMainRole(flyeffect.owner));
+            this.stage.effectLayer.showHitNum(num, this.node.position, null, PlayerMgr.isMainRole(flyeffect.owner));
         }
     }
 }

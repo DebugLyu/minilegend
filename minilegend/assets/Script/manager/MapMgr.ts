@@ -1,4 +1,5 @@
 import { Gird } from "../common/G";
+import { getRes } from "../common/gFunc";
 
 export class StageData {
 	stageid: number = 0;
@@ -24,13 +25,12 @@ export class MapData {
 	stageList: StageData[] = [];
 }
 
-class __MapMgr__ {
+class MapMgr {
 	private mapDatas: { [index: number]: MapData } = {};
 
-	init() {
-		cc.loader.loadRes("prop_data/prop_map", cc.JsonAsset, (error: Error, resource) => {
-			this.mapDatas = resource.json;
-		});
+	async init() {
+		let mapjson = await getRes("prop_data/prop_map", cc.JsonAsset);
+		this.mapDatas = mapjson.json;
 	}
 
 
@@ -71,5 +71,5 @@ class __MapMgr__ {
 	}
 }
 
-let mapMgr = new __MapMgr__();
+let mapMgr = new MapMgr();
 export default mapMgr;

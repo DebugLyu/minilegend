@@ -8,7 +8,7 @@ export interface ItemData {
 	icon: number;
 	desc: string
 }
-class __ItemMgr__ {
+class ItemMgr {
 	private itemList: { [key: number]: ItemData } = {};
 
 	async init() {
@@ -19,5 +19,5 @@ class __ItemMgr__ {
 		return this.itemList[itemid];
 	}
 }
-let itemMgr = new __ItemMgr__();
+let itemMgr = new ItemMgr();
 export default itemMgr;

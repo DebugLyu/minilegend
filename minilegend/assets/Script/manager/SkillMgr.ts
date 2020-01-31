@@ -146,7 +146,7 @@ export class LingHunHuoFu extends SkillBase {
 }
 
 
-class __SkillMgr__ {
+class SkillMgr {
     
 
     skillList = {
@@ -165,5 +165,5 @@ class __SkillMgr__ {
     }
 }
 
-let skillMgr = new __SkillMgr__();
+let skillMgr = new SkillMgr();
 export default skillMgr;

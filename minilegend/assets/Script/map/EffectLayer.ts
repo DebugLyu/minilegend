@@ -1,5 +1,5 @@
 import RoleEx from "../role/RoleEx";
-import { getPrefab, getNextPos } from "../common/gFunc";
+import { getNextPos, getRes } from "../common/gFunc";
 import FlyEffect from "../skill/FlyEffect";
 import PlayerMgr from "../manager/PlayerMgr";
 
@@ -22,7 +22,7 @@ export default class EffectLayer extends cc.Component {
     roleExList: { [key: number]: cc.Node } = {};
 
     async start() {
-        this.flyEffect = await getPrefab("effect/FlyEffect");
+        this.flyEffect = await getRes("/prefab/effect/FlyEffect", cc.Prefab);
     }
 
     addRoleEx(onlyid, role) {
@@ -45,7 +45,7 @@ export default class EffectLayer extends cc.Component {
         for (const onlyid in this.roleExList) {
             if (this.roleExList.hasOwnProperty(onlyid)) {
                 // 永远不会删除主角的 扩展
-                if(PlayerMgr.instance.isMainRole(Number(onlyid))){
+                if(PlayerMgr.isMainRole(Number(onlyid))){
                     continue;
                 }
                 const roleEx = this.roleExList[onlyid];

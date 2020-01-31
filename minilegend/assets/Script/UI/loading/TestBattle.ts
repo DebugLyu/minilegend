@@ -8,7 +8,8 @@ import playerMgr from "../../manager/PlayerMgr";
 import { AttrIds } from "../../common/G";
 import PlayerMod from "../../role/PlayerMod";
 import BattleScene from "../../map/BattleScene";
-import { getPrefab } from "../../common/gFunc";
+import { getRes } from "../../common/gFunc";
+import gameMgr from "../../manager/GameMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -21,12 +22,8 @@ export default class TestBattle extends cc.Component {
 	@property(BattleScene)
 	battleScene: BattleScene = null;
 
-	onLoad() {
-		mapMgr.init();
-		monsterMgr.init();
-		skillMgr.init();
-		itemMgr.init();
-
+	async onLoad() {
+		await gameMgr.init();
 		playerMgr.mainRole = this.role;// addPlayer(this.role);
 	}
 
@@ -41,8 +38,7 @@ export default class TestBattle extends cc.Component {
 		}, 2000);
 
 		setTimeout(async () => {
-
-			let playerprefab = await getPrefab("role/PlayerRole");
+			let playerprefab = await getRes("prefab/role/PlayerRole", cc.Prefab);
 			let rolenode = cc.instantiate(playerprefab);
 			this.role = rolenode.getComponent(Role);
 			this.role.init();

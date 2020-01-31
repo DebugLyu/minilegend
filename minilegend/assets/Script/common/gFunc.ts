@@ -80,20 +80,8 @@ export async function getMapSpr(mapid: number, x: number, y: number) {
 	});
 }
 
-export async function getPrefab(pname: string) {
-	return new Promise<cc.Prefab>((resolve, reject) => {
-		cc.loader.loadRes("/prefab/" + pname, cc.Prefab, (error, prefab) => {
-			if (error) {
-				resolve(null);
-				console.error("Prefab: " + pname + " not found!");
-				return;
-			}
-			resolve(prefab);
-		});
-	});
-}
 export async function getPropData(pname: string) {
-	return new Promise<{ [key: number]: ItemData }>((resolve, reject) => {
+	return await new Promise<{ [key: number]: ItemData }>((resolve, reject) => {
 		cc.loader.loadRes("/prop_data/" + pname, cc.JsonAsset, (error, jsondata: cc.JsonAsset) => {
 			if (error) {
 				resolve(null);
@@ -105,30 +93,18 @@ export async function getPropData(pname: string) {
 	});
 }
 
-export async function getItemAtlas() {
-	return new Promise<cc.SpriteAtlas>((resolve, reject) => {
-		cc.loader.loadRes("item/ItemIcon", cc.SpriteAtlas, (error, atlas: cc.SpriteAtlas) => {
-			if (error) {
-				console.error("ItemIcon Error!");
-				resolve(null);
-				return;
-			}
-			resolve(atlas);
-		});
-	});
-}
-
-export async function getTexture(path: string) {
-	return new Promise<cc.Texture2D>((resolve, reject) => {
-		cc.loader.loadRes(path, cc.Texture2D, (error, texture: cc.Texture2D) => {
-			if (error) {
-				console.error("Texture Path:" + path + " Error!");
-				resolve(null);
-				return;
-			}
-			resolve(texture);
-		});
-	});
+/**
+     * 载入单个资源
+     * @param path
+     * @param type
+     */
+export async function getRes<T extends typeof cc.Asset>(path: string, type: T): Promise<InstanceType<T>> {
+	return await new Promise(res => {
+		cc.loader.loadRes(path, type, (err, resource) => {
+			err && cc.warn(`载入资源失败, path=${path}, err=${err}`)
+			err ? res(null) : res(resource)
+		})
+	})
 }
 
 export function getAngle(x1: number, y1: number, x2: number, y2: number): number {
@@ -239,4 +215,41 @@ export function isJSON(str: string) {
 		}
 	}
 	return false;
+}
+
+/**
+ * 获取一个随机数组项
+ * @param array
+ */
+export function getRandomArrayItem<T>(array: Array<T>): T {
+	return array[Math.trunc(Math.random() * array.length)]
+}
+
+/** 随机字符数组,默认去掉了容易混淆的字符oO/9gq/Vv/Uu/LlI1 */
+const RANDOM_CHAR = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678"
+
+/**
+ * 随机字符串
+ * @param length
+ */
+export function getRandomString(length: number): string {
+	let result = []
+	for (let i = 0; i < length; i += 1) {
+		result.push(RANDOM_CHAR[Math.trunc(Math.random() * RANDOM_CHAR.length)])
+	}
+	return result.join("")
+}
+
+/**
+ * 采用洗牌算法打乱数组顺序,不更改原数组,返回一个打乱顺序的新数组
+ * - 采用遍历+替换的方式。在数量级很大时,可能会有性能损耗
+ * @param array
+ */
+export function shuffleArray<T>(array: Array<T>): Array<T> {
+	let result = [...array]
+	for (let i = 0; i < result.length; i += 1) {
+		let t = Math.trunc(Math.random() * result.length);
+		[result[i], result[t]] = [result[t], result[i]];
+	}
+	return result
 }

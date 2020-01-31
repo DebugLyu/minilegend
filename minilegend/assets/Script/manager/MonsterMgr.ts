@@ -2,6 +2,7 @@ import Role from "../role/Role";
 import MonsterCtr from "../role/MonsterCtr";
 import Stage from "../map/Stage";
 import BattleScene from "../map/BattleScene";
+import { getRes } from "../common/gFunc";
 
 export class MonsterData {
     monid = 0;
@@ -9,37 +10,39 @@ export class MonsterData {
     ResID = 0;
 
     MaxHp = 0;// 当前生命值
-	Speed = 240;// 移动速度
-	AtkMin = 0;// 攻击力
-	AtkMax = 0;
-	Defense = 0;// 防御力
-	MatkMin = 0;// 魔法攻击力
-	MatkMax = 0;
-	Mdefense = 0;// 魔法防御力
-	DatkMin = 0;// 道术攻击力
-	DatkMax = 0;
+    Speed = 240;// 移动速度
+    AtkMin = 0;// 攻击力
+    AtkMax = 0;
+    Defense = 0;// 防御力
+    MatkMin = 0;// 魔法攻击力
+    MatkMax = 0;
+    Mdefense = 0;// 魔法防御力
+    DatkMin = 0;// 道术攻击力
+    DatkMax = 0;
     Ddefense = 0;// 道术防御力
-    
+
     Skills = []; // 技能
     Items = []; // 物品掉落列表
     DropNum = 1 // 物品掉落数量
 }
 
-class __MonsterMgr__ {
+class MonsterMgr {
     private monsterDataList: { [key: number]: MonsterData } = {};
     private monPrefab: cc.Prefab = null;
 
-    init() {
-        cc.loader.loadRes("prop_data/prop_monster", cc.JsonAsset, (error, data) => {
-            this.monsterDataList = data.json;
-        });
-        cc.loader.loadRes("prefab/role/MonsterRole", cc.Prefab, (error, prefab) => {
-            if(error){
-                console.log(error);
-                return;
-            }
-            this.monPrefab = prefab;
-        });
+    async init() {
+        let monsterjson = await getRes("prop_data/prop_monster", cc.JsonAsset);
+        if (monsterjson == null) {
+            console.error("Prop Monster read Error");
+            return;
+        }
+        this.monsterDataList = monsterjson.json;
+        let prefab = await getRes("prefab/role/MonsterRole", cc.Prefab);
+        if (prefab == null) {
+            console.error("Prop Monster read Error");
+            return;
+        }
+        this.monPrefab = prefab;
     }
 
     getMonsterData(monid: number): MonsterData {
@@ -59,21 +62,21 @@ class __MonsterMgr__ {
         let monsterctr = node.getChildByName("rolectr").getComponent(MonsterCtr);
         monsterctr.model.setMonData(mondata);
         let role = node.getComponent(Role);
-        role.init(); 
-        if(btlScene){
+        role.init();
+        if (btlScene) {
             btlScene.roleEnter(role);
         }
 
-        if(x){
+        if (x) {
             role.x = x;
         }
-        if(y){
+        if (y) {
             role.y = y;
         }
-        
+
         return node;
     }
 }
 
-let monsterMgr = new __MonsterMgr__();
+let monsterMgr = new MonsterMgr();
 export default monsterMgr;

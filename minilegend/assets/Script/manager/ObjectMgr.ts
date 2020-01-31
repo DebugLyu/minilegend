@@ -2,7 +2,7 @@ import LivingMod from "../role/LivingMod";
 import Role from "../role/Role";
 
 
-class __ObjectMgr__ {
+class ObjectMgr {
 	
 	public objectList: {[key:number]: Role} = {};
 
@@ -30,5 +30,5 @@ class __ObjectMgr__ {
 		return this.objectList[onlyid];
 	}
 }
-let objMgr = new __ObjectMgr__();
+let objMgr = new ObjectMgr();
 export default objMgr;

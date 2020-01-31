@@ -1,4 +1,4 @@
-import { getAnimation, getItemAtlas } from "../common/gFunc"
+import { getAnimation, getRes } from "../common/gFunc"
 import { dropInfo } from "../common/G";
 import ItemMgr from "../manager/ItemMgr";
 import GameSceneMgr from "../manager/GameSceneMgr";
@@ -26,11 +26,11 @@ export default class EndBattle extends cc.Component {
     async addItemList(itemlist: {[key:number]:number}){
         let basenode = cc.find("itemBg/item", this.node);
         let n = 0;
-        let itemAtlas = await getItemAtlas();
+        let itemAtlas = await getRes("item/ItemIcon", cc.SpriteAtlas);
         for (const itemid in itemlist) {
             if (itemlist.hasOwnProperty(itemid)) {
                 const num = itemlist[itemid];
-                let iteminfo = ItemMgr.instance.getItemData(Number(itemid));
+                let iteminfo = ItemMgr.getItemData(Number(itemid));
                 let node = cc.instantiate(basenode);
                 let icon = node.getChildByName("icon").getComponent(cc.Sprite);
                 icon.spriteFrame = itemAtlas.getSpriteFrame(String(iteminfo.icon));

@@ -7,7 +7,7 @@
 import mapMgr, { StageData } from "../manager/MapMgr";
 import { ActState, Cell, dropInfo } from "../common/G";
 import Role from "../role/Role";
-import { getMapSpr, getAnimation, getItemAtlas, getNextPos, getAngle, random, getTexture } from "../common/gFunc";
+import { getMapSpr, getAnimation, getNextPos, getAngle, random, getRes } from "../common/gFunc";
 import playerMgr from "../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
 import BattleScene from "./BattleScene";
@@ -49,8 +49,8 @@ export default class Stage extends cc.Component {
     }
 
     async init() {
-        this.itemAtlas = await getItemAtlas();
-        this.itemLight = await getTexture("item/light");
+        this.itemAtlas = await getRes("item/ItemIcon", cc.SpriteAtlas);
+        this.itemLight = await getRes("item/light", cc.Texture2D);
     }
 
     setMainRole(role: Role) {

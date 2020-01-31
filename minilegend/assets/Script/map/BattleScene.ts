@@ -4,7 +4,7 @@
  */
 
 
-import { getPrefab, getItemAtlas, toChineseNum } from "../common/gFunc";
+import { toChineseNum, getRes } from "../common/gFunc";
 import Stage from "./Stage";
 import MapMgr, { MapData, StageData } from "../manager/MapMgr";
 import Role from "../role/Role";
@@ -60,7 +60,7 @@ export default class BattleScene extends cc.Component {
 	}
 
 	async init() {
-		this.endBattle = await getPrefab("battle/EndBattle");
+		this.endBattle = await getRes("/prefab/battle/EndBattle", cc.Prefab);
 	}
 
 	loadMap(mapid: number): void {
