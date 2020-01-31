@@ -24,15 +24,7 @@ export class MapData {
 	stageList: StageData[] = [];
 }
 
-export default class MapMgr {
-	private static _instance: MapMgr = null
-	public static get instance(): MapMgr {
-		if (this._instance == null) {
-			this._instance = new MapMgr();
-		}
-		return this._instance;
-	}
-
+class __MapMgr__ {
 	private mapDatas: { [index: number]: MapData } = {};
 
 	init() {
@@ -54,27 +46,30 @@ export default class MapMgr {
 		return null;
 	}
 
-	public static pixPos2GirdPos(pixpos: cc.Vec2): cc.Vec2 {
+	pixPos2GirdPos(pixpos: cc.Vec2): cc.Vec2 {
 		return cc.v2(Math.floor(pixpos.x / Gird.width), Math.floor(pixpos.y / Gird.height));
 	}
 
-	public static girdPos2pixPos(girdpos: cc.Vec2): cc.Vec2 {
+	girdPos2pixPos(girdpos: cc.Vec2): cc.Vec2 {
 		return cc.v2(girdpos.x * Gird.width, girdpos.y * Gird.height);
 	}
 
-	public static girdX2PixX(x: number): number {
+	girdX2PixX(x: number): number {
 		return x * Gird.width;
 	}
 
-	public static girdY2PixY(y: number): number {
+	girdY2PixY(y: number): number {
 		return y * Gird.height;
 	}
 
-	public static pixX2GirdX(x: number) {
+	pixX2GirdX(x: number) {
 		return Math.floor(x / Gird.width)
 	}
 
-	public static pixY2GirdY(y: number) {
+	pixY2GirdY(y: number) {
 		return Math.floor(y / Gird.height)
 	}
 }
+
+let mapMgr = new __MapMgr__();
+export default mapMgr;

@@ -1,11 +1,11 @@
-import http = require('http');
-import https = require('https');
+import __http = require('http');
+import __https = require('https');
 import qs = require('querystring');
-import { ResInterface } from './G';
-import { safeJson } from './gFunc';
+import { ResInterface } from '../common/G';
+import { safeJson } from '../common/gFunc';
 
-export namespace Lhttp {
-    export async function sendpost(host: string, port: string, path: string, data: object) {
+export class myhttp {
+    async sendpost(host: string, port: string, path: string, data: object) {
         return new Promise<JSON>((resolve, reject) => {
             if (host == null) {
                 console.error('[HTTP] ERROR: host is null');
@@ -19,7 +19,7 @@ export namespace Lhttp {
                 method: 'GET'
             };
 
-            var req = http.request(options, function (res) {
+            var req = __http.request(options, function (res) {
                 console.log('STATUS: ' + res.statusCode);
                 console.log('HEADERS: ' + JSON.stringify(res.headers));
                 res.setEncoding('utf8');
@@ -40,13 +40,13 @@ export namespace Lhttp {
         });
     };
 
-    export async function sendgeturl(url: string, data: object, safe: boolean) {
+    async sendgeturl(url: string, data: object, safe: boolean) {
         return new Promise<JSON>((resolve, reject) => {
             var content = qs.stringify(data);
             url = url + '?' + content;
-            let getfunc = http.get;
+            let getfunc = __http.get;
             if (safe) {
-                getfunc = https.get;
+                getfunc = __https.get;
             }
             var req = getfunc(url, function (res) {
                 //console.log('STATUS: ' + res.statusCode);  
@@ -75,7 +75,7 @@ export namespace Lhttp {
         });
     }
 
-    export async function sendget(host: string, port: number, path: string, data: object, safe: boolean) {
+    async sendget(host: string, port: number, path: string, data: object, safe: boolean) {
         return new Promise<JSON>((resolve, reject) => {
             if (host == null) {
                 console.error('[HTTP] ERROR: host is null');
@@ -93,9 +93,9 @@ export namespace Lhttp {
                 options.port = port;
             }
 
-            var getfunc = http.get;
+            var getfunc = __http.get;
             if (safe) {
-                getfunc = https.get;
+                getfunc = __https.get;
             }
             var req = getfunc(options, function (res) {
                 res.setEncoding('utf8');
@@ -142,7 +142,7 @@ export namespace Lhttp {
         req.end();
     };
 */
-    exports.reply = function (res:ResInterface, data: object) {
+    reply(res:ResInterface, data: object) {
         if (data == null) {
             data = {};
         }
@@ -151,3 +151,5 @@ export namespace Lhttp {
     };
 }
 
+let http = new myhttp();
+export default http;

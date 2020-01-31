@@ -1,7 +1,7 @@
 import LivingMod from "./LivingMod";
 import { Attribute, AttrIds, AtkInfo, SkillAtkType } from "../common/G";
-import SkillMgr, { SkillBase, NormalAttack } from "../manager/SkillMgr";
 import WarriorCtr from "./WarriorCtr";
+import skillMgr, { SkillBase, NormalAttack } from "../manager/SkillMgr";
 
 export default class WarriorMod extends LivingMod {
     // 属性值
@@ -81,7 +81,7 @@ export default class WarriorMod extends LivingMod {
     initSkill(skills: number[]) {
         for (let i = 0; i < skills.length; i++) {
             const skillid = skills[i];
-            let skillclass = SkillMgr.instance.getSkill(skillid);
+            let skillclass = skillMgr.getSkill(skillid);
             this.skillList.push(new skillclass());
         }
     }

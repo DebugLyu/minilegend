@@ -1,83 +1,11 @@
-// 地图块 数据
-export const Cell = {
-	width: 256,
-	height: 256,
+export enum AgentKind {
+	Server = 1,
+	Client = 9,
 }
 
-// 地图格子数据
-export const Gird = {
-	width: 40,
-	height: 40,
+export interface ResInterface {
+	send: (arg0: any) => void,
 }
-
-// 生物类型
-export enum LivingType {
-	NOTHING = 0,
-	OBJECT,
-	NPC,
-	MONSTER,
-	PLAYER,
-}
-// 动作状态
-export enum ActState {
-	IDLE = 1,// 待机
-	RUN,// 移动
-	RATK,// 准备攻击
-	ATK,// 攻击
-	MGC,// 魔法
-	DIE,// 死亡
-}
-// 技能计算回调
-export interface AtkInfo {
-	AtkType: number,
-	AtkNum: number
-}
-
-// 技能类型
-export enum SkillType {
-	ATTACK = 0,
-	BUFF,
-	DEBUFF,
-}
-// 技能主动性
-export enum SkillActType {
-	Active = 0,
-	Passive,
-}
-// 技能ID
-export const SkillIds = {
-	NormalAttack: 10000, // 普通攻击
-	GongShaJianFa: 10001,// 攻杀剑法
-	LeiDianShu: 20001,//雷电术
-	LingHunHuoFu: 30001, // 灵魂火符
-}
-// 技能名字
-export const SkillName = {
-	[SkillIds.NormalAttack]: "普通攻击",
-	[SkillIds.GongShaJianFa]: "攻杀剑法",
-	[SkillIds.LeiDianShu]: "雷电术",
-	[SkillIds.LingHunHuoFu]: "灵魂火符",
-}
-// 技能简介
-export const SkillDesc = {
-	[SkillIds.NormalAttack]: "普通攻击",
-	[SkillIds.GongShaJianFa]: "攻杀剑法",
-	[SkillIds.LeiDianShu]: "雷电术",
-	[SkillIds.LingHunHuoFu]: "灵魂火符",
-}
-// 技能攻击类型
-export enum SkillAtkType {
-	Physics = 0, // 物理攻击
-	Magic,// 魔法攻击
-	Taoist,// 道术攻击
-}
-
-export interface dropInfo {
-	itemid: number,
-	num: number,
-}
-
-
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -88,7 +16,6 @@ export interface dropInfo {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
-
 
 export enum AttrIds {
 	Hp = 10,// 当前生命值
@@ -117,8 +44,35 @@ export enum AttrIds {
 	Damnation,// 诅咒
 }
 
+export const AttrIdsArray = [
+	AttrIds.Hp,
+	AttrIds.MaxHp,
+	AttrIds.Speed,
+	AttrIds.AtkSpe,
+	AttrIds.AtkMin,
+	AttrIds.AtkMax,
+	AttrIds.Defense,
+	AttrIds.MatkMin,
+	AttrIds.MatkMax,
+	AttrIds.Mdefense,
+	AttrIds.DatkMin,
+	AttrIds.DatkMax,
+	AttrIds.Ddefense,
+	AttrIds.Hit,
+	AttrIds.Crit,
+	AttrIds.CritAdd,
+	AttrIds.Dodge,
+	AttrIds.Cut,
+	AttrIds.CutPre,
+	AttrIds.Poison,
+	AttrIds.Paralysis,
+	AttrIds.Toughness,
+	AttrIds.Lucky,
+	AttrIds.Damnation,
+]
+
 export const AttrStr = {
-	[AttrIds.Hp]: "Hp ",
+	[AttrIds.Hp]: "Hp",
 	[AttrIds.MaxHp]: "MaxHp",
 	[AttrIds.Speed]: "Speed",
 	[AttrIds.AtkSpe]: "AtkSpe",
@@ -169,4 +123,34 @@ export class Attribute {
 	[AttrIds.Toughness]: number = 0;
 	[AttrIds.Lucky]: number = 0;
 	[AttrIds.Damnation]: number = 0;
+
+	add(attr: Attribute): Attribute {
+		let attrn = new Attribute();
+		for (const attrid of AttrIdsArray) {
+			attrn[attrid] = this[attrid] + attr[attrid]; 
+		}
+		return attrn;
+	}
+}
+
+export enum ItemType {
+	Gold = 1, // 元宝
+	Coin, // 银币
+	Exp, // 经验
+	Consume = 100, // 消耗品
+	Waste, // 垃圾品
+	ComMat, // 通用材料
+	DrugMat,// 药品材料
+	Drug,// 药品
+	EquipMat,// 装备材料
+	Equip,// 装备
+}
+
+export enum EquipPos {
+	Weapon = 1, // 武器位置
+	Hat,
+	Clothes,
+	Ring1,
+	Ring2,
+	Shoes,
 }

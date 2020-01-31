@@ -8,7 +8,7 @@
     "bufferutil": "^4.0.1",
     "byte-buffer": "^1.0.3",
     "express": "^4.17.1",
-    "log4js": "^6.1.0",
+    "log4js": "^6.1.1",
     "protobufjs": "^6.8.8",
     "utf-8-validate": "^5.0.2",
     "ws": "^7.2.1"

@@ -2,7 +2,7 @@
 // import mgen = require("../common/modelGenerate")
 
 import { GateConfig as config } from "../config";
-import { gFunc  } from "../util/gFunc";
+import { getLocalIp } from "../common/gFunc";
 
 function int16ToByte(num: number): Uint8Array {
     //只有int类型，小于256点1字节，大于256点两字节，所有只能返过来
@@ -54,7 +54,7 @@ class WSocket {
     isOpen: boolean = false;
     // status
     constructor() {
-        this.url = "ws://" + gFunc.getLocalIp() + "/" + config.port;
+        this.url = "ws://" + getLocalIp() + "/" + config.port;
         this.dataType = "arraybuffer";
 
         this.connection(false);

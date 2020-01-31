@@ -10,7 +10,7 @@ import MapMgr, { MapData, StageData } from "../manager/MapMgr";
 import Role from "../role/Role";
 import { LivingType, dropInfo } from "../common/G";
 import MonsterMgr from "../manager/MonsterMgr";
-import PlayerMgr from "../manager/PlayerMgr";
+import playerMgr from "../manager/PlayerMgr";
 import EndBattle from "./EndBattle";
 
 const { ccclass, property, menu } = cc._decorator;
@@ -65,7 +65,7 @@ export default class BattleScene extends cc.Component {
 
 	loadMap(mapid: number): void {
 		this.mapId = mapid;
-		this.mapData = MapMgr.instance.getMapData(mapid);
+		this.mapData = MapMgr.getMapData(mapid);
 		this.loadStage(this.mapData.startStage)
 	}
 
@@ -118,7 +118,7 @@ export default class BattleScene extends cc.Component {
 	private nextWave() {
 		let monsterlist = this.stageData.monster[this.wave - 1];
 		for (const moninfo of monsterlist) {
-			MonsterMgr.instance.genMonster(moninfo.monid, this, moninfo.x, moninfo.y);
+			MonsterMgr.genMonster(moninfo.monid, this, moninfo.x, moninfo.y);
 		}
 	}
 
@@ -154,7 +154,7 @@ export default class BattleScene extends cc.Component {
 		role.enterStage(this.mapId, this.stageId);
 		this.roleList[role.model.onlyid] = role;
 
-		if (PlayerMgr.instance.isMainRole(role.model.onlyid)) {
+		if (playerMgr.isMainRole(role.model.onlyid)) {
 			role.x = this.stageData.startPos.x;
 			role.y = this.stageData.startPos.y;
 		}
@@ -217,7 +217,7 @@ export default class BattleScene extends cc.Component {
 
 	private checkTransport() {
 		if (this.isFinish) {
-			let mainrole = PlayerMgr.instance.mainRole;
+			let mainrole = playerMgr.mainRole;
 			for (const _ in this.stageData.trancePos) {
 				let trpos = this.stageData.trancePos[_];
 				let trrect = cc.rect(trpos.x - 1, trpos.y - 1, 3, 5);

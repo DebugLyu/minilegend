@@ -23,6 +23,41 @@ export function getLocalIp() {
 	return ip;
 }
 
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//   
+//							下面前后端通用部分
+//
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+export function random(min: number = 100, max?: number): number {
+	if (max == null) {
+		max = min;
+		min = 0;
+	}
+	return Math.floor((Math.random() * (max - min)) + min);
+}
+
+let lseed: number = Date.now();
+function rnd(): number {
+	lseed = (lseed * 9301 + 49297) % 233280; //为何使用这三个数?
+	return lseed / (233280.0);
+};
+export function lRandomSeed(seed: number) {
+	lseed = seed;
+}
+export function lRandom(min: number = 100, max?: number): number {
+	if (max == null) {
+		max = min;
+		min = 0;
+	}
+	return Math.floor((rnd() * (max - min)) + min);
+}
+
 export function safeJson(str: any) {
 	if (typeof str == "string") {
 		try {
@@ -53,7 +88,7 @@ export function isJSON(str: string) {
 			}
 
 		} catch (e) {
-			console.log('error：' + str + '!!!' + e);
+			console.error('error：' + str + '!!!' + e);
 			return false;
 		}
 	}

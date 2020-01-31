@@ -25,16 +25,7 @@ export class MonsterData {
     DropNum = 1 // 物品掉落数量
 }
 
-export default class MonsterMgr {
-    private static _instance: MonsterMgr = null
-    public static get instance(): MonsterMgr {
-        if (this._instance == null) {
-            this._instance = new MonsterMgr();
-
-        }
-        return this._instance;
-    }
-
+class __MonsterMgr__ {
     private monsterDataList: { [key: number]: MonsterData } = {};
     private monPrefab: cc.Prefab = null;
 
@@ -83,3 +74,6 @@ export default class MonsterMgr {
         return node;
     }
 }
+
+let monsterMgr = new __MonsterMgr__();
+export default monsterMgr;

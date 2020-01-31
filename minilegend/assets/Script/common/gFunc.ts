@@ -1,4 +1,5 @@
 import { ActState } from "./G";
+import { ItemData } from "../manager/ItemMgr";
 
 let ActStateStr = {
 	[ActState.IDLE]: "idle",
@@ -92,7 +93,7 @@ export async function getPrefab(pname: string) {
 	});
 }
 export async function getPropData(pname: string) {
-	return new Promise<JSON>((resolve, reject) => {
+	return new Promise<{ [key: number]: ItemData }>((resolve, reject) => {
 		cc.loader.loadRes("/prop_data/" + pname, cc.JsonAsset, (error, jsondata: cc.JsonAsset) => {
 			if (error) {
 				resolve(null);
@@ -128,14 +129,6 @@ export async function getTexture(path: string) {
 			resolve(texture);
 		});
 	});
-}
-
-export function random(min: number, max?: number): number {
-	if (max == null) {
-		max = min;
-		min = 0;
-	}
-	return Math.floor((Math.random() * (max - min)) + min);
 }
 
 export function getAngle(x1: number, y1: number, x2: number, y2: number): number {
@@ -174,4 +167,76 @@ export function toChineseNum(num: number): string {
 		noWanStr = "0" + noWan;
 	}
 	return overWan ? getWan(overWan) + "万" + getWan(noWanStr) : getWan(num);
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+//   
+//							下面前后端通用部分
+//
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+export function random(min: number = 100, max?: number): number {
+	if (max == null) {
+		max = min;
+		min = 0;
+	}
+	return Math.floor((Math.random() * (max - min)) + min);
+}
+
+let lseed: number = Date.now();
+function rnd(): number {
+	lseed = (lseed * 9301 + 49297) % 233280; //为何使用这三个数?
+	return lseed / (233280.0);
+};
+export function lRandomSeed(seed: number) {
+	lseed = seed;
+}
+export function lRandom(min: number = 100, max?: number): number {
+	if (max == null) {
+		max = min;
+		min = 0;
+	}
+	return Math.floor((rnd() * (max - min)) + min);
+}
+
+export function safeJson(str: any) {
+	if (typeof str == "string") {
+		try {
+			let obj = JSON.parse(str);
+			if (obj && typeof obj == "object") {
+				return obj;
+			}
+		} catch (error) {
+			console.error('Json parse Error:' + str + '>>> is not Json string');
+			console.error(error);
+			return str;
+		}
+	} else if (typeof str == "object") {
+		return str;
+	}
+	console.error('Json parse Error:' + str + '>>> is not Json string');
+	return str;
+}
+
+export function isJSON(str: string) {
+	if (typeof str == 'string') {
+		try {
+			var obj = JSON.parse(str);
+			if (typeof obj == 'object' && obj) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (e) {
+			console.error('error：' + str + '!!!' + e);
+			return false;
+		}
+	}
+	return false;
 }

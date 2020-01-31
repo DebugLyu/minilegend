@@ -1,10 +1,10 @@
 import Role from "../../role/Role";
-import MapMgr from "../../manager/MapMgr";
-import MonsterMgr from "../../manager/MonsterMgr";
-import SkillMgr from "../../manager/SkillMgr";
-import ItemMgr from "../../manager/ItemMgr";
+import mapMgr from "../../manager/MapMgr";
+import monsterMgr from "../../manager/MonsterMgr";
+import skillMgr from "../../manager/SkillMgr";
+import itemMgr from "../../manager/ItemMgr";
 import Stage from "../../map/Stage";
-import PlayerMgr from "../../manager/PlayerMgr";
+import playerMgr from "../../manager/PlayerMgr";
 import { AttrIds } from "../../common/G";
 import PlayerMod from "../../role/PlayerMod";
 import BattleScene from "../../map/BattleScene";
@@ -22,12 +22,12 @@ export default class TestBattle extends cc.Component {
 	battleScene: BattleScene = null;
 
 	onLoad() {
-		MapMgr.instance.init();
-		MonsterMgr.instance.init();
-		SkillMgr.instance.init();
-		ItemMgr.instance.init();
+		mapMgr.init();
+		monsterMgr.init();
+		skillMgr.init();
+		itemMgr.init();
 
-		PlayerMgr.instance.mainRole = this.role;// addPlayer(this.role);
+		playerMgr.mainRole = this.role;// addPlayer(this.role);
 	}
 
 	start() {
@@ -49,7 +49,7 @@ export default class TestBattle extends cc.Component {
 			this.role.weapon.resId = 1700;
 			this.role.warrior.resId = 3800;
 
-			PlayerMgr.instance.mainRole = this.role;
+			playerMgr.mainRole = this.role;
 
 			this.role.model.name = "测试角色";
 			this.role.model.attr[AttrIds.Hp] = 50000;

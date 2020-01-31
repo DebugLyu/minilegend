@@ -2,16 +2,10 @@ import LivingMod from "../role/LivingMod";
 import Role from "../role/Role";
 
 
-export default class ObjectMgr {
-	private static _instance: ObjectMgr = null;
-
+class __ObjectMgr__ {
+	
 	public objectList: {[key:number]: Role} = {};
-	public static get instance(): ObjectMgr {
-		if (this._instance == null) {
-			this._instance = new ObjectMgr();
-		}
-		return this._instance;
-	}
+
 
 	addObject(obj: Role): Role {
 		// this._object_list[obj]
@@ -36,3 +30,5 @@ export default class ObjectMgr {
 		return this.objectList[onlyid];
 	}
 }
+let objMgr = new __ObjectMgr__();
+export default objMgr;

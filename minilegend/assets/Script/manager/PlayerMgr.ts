@@ -1,17 +1,7 @@
 import PlayerMod from "../role/PlayerMod";
 import Role from "../role/Role";
 
-export default class PlayerMgr {
-	// 单例
-	private static _instance: PlayerMgr = null;
-	public static get instance(): PlayerMgr {
-		if (this._instance == null) {
-			this._instance = new PlayerMgr();
-		}
-		return this._instance;
-	}
-
-
+class __PlayerMgr__ {
 	// 玩家数据列表
 	private playerList:{[key:number]: PlayerMod} = {};
 	// 玩家id列表对应 数据列表
@@ -55,3 +45,6 @@ export default class PlayerMgr {
 		return onlyid == this.mainRole.model.onlyid;
 	}
 }
+
+let playerMgr = new __PlayerMgr__();
+export default playerMgr;

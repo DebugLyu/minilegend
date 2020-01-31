@@ -2,7 +2,7 @@
 import WebSocket = require("ws");
 import { Packet } from "../protocal/Packet";
 import { protocal } from "../protocal/protocal";
-import { G } from "../util/G";
+import { AgentKind } from "./G";
 
 export class Agent {
 	// 添加自定义内容
@@ -55,7 +55,7 @@ export class Agent {
 				if (pk) {
 					if (pk.head == 1000) {
 						let reg = protocal.register.decode(pk.data as Uint8Array);
-						if (reg.kind == G.AgentKind.Server) {
+						if (reg.kind == AgentKind.Server) {
 							this.regServer();
 						} else {
 							this.regClient();

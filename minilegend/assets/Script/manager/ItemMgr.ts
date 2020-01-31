@@ -8,15 +8,7 @@ export interface ItemData {
 	icon: number;
 	desc: string
 }
-export default class ItemMgr {
-	private static _instance: ItemMgr = null
-	public static get instance(): ItemMgr {
-		if (this._instance == null) {
-			this._instance = new ItemMgr();
-		}
-		return this._instance;
-	}
-
+class __ItemMgr__ {
 	private itemList: { [key: number]: ItemData } = {};
 
 	async init() {
@@ -27,3 +19,5 @@ export default class ItemMgr {
 		return this.itemList[itemid];
 	}
 }
+let itemMgr = new __ItemMgr__();
+export default itemMgr;

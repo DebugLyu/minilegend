@@ -4,14 +4,14 @@
  *      掉落物品
  */
 
-import MapMgr, { StageData } from "../manager/MapMgr";
+import mapMgr, { StageData } from "../manager/MapMgr";
 import { ActState, Cell, dropInfo } from "../common/G";
 import Role from "../role/Role";
 import { getMapSpr, getAnimation, getItemAtlas, getNextPos, getAngle, random, getTexture } from "../common/gFunc";
-import PlayerMgr from "../manager/PlayerMgr";
+import playerMgr from "../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
 import BattleScene from "./BattleScene";
-import ItemMgr from "../manager/ItemMgr";
+import itemMgr from "../manager/ItemMgr";
 
 const { ccclass, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;
@@ -148,7 +148,7 @@ export default class Stage extends cc.Component {
 
             node.parent = this.node;
             node.zIndex = 1;
-            node.position = MapMgr.girdPos2pixPos(cc.v2(tinfo.x, tinfo.y));
+            node.position = mapMgr.girdPos2pixPos(cc.v2(tinfo.x, tinfo.y));
             this.transportList[tinfo.tomap] = node;
         }
     }
@@ -222,7 +222,7 @@ export default class Stage extends cc.Component {
 
     getEmptyCell(gridpos: cc.Vec2): cc.Vec2 {
         let isEmptyCell = (gpos: cc.Vec2) => {
-            let ppos = MapMgr.girdPos2pixPos(gpos);
+            let ppos = mapMgr.girdPos2pixPos(gpos);
             for (const dropitem of this.dropList) {
                 if (dropitem.x == ppos.x && dropitem.y == ppos.y) {
                     return false;
@@ -301,11 +301,11 @@ export default class Stage extends cc.Component {
                 console.log("Error: drop item too match");
                 break;
             }
-            let itemdata = ItemMgr.instance.getItemData(iteminfo.itemid);
+            let itemdata = itemMgr.getItemData(iteminfo.itemid);
             let node = new cc.Node();
             let sprite = node.addComponent(cc.Sprite);
             sprite.spriteFrame = this.itemAtlas.getSpriteFrame(String(itemdata.icon));
-            node.position = MapMgr.girdPos2pixPos(pos);
+            node.position = mapMgr.girdPos2pixPos(pos);
             node.parent = this.effectLayer.node;
             node.scale = 20 / sprite.spriteFrame.getRect().width;
             node.name = "pos:" + pos.x + "|" + pos.y;
@@ -316,7 +316,7 @@ export default class Stage extends cc.Component {
 
     private checkDropItem() {
         if (this.isFinish) {
-            let mainrole = PlayerMgr.instance.mainRole;
+            let mainrole = playerMgr.mainRole;
             for (let i = 0; i < this.dropList.length; i++) {
                 let itemnode = this.dropList[i];
                 let angle = getAngle(itemnode.x, itemnode.y, mainrole.pixx, mainrole.pixy + 30);

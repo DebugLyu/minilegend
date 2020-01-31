@@ -146,15 +146,8 @@ export class LingHunHuoFu extends SkillBase {
 }
 
 
-export default class SkillMgr {
-    // 单例
-    private static _instance: SkillMgr = null;
-    public static get instance(): SkillMgr {
-        if (this._instance == null) {
-            this._instance = new SkillMgr();
-        }
-        return this._instance;
-    }
+class __SkillMgr__ {
+    
 
     skillList = {
         [SkillIds.NormalAttack]: NormalAttack,
@@ -171,3 +164,6 @@ export default class SkillMgr {
         return this.skillList[skillid];
     }
 }
+
+let skillMgr = new __SkillMgr__();
+export default skillMgr;
