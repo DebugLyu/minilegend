@@ -1,7 +1,7 @@
-class equipMgr {
+class EquipMgr {
 
 
 }
 
-let __equip_mgr__ = new equipMgr();
-export default __equip_mgr__;
+let equipMgr = new EquipMgr();
+export default equip_mgr;
