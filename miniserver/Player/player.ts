@@ -6,13 +6,14 @@ export default class player {
 	[x:string]: any;
 	// 绝对id 服务器专有 与 客户端 绝对id 不同。
 	onlyid: number = 0;
-	// 玩家id 
+	// 玩家id 数据库id
 	playerid: number = 0;
 	// 账号
 	account: string = "";
 	// token 验证上下文
 	token: string = "";
-
+	// uuid
+	uuid: string = "";
 	// 等级
 	level: number = 0;
 	// 经验
@@ -38,7 +39,7 @@ export default class player {
 
 	}
 
-	toJson(){
+	toString(){
 		return JSON.stringify(this);
 	}
 

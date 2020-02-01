@@ -1,9 +1,11 @@
-import { lRandomSeed, lRandom } from "../common/gFunc";
+import { getRandomString } from "../common/gFunc";
+import { md5 } from "./crypto";
 
 export default class Token {
 	public static getToken(str: string): string{
-		let t = lRandom(10000000);
+		let t = getRandomString(10);
 		let token = t + str;
+		token = md5(token);
 		return token;
 	}
 }

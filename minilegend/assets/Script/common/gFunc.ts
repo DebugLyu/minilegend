@@ -125,26 +125,6 @@ export function getNextPos(curpos: cc.Vec2, len: number, angle: number): cc.Vec2
 	return cc.v2(x1, y1);
 }
 
-export function toChineseNum(num: number): string {
-	let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']; //changeNum[0] = "零"
-	let unit = ["", "十", "百", "千", "万"];
-	let getWan = (temp) => {
-		let strArr = temp.toString().split("").reverse();
-		let newNum = "";
-		for (var i = 0; i < strArr.length; i++) {
-			newNum = (i == 0 && strArr[i] == 0 ? "" : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? "" : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;
-		}
-		return newNum;
-	}
-	let overWan = Math.floor(num / 10000);
-	let noWan = num % 10000;
-	let noWanStr = "";
-	if (noWan.toString().length < 4) {
-		noWanStr = "0" + noWan;
-	}
-	return overWan ? getWan(overWan) + "万" + getWan(noWanStr) : getWan(num);
-}
-
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -252,4 +232,24 @@ export function shuffleArray<T>(array: Array<T>): Array<T> {
 		[result[i], result[t]] = [result[t], result[i]];
 	}
 	return result
+}
+
+export function toChineseNum(num: number): string {
+	let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']; //changeNum[0] = "零"
+	let unit = ["", "十", "百", "千", "万"];
+	let getWan = (temp: number | string) => {
+		let strArr = temp.toString().split("").reverse();
+		let newNum = "";
+		for (var i = 0; i < strArr.length; i++) {
+			newNum = (i == 0 && strArr[i] == "0" ? "" : (i > 0 && strArr[i] == "0" && strArr[i - 1] == "0" ? "" : changeNum[Number(strArr[i])] + (strArr[i] == "0" ? unit[0] : unit[i]))) + newNum;
+		}
+		return newNum;
+	}
+	let overWan = Math.floor(num / 10000);
+	let noWan = num % 10000;
+	let noWanStr = "";
+	if (noWan.toString().length < 4) {
+		noWanStr = "0" + noWan;
+	}
+	return overWan ? getWan(overWan) + "万" + getWan(noWanStr) : getWan(num);
 }

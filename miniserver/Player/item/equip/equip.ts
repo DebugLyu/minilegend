@@ -1,4 +1,4 @@
-import { Attribute, AttrIds } from "../../../common/G"
+import { Attribute, AttrIds, ItemType } from "../../../common/G"
 import item from "../item";
 
 
@@ -11,4 +11,13 @@ export default class equip extends item {
 	getAttr() {
 		return this.attr.add(this.artiAttr);
 	}
+
+	convType(t: ItemType): equip | null{
+		if(this.type == t){
+			return this;
+		}
+		return null;
+	}
 }
+
+

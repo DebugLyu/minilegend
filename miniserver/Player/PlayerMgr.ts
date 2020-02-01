@@ -1,15 +1,11 @@
+import player from "./player";
 
-export default class PlayerMgr {
-    
-    private static _instance: PlayerMgr;
-    public static get instance() : PlayerMgr {
-        if(this._instance == null){
-            this._instance = new PlayerMgr(); 
-        }
-        return this._instance;
-    }
+class PlayerMgr {
+    private playerList = new Map<number, player>();
 
-    addPlayer(p:any){
-
+    addPlayer(p:player){
+        this.playerList.set(p.onlyid, p);
     }
 }
+let playerMgr = new PlayerMgr();
+export default playerMgr;
