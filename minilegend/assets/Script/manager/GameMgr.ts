@@ -6,6 +6,7 @@ import { getRes } from "../common/gFunc";
 
 class GameMgr {
     config: any = null;
+    rURL:string = "";
 
     async init() {
         await itemMgr.init();
@@ -22,7 +23,7 @@ class GameMgr {
         if (json.dev) {
             this.config.host = this.config.devhost;
         }
-
+        this.rURL = "http://" + gameMgr.config.host + ":" + gameMgr.config.port;
     }
 }
 let gameMgr = new GameMgr();

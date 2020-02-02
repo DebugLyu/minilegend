@@ -1,7 +1,7 @@
 import RoleEx from "../role/RoleEx";
-import { getNextPos, getRes } from "../common/gFunc";
+import { getNextPos, getRes } from "../../common/gFunc";
 import FlyEffect from "../skill/FlyEffect";
-import PlayerMgr from "../manager/PlayerMgr";
+import PlayerMgr from "../../manager/PlayerMgr";
 
 const { ccclass, property } = cc._decorator;
 

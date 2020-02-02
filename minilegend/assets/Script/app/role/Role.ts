@@ -2,14 +2,14 @@
  * 地图上 战斗角色 所在的实际节点 
  *      控制并计算 角色在地图上位置
  */
-import { ActState, AttrIds, LivingType } from "../common/G";
-import MapMgr from "../manager/MapMgr";
+import { ActState, AttrIds, LivingType } from "../../common/G";
+import MapMgr from "../../manager/MapMgr";
 import Stage from "../map/Stage";
 import WarriorCtr from "./WarriorCtr";
 import WeaponCtr from "./weaponCtr";
-import { getDir, getAngle } from "../common/gFunc";
+import { getDir, getAngle } from "../../common/gFunc";
 import WarriorMod from "./WarriorMod";
-import PlayerMgr from "../manager/PlayerMgr";
+import PlayerMgr from "../../manager/PlayerMgr";
 import FlyEffect from "../skill/FlyEffect";
 import BattleScene from "../map/BattleScene";
 import MonsterMod from "./MonsterMod";

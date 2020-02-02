@@ -1,8 +1,8 @@
-import { getAnimation } from "../common/gFunc";
+import { getAnimation } from "../../common/gFunc";
 import EffectLayer from "../map/EffectLayer";
 import Role from "../role/Role";
-import { LivingType } from "../common/G";
-import { SkillBase } from "../manager/SkillMgr";
+import { LivingType } from "../../common/G";
+import { SkillBase } from "../../manager/SkillMgr";
 
 const { ccclass, property } = cc._decorator;
 

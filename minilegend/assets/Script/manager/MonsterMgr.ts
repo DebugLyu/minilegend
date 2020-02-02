@@ -1,7 +1,7 @@
-import Role from "../role/Role";
-import MonsterCtr from "../role/MonsterCtr";
-import Stage from "../map/Stage";
-import BattleScene from "../map/BattleScene";
+import Role from "../app/role/Role";
+import MonsterCtr from "../app/role/MonsterCtr";
+import Stage from "../app/map/Stage";
+import BattleScene from "../app/map/BattleScene";
 import { getRes } from "../common/gFunc";
 
 export class MonsterData {

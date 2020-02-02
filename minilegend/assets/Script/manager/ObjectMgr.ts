@@ -1,5 +1,5 @@
-import LivingMod from "../role/LivingMod";
-import Role from "../role/Role";
+import LivingMod from "../app/role/LivingMod";
+import Role from "../app/role/Role";
 
 
 class ObjectMgr {

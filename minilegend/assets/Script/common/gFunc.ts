@@ -125,6 +125,14 @@ export function getNextPos(curpos: cc.Vec2, len: number, angle: number): cc.Vec2
 	return cc.v2(x1, y1);
 }
 
+/**
+ * 生成32位 字符串 伪造唯一id
+ */
+export function genUUID(): string {
+	let time = Date.now();// 1580650846000  13位 
+	let t = getRandomString(9) + time + getRandomString(10);
+	return t;
+}
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////

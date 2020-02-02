@@ -59,7 +59,13 @@ export function lRandom(min: number = 100, max?: number): number {
 }
 
 export function safeJson(str: any) {
+	if(str == null){
+		return null;
+	}
 	if (typeof str == "string") {
+		if(str[0] != "{" && str[0] != "["){
+			return str;
+		}
 		try {
 			let obj = JSON.parse(str);
 			if (obj && typeof obj == "object") {

@@ -1,23 +1,39 @@
-// test.ts
-function aa(param: number) {
-	let t = 1000;
-	return new Promise<number>((resolve, reject) => {
-		let a = t + param;
-		resolve(a);
-	});
-}
+import { createClient, RedisClient } from "redis";
 
-async function main(){
-	let a: number = 0;
-	a = await aa(100);
-	console.log(a);
-}
+let rs:RedisClient = createClient({auth_pass:"123456"})
 
-main();
-function bb(){
-	let a = 1;
-	let b = 2;
-	a= a+b;
-	return a++;
+let player1 = {
+	onlyid: 100,
+	equip: {
+		weapon: "100",
+		clothes: "200",
+	}
 }
-bb();
+rs.hmset("players", "player1", JSON.stringify(player1), () => {
+    console.log("ok");
+})
+rs.hmset("players", "player2", JSON.stringify(player1), () => {
+    console.log("ok");
+})
+
+rs.hmget("players", "player1", (err, strlist) => {
+	// console.log("2222", strlist);
+	console.log("22222");
+	let  t = JSON.parse(strlist[0]);
+	console.log(t);
+	
+});
+
+rs.hgetall("players", (err, strlist) => {
+
+	console.log("3333", strlist);
+
+rs.del("players",  () => {
+	console.log("del");
+	rs.hgetall("players", (e, str) => {
+		console.log(str);
+		
+	})
+});
+})
+

@@ -11,7 +11,7 @@ export var http = {
      * @param cb
      */
     get: async function (path: string, params?: object, url?: string) {
-        return new Promise<object>((resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             let xhr = cc.loader.getXMLHttpRequest();
             xhr.timeout = 10000;
             let str = "?";
@@ -22,7 +22,7 @@ export var http = {
                 str += k + "=" + params[k];
             }
             if (url == null) {
-                url = gameMgr.config.host;
+                url = gameMgr.rURL;
             }
             let requestURL = url + path + encodeURI(str);
             console.log("RequestURL:" + requestURL);

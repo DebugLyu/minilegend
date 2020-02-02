@@ -1,9 +1,9 @@
-import Stage from "../../map/Stage";
+import Stage from "../../app/map/Stage";
 import MonsterMgr from "../../manager/MonsterMgr";
 import { random } from "../../common/gFunc";
 import MapMgr from "../../manager/MapMgr";
 import PlayerMgr from "../../manager/PlayerMgr";
-import BattleScene from "../../map/BattleScene";
+import BattleScene from "../../app/map/BattleScene";
 
 const { ccclass, property } = cc._decorator;
 
@@ -24,7 +24,7 @@ export default class TestLayer extends cc.Component {
 
     // update (dt) {}
     relive(e, d) {
-        let role = PlayerMgr.instance.mainRole;
+        let role = PlayerMgr.mainRole;
         role.relive();
     }
 
@@ -41,11 +41,11 @@ export default class TestLayer extends cc.Component {
                 random_y = random(this.battleScene.stageData.rows);
             }
         }
-        MonsterMgr.instance.genMonster(1000, this.battleScene, random_x, random_y);
+        MonsterMgr.genMonster(1000, this.battleScene, random_x, random_y);
     }
 
     createItem(e, d){
-        let role = PlayerMgr.instance.mainRole;
+        let role = PlayerMgr.mainRole;
         if(role == null){
             return;
         }

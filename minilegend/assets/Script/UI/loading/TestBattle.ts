@@ -1,13 +1,13 @@
-import Role from "../../role/Role";
+import Role from "../../app/role/Role";
 import mapMgr from "../../manager/MapMgr";
 import monsterMgr from "../../manager/MonsterMgr";
 import skillMgr from "../../manager/SkillMgr";
 import itemMgr from "../../manager/ItemMgr";
-import Stage from "../../map/Stage";
+import Stage from "../../app/map/Stage";
 import playerMgr from "../../manager/PlayerMgr";
 import { AttrIds } from "../../common/G";
-import PlayerMod from "../../role/PlayerMod";
-import BattleScene from "../../map/BattleScene";
+import PlayerMod from "../../app/role/PlayerMod";
+import BattleScene from "../../app/map/BattleScene";
 import { getRes } from "../../common/gFunc";
 import gameMgr from "../../manager/GameMgr";
 

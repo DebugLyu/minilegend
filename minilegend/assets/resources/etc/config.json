@@ -1,6 +1,6 @@
 {
     "dev": true,
-    "devhost": "localhost",
+    "devhost": "127.0.0.1",
     "port": 5188,
     "host": "127.0.0.1"
 }

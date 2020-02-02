@@ -1,7 +1,7 @@
 import LivingMod from "./LivingMod";
-import { Attribute, AttrIds, AtkInfo, SkillAtkType } from "../common/G";
+import { Attribute, AttrIds, AtkInfo, SkillAtkType } from "../../common/G";
 import WarriorCtr from "./WarriorCtr";
-import skillMgr, { SkillBase, NormalAttack } from "../manager/SkillMgr";
+import skillMgr, { SkillBase, NormalAttack } from "../../manager/SkillMgr";
 
 export default class WarriorMod extends LivingMod {
     // 属性值

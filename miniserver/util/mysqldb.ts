@@ -1,7 +1,8 @@
 import mysql from "mysql";
 import Llog from "./Log";
+import { GameConfig, DBConfig } from "../config";
 // var dbfrom = require('./dbform');
-let pool: mysql.Pool;
+let pool: mysql.Pool = mysql.createPool(DBConfig);;
 
 function nop(a: any, b: any, c: any, d: any, e: any, f: any, g: any) {
 
@@ -23,7 +24,7 @@ function query(sql: string) {
     });
 }
 async function asyncQuery(sql: string) {
-    return new Promise<JSON | null>((resolve, reject) => {
+    return await new Promise<any[] | null>((resolve, reject) => {
         pool.getConnection((err, conn) => {
             if (err) {
                 Llog.error("Sql:" + sql + ", Query Error");
@@ -43,22 +44,32 @@ async function asyncQuery(sql: string) {
     });
 };
 
-exports.init = function (config: mysql.PoolConfig) {
-    pool = mysql.createPool(config);
-};
+export namespace mysqldb {
+    export async function set(key: string, value: string) {
+        if (key == null) {
+            return;
+        }
 
-exports.set = async function (key: string, value: string) {
-    if (key == null) {
-        return;
+        var sql = 'insert into t_tbl( t_key, t_value )values(' + key + ',' + value + ')ON DUPLICATE KEY UPDATE t_value = ' + value + ';';
+        query(sql);
     }
 
-    var sql = 'insert into t_tbl( t_key, t_value )values(' + key + ',' + value + ')ON DUPLICATE KEY UPDATE t_value = ' + value + ';';
-    query(sql);
-};
+    export async function get(key: string) {
+        // return new Promise<JSON | null>((resolve, reject) => {
+        var sql = 'select * from t_tbl where t_key = ?;';
+        sql = mysql.format(sql, [key]);
+        let obj = await asyncQuery(sql);
+        return obj;
+    }
 
-exports.get = async function (key:string) {
-    // return new Promise<JSON | null>((resolve, reject) => {
-    var sql = 'select * from t_tbl where t_key = ?;';
-    sql = mysql.format(sql, [key]);
-    return await asyncQuery(sql);
+    export async function getPlayer(uuid: string) {
+        let sql = "select * from mn_player where uuid = ?";
+        sql = mysql.format(sql, [uuid]);
+        let values = await asyncQuery(sql);
+        if (values == null) {
+            return null;
+        }
+        let pinfo = values[0];
+        return pinfo;
+    }
 }

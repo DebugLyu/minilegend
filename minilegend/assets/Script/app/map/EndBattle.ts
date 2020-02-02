@@ -1,7 +1,7 @@
-import { getAnimation, getRes } from "../common/gFunc"
-import { dropInfo } from "../common/G";
-import ItemMgr from "../manager/ItemMgr";
-import GameSceneMgr from "../manager/GameSceneMgr";
+import { getAnimation, getRes } from "../../common/gFunc"
+import { dropInfo } from "../../common/G";
+import ItemMgr from "../../manager/ItemMgr";
+import GameSceneMgr from "../../manager/GameSceneMgr";
 
 const {ccclass, property} = cc._decorator;
 

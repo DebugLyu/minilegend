@@ -99,6 +99,8 @@ export const AttrStr = {
 }
 
 export class Attribute {
+	// [x:string]: any;
+
 	[AttrIds.Hp]: number = 0;
 	[AttrIds.MaxHp]: number = 0;
 	[AttrIds.Speed]: number = 240;
@@ -125,12 +127,25 @@ export class Attribute {
 	[AttrIds.Damnation]: number = 0;
 
 	add(attr: Attribute): Attribute {
+		for (const attrid of AttrIdsArray) {
+			this[attrid] += attr[attrid]; 
+		}
+		return this;
+	}
+
+	addCopy(attr: Attribute): Attribute {
 		let attrn = new Attribute();
 		for (const attrid of AttrIdsArray) {
 			attrn[attrid] = this[attrid] + attr[attrid]; 
 		}
 		return attrn;
 	}
+
+	// fromJson(json: any){
+	// 	for (const key in json) {
+	// 		this[key] = json[key];
+	// 	}
+	// }
 }
 
 export enum ItemType {

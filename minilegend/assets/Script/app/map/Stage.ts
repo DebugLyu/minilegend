@@ -4,14 +4,14 @@
  *      掉落物品
  */
 
-import mapMgr, { StageData } from "../manager/MapMgr";
-import { ActState, Cell, dropInfo } from "../common/G";
+import mapMgr, { StageData } from "../../manager/MapMgr";
+import { ActState, Cell, dropInfo } from "../../common/G";
 import Role from "../role/Role";
-import { getMapSpr, getAnimation, getNextPos, getAngle, random, getRes } from "../common/gFunc";
-import playerMgr from "../manager/PlayerMgr";
+import { getMapSpr, getAnimation, getNextPos, getAngle, random, getRes } from "../../common/gFunc";
+import playerMgr from "../../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
 import BattleScene from "./BattleScene";
-import itemMgr from "../manager/ItemMgr";
+import itemMgr from "../../manager/ItemMgr";
 
 const { ccclass, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;

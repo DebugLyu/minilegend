@@ -1,8 +1,8 @@
 import WarriorMod from "./WarriorMod";
 import MonsterCtr from "./MonsterCtr";
-import { LivingType, AttrIds, dropInfo } from "../common/G";
-import { MonsterData } from "../manager/MonsterMgr";
-import { random } from "../common/gFunc";
+import { LivingType, AttrIds, dropInfo } from "../../common/G";
+import { MonsterData } from "../../manager/MonsterMgr";
+import { random } from "../../common/gFunc";
 
 
 export default class MonsterMod extends WarriorMod {

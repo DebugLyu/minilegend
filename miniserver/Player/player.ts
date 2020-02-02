@@ -1,9 +1,10 @@
 import { Attribute, AttrIds } from "../common/G";
 import equip from "./item/equip/equip";
 import item from "./item/item";
+import { safeJson } from "../common/gFunc";
 
 export default class player {
-	[x:string]: any;
+	[x: string]: any;
 	// 绝对id 服务器专有 与 客户端 绝对id 不同。
 	onlyid: number = 0;
 	// 玩家id 数据库id
@@ -39,17 +40,26 @@ export default class player {
 
 	}
 
-	toString(){
+	init(uuid: string, token: string){
+		this.uuid = uuid;
+		this.token = token;
+	}
+
+	toString() {
 		return JSON.stringify(this);
 	}
 
-	fromJson(json: any){
+	fromJson(json: any) {
 		for (const key in json) {
-			this[key] = json[key];
+			// if(key == "attr"){
+			// 	this.attr.fromJson(json[key]);
+			// 	continue;
+			// }
+			this[key] = safeJson(json[key]);
 		}
 	}
 
-	static toObj(jsonstr: string){
+	static toObj(jsonstr: string) {
 		let newplayer = new player();
 		let json = JSON.parse(jsonstr);
 		newplayer.fromJson(json);

@@ -4,13 +4,13 @@
  */
 
 
-import { toChineseNum, getRes } from "../common/gFunc";
+import { toChineseNum, getRes } from "../../common/gFunc";
 import Stage from "./Stage";
-import MapMgr, { MapData, StageData } from "../manager/MapMgr";
+import MapMgr, { MapData, StageData } from "../../manager/MapMgr";
 import Role from "../role/Role";
-import { LivingType, dropInfo } from "../common/G";
-import MonsterMgr from "../manager/MonsterMgr";
-import playerMgr from "../manager/PlayerMgr";
+import { LivingType, dropInfo } from "../../common/G";
+import MonsterMgr from "../../manager/MonsterMgr";
+import playerMgr from "../../manager/PlayerMgr";
 import EndBattle from "./EndBattle";
 
 const { ccclass, property, menu } = cc._decorator;

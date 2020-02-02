@@ -1,5 +1,5 @@
 import WarriorMod from "./WarriorMod";
-import { LivingType } from "../common/G";
+import { LivingType } from "../../common/G";
 import PlayerCtr from "./playerCtr";
 
 export default class PlayerMod extends WarriorMod {
