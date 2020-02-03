@@ -1,4 +1,4 @@
-import { setWidget, setLayout } from "../../common/gFunc";
+import { setWidget } from "../../common/gFunc";
 
 const { ccclass, property, menu } = cc._decorator;
 
