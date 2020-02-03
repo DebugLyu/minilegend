@@ -24,7 +24,7 @@ app.all('*', function (req, res, next) {
 
     let player = await playerMgr.getPlayer(uuid);
 
-    http.reply(res, { pinfo: player.toString() });
+    http.reply(res, player );
 });
 
 app.post("/test", (req) => {

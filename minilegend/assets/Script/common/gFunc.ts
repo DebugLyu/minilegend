@@ -134,6 +134,53 @@ export function genUUID(): string {
 	return t;
 }
 
+/**
+ * 百分比布局节点
+ * @param node 节点
+ * @param dir 方向数据 参考小键盘 5 居中 0 满屏
+ * @param n 具体数值
+ */
+export function setWidget(node: cc.Node, dir: number, n: number = 0){
+	let widget = node.getComponent(cc.Widget);
+	if(widget == null){
+		widget = node.addComponent(cc.Widget);
+	}
+	switch(dir){
+		case 0: {
+			widget.isAlignHorizontalCenter = true;
+			widget.isAlignVerticalCenter = true;
+			widget.verticalCenter = widget.horizontalCenter = 0;
+		}break;
+		case 5: {
+			widget.isAlignTop = true;
+			widget.isAlignBottom = true;
+			widget.isAlignLeft = true;
+			widget.isAlignRight = true;
+			widget.left = widget.right = widget.top = widget.bottom = n;
+		}break;
+		default: {
+			let tmp = String(dir);
+			// let t = tmp.indexOf("1");
+			if(tmp.indexOf("1") != -1 || tmp.indexOf("4") != -1 || tmp.indexOf("7") != -1){
+				widget.isAlignLeft = true;
+				widget.left = n;
+			}
+			if(tmp.indexOf("7") != -1 || tmp.indexOf("8") != -1 || tmp.indexOf("9") != -1){
+				widget.isAlignTop = true;
+				widget.top = n;
+			}
+			if(tmp.indexOf("9") != -1 || tmp.indexOf("6") != -1 || tmp.indexOf("3") != -1){
+				widget.isAlignRight = true;
+				widget.right = n;
+			}
+			if(tmp.indexOf("1") != -1 || tmp.indexOf("2") != -1 || tmp.indexOf("3") != -1){
+				widget.isAlignBottom = true;
+				widget.bottom = n;
+			}
+		}
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////

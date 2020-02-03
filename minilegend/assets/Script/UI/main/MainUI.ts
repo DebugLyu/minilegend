@@ -11,9 +11,10 @@ enum MainMenu {
 @ccclass
 export default class NewClass extends cc.Component {
     curToggle: MainMenu = MainMenu.Stage;
-
+    
     layerList: cc.Node[] = [];
     toggleList: cc.Toggle[] = [];
+
     start() {
         let list = ["RoleLayer", "ForgeLayer", "StageLayer", "SkillLayer"];
         let mid = cc.find("Canvas/Mid");

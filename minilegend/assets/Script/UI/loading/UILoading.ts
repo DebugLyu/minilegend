@@ -2,6 +2,7 @@ import gameMgr from "../../manager/GameMgr";
 import { http } from "../../net/http";
 import storge from "../../common/Storge";
 import { genUUID, safeJson } from "../../common/gFunc";
+import { Net } from "../../net/net";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -26,7 +27,7 @@ export default class UILoading extends cc.Component {
             return;
         }
         if (!this.inited && gameMgr.config) {
-            this.login();
+            Net.login();
             this.inited = true;
         }
         if(this.loadingBar.progress < 0.95){
@@ -34,16 +35,4 @@ export default class UILoading extends cc.Component {
         }
     }
 
-    async login(){
-        let uuid = storge.get("uuid");
-        if(uuid == null){
-            uuid = genUUID();
-            storge.set("uuid", uuid);
-        }
-        let res = await http.get("/login", {uuid: uuid});
-        // 登陆到主界面
-        let pinfo = safeJson(res.pinfo);
-        console.log(pinfo);
-        
-    }
 }

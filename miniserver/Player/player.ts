@@ -40,9 +40,9 @@ export default class player {
 
 	}
 
-	init(uuid: string, token: string){
+	init(uuid: string, token?: string){
 		this.uuid = uuid;
-		this.token = token;
+		token && (this.token = token);
 	}
 
 	toString() {
