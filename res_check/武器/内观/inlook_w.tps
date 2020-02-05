@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>cocos2d</string>
         <key>textureFileName</key>
-        <filename>ItemIcon.png</filename>
+        <filename>inlook_w.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -99,7 +99,7 @@
             <key>packageName</key>
             <string>Texture</string>
             <key>javaFileName</key>
-            <filename>ItemIcon.java</filename>
+            <filename>inlook_w.java</filename>
             <key>wrap</key>
             <struct type="AndEngineWrap">
                 <key>s</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>ItemIcon.plist</filename>
+        <filename>inlook_w.plist</filename>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -146,13 +146,8 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>10000.png</filename>
-            <filename>10277.png</filename>
-            <filename>10278.png</filename>
-            <filename>10279.png</filename>
-            <filename>10280.png</filename>
-            <filename>01011.png</filename>
-            <filename>01001.png</filename>
+            <filename>10002.png</filename>
+            <filename>10001.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
