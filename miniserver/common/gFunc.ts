@@ -59,11 +59,11 @@ export function lRandom(min: number = 100, max?: number): number {
 }
 
 export function safeJson(str: any) {
-	if(str == null){
+	if (str == null) {
 		return null;
 	}
 	if (typeof str == "string") {
-		if(str[0] != "{" && str[0] != "["){
+		if (str[0] != "{" && str[0] != "[") {
 			return str;
 		}
 		try {
@@ -141,7 +141,7 @@ export function shuffleArray<T>(array: Array<T>): Array<T> {
 export function toChineseNum(num: number): string {
 	let changeNum = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']; //changeNum[0] = "零"
 	let unit = ["", "十", "百", "千", "万"];
-	let getWan = (temp:number | string) => {
+	let getWan = (temp: number | string) => {
 		let strArr = temp.toString().split("").reverse();
 		let newNum = "";
 		for (var i = 0; i < strArr.length; i++) {
