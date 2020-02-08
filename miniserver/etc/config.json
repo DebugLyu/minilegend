@@ -1,0 +1,18 @@
+{
+    "dev": true,
+    "name": "miniserver",
+    "port": 5188,
+    "redis": {
+        "host":"127.0.0.1",
+        "auth_pass": "123456"
+    },
+    "dbconfig": {
+        "host":"127.0.0.1",
+        "user":"root",
+        "password": "123456",
+        "database": "minigame",
+        "port": 3306,
+        "timeout": 60000,
+        "multipleStatements": true
+    }
+}

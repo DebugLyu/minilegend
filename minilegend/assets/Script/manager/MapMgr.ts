@@ -1,5 +1,4 @@
 import { Gird } from "../common/G";
-import { getRes } from "../common/gFunc";
 
 export class StageData {
 	stageid: number = 0;
@@ -28,10 +27,20 @@ export class MapData {
 class MapMgr {
 	private mapDatas: { [index: number]: MapData } = {};
 
+
 	async init() {
-		let mapjson = await getRes("prop_data/prop_map", cc.JsonAsset);
-		this.mapDatas = mapjson.json;
+	    let getRes = (await import("../common/gFunc")).getRes;
+	    let data = await getRes("/prop_data/prop_map", cc.JsonAsset);
+	    let json = data.json;
+	    this.mapDatas = json;
 	}
+
+	// async init() {
+	// 	let RootDir = (await import("../common/gFunc")).RootDir;
+	// 	let data = require(RootDir("../app/prop_data/prop_map"));
+	// 	this.mapDatas = data;
+	// }
+
 
 
 	getMapData(mapid: number): MapData {

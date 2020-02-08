@@ -1,5 +1,6 @@
 import { safeJson } from "../common/gFunc";
 import gameMgr from "../manager/GameMgr";
+import Llog from "../common/LLog";
 
 export var http = {
 
@@ -25,7 +26,8 @@ export var http = {
                 url = gameMgr.rURL;
             }
             let requestURL = url + path + encodeURI(str);
-            console.log("RequestURL:" + requestURL);
+            
+            Llog.log("RequestURL:" + requestURL);
             xhr.open("GET", requestURL, true);
             xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8")
 
@@ -35,7 +37,7 @@ export var http = {
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 300)) {
-                    // console.log("http res(" + xhr.responseText.length + "):" + xhr.responseText);
+                    // Llog.log("http res(" + xhr.responseText.length + "):" + xhr.responseText);
                     let ret = xhr.responseText;
                     resolve(safeJson(ret));
                 }
@@ -70,7 +72,7 @@ export var http = {
             }
             // true代表异步
             let requestURL = url + path + encodeURI(str);
-            console.log("RequestURL:" + requestURL);
+            Llog.log("RequestURL:" + requestURL);
             xhr.open("POST", requestURL, true);
 
             if (cc.sys.isNative) {
@@ -83,7 +85,7 @@ export var http = {
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 300)) {
-                    // console.log("http res(" + xhr.responseText.length + "):" + xhr.responseText);
+                    // Llog.log("http res(" + xhr.responseText.length + "):" + xhr.responseText);
                     let ret = xhr.responseText;
                     resolve(safeJson(ret));
                 }

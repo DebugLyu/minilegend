@@ -2,13 +2,14 @@ import itemMgr from "./ItemMgr";
 import mapMgr from "./MapMgr";
 import monsterMgr from "./MonsterMgr";
 import skillMgr from "./SkillMgr";
-import { getRes } from "../common/gFunc";
-import attributeMgr from "./AttributeMgr_bak";
+import attributeMgr from "./AttributeMgr";
 import equipMgr from "./EquipMgr";
+import { mysqldb } from "../util/mysqldb";
+import { getRes } from "../common/gFunc";
+import { redisdb } from "../util/redisdb";
 
 class GameMgr {
     config: any = null;
-    rURL:string = "";
 
     private eventList: (() => void)[] = [];
 
@@ -21,16 +22,17 @@ class GameMgr {
         await skillMgr.init();
         await equipMgr.init();
 
-        let config = await getRes("/etc/config", cc.JsonAsset);
+        let config = await getRes("../etc/config");
         if (config == null) {
             throw "Config Error";
         }
-        let json = config.json;
-        this.config = json;
-        if (json.dev) {
-            this.config.host = this.config.devhost;
+        this.config = config;
+        if (config.dev) {
+            // this.config.host = this.config.devhost;
         }
-        this.rURL = "http://" + this.config.host + ":" + this.config.port;
+        
+        redisdb.init(config.redis);
+        mysqldb.init(config.dbconfig);
 
         for (let i = 0; i < this.eventList.length; i++) {
             const func = this.eventList[i];

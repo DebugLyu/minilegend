@@ -1,8 +1,7 @@
-import mysql from "mysql";
+import mysql, { PoolConfig } from "mysql";
 import Llog from "./Log";
-import { GameConfig, DBConfig } from "../config";
 // var dbfrom = require('./dbform');
-let pool: mysql.Pool = mysql.createPool(DBConfig);;
+let pool: mysql.Pool;
 
 function nop(a: any, b: any, c: any, d: any, e: any, f: any, g: any) {
 
@@ -45,6 +44,9 @@ async function asyncQuery(sql: string) {
 };
 
 export namespace mysqldb {
+    export function init(config: PoolConfig) {
+        pool = mysql.createPool(config);
+    }
     export async function set(key: string, value: string) {
         if (key == null) {
             return;

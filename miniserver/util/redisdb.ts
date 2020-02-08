@@ -1,21 +1,29 @@
-import { createClient, RedisClient } from "redis";
+import { createClient, RedisClient, ClientOpts } from "redis";
 import { safeJson } from "../common/gFunc";
 
-let rsc: RedisClient = createClient({ auth_pass: "123456" });
+let rsc: RedisClient| null = null;
 
-async function asyncget(key: string) {
-	let doc = await new Promise<string>((resolve) => {
-		rsc.get(key, function (err, res: string) {
-			return resolve(res);
+export namespace redisdb {
+	export function init(config: ClientOpts){
+		rsc = createClient(config);
+	}
+	async function asyncget(key: string) {
+		let doc = await new Promise<string | null>((resolve) => {
+			rsc?.get(key, function (err, res: string) {
+				if (err) {
+					return resolve(null);
+				}
+				return resolve(res);
+			});
 		});
-	});
-	doc = JSON.parse(doc);
-	return doc;
-}
+		if (doc) {
+			doc = JSON.parse(doc);
+		}
+		return doc;
+	}
 
-export namespace redis {
 	export function set(key: string, value: string) {
-		return rsc.set(key, value, function (err) {
+		return rsc?.set(key, value, function (err) {
 			!err && console.log(err);
 		});
 	}
@@ -26,15 +34,15 @@ export namespace redis {
 	}
 
 	export function setHash(hash: string, key: string, value: string) {
-		return rsc.hmset(hash, key, value, (err) => {
+		return rsc?.hmset(hash, key, value, (err) => {
 			!err && console.log(err);
 		});
 	}
 
 	export async function getHash(hash: string, key: string) {
-		let str = await new Promise<string| null>((resolve, reject) => {
-			rsc.hget(hash, key, (err, strlist) => {
-				if(strlist == null){
+		let str = await new Promise<string | null>((resolve, reject) => {
+			rsc?.hget(hash, key, (err, strlist) => {
+				if (strlist == null) {
 					resolve(null);
 					return;
 				}

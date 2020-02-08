@@ -1,6 +1,6 @@
 import { ItemType } from "../../common/G";
 
-export default abstract class item {
+export default abstract class Item {
 	// 唯一id 
 	onlyid: number = 0;
 	// 名字
@@ -24,5 +24,5 @@ export default abstract class item {
 	}
 
 
-	abstract convType(t: ItemType): item | null;
+	abstract convType(t: ItemType): Item | null;
 }

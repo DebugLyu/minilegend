@@ -1,4 +1,27 @@
 import os = require("os");
+import fs = require("fs");
+import path = require('path'); //系统路径模块
+import Llog from "../util/Log";
+
+export function RootDir(path: string): string {
+	path = "../" + path;
+	return path;
+}
+
+export function getRes(jsonpath: string) {
+	jsonpath = "../" + jsonpath +".json";
+	var file = path.join(__dirname, jsonpath);
+	return new Promise<any>((resolve, reject) => {
+		fs.readFile(file, "utf-8", (err, data: string) => {
+			if (err) {
+				Llog.error(err);
+				resolve({});
+				return;
+			}
+			resolve(JSON.parse(data));
+		});
+	});
+}
 
 export function getLocalIp() {
 	const osType = os.type(); //系统类型

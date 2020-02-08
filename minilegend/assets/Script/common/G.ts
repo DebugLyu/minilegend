@@ -1,3 +1,5 @@
+import { random } from "./gFunc"
+
 // 地图块 数据
 export const Cell = {
 	width: 256,
@@ -87,34 +89,86 @@ export interface dropInfo {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-export enum AttrIds {
-	Hp = 10,// 当前生命值
-	MaxHp,// 最大生命值
-	Speed,// 移动速度
-	AtkSpe, // 攻击速度
-	AtkMin = 101,// 攻击力
-	AtkMax,
-	Defense,// 防御力
-	MatkMin,// 魔法攻击力
-	MatkMax,
-	Mdefense,// 魔法防御力
-	DatkMin,// 道术攻击力
-	DatkMax,
-	Ddefense,// 道术防御力
-	Hit = 201,// 准确（命中）
-	Crit,// 暴击率
-	CritAdd,// 暴击伤害加成
-	Dodge,// 闪避率
-	Cut,// 切割率
-	CutPre,// 切割伤害百分比
-	Poison,// 中毒率
-	Paralysis,// 麻痹率
-	Toughness,// 韧性
-	Lucky,// 幸运
-	Damnation,// 诅咒
+export interface AttrDatas {
+	ID: number;
+	Hp1: number;
+	Hp2: number;
+	MaxHp1: number;
+	MaxHp2: number;
+	Speed1: number;
+	Speed2: number;
+	AtkSpe1: number;
+	AtkSpe2: number;
+	AtkMin1: number;
+	AtkMin2: number;
+	AtkMax1: number;
+	AtkMax2: number;
+	Defense1: number;
+	Defense2: number;
+	MatkMin1: number;
+	MatkMin2: number;
+	MatkMax1: number;
+	MatkMax2: number;
+	Mdefense1: number;
+	Mdefense2: number;
+	DatkMin1: number;
+	DatkMin2: number;
+	DatkMax1: number;
+	DatkMax2: number;
+	Ddefense1: number;
+	Ddefense2: number;
+	Hit1: number;
+	Hit2: number;
+	Crit1: number;
+	Crit2: number;
+	CritAdd1: number;
+	CritAdd2: number;
+	Dodge1: number;
+	Dodge2: number;
+	Cut1: number;
+	Cut2: number;
+	CutPre1: number;
+	CutPre2: number;
+	Poison1: number;
+	Poison2: number;
+	Paralysis1: number;
+	Paralysis2: number;
+	Toughness1: number;
+	Toughness2: number;
+	Lucky1: number;
+	Lucky2: number;
+	Damnation1: number;
+	Damnation2: number;
 }
 
-export const AttrIdsArray = [
+export enum AttrIds {
+	Hp = 101,
+	MaxHp,
+	Speed,
+	AtkSpe,
+	AtkMin = 1001,
+	AtkMax,
+	Defense,
+	MatkMin,
+	MatkMax,
+	Mdefense,
+	DatkMin,
+	DatkMax,
+	Ddefense,
+	Hit = 2001,
+	Crit,
+	CritAdd,
+	Dodge,
+	Cut,
+	CutPre,
+	Poison,
+	Paralysis,
+	Toughness,
+	Lucky,
+	Damnation,
+}
+
+export let AttrArray = [
 	AttrIds.Hp,
 	AttrIds.MaxHp,
 	AttrIds.Speed,
@@ -142,35 +196,33 @@ export const AttrIdsArray = [
 ]
 
 export const AttrStr = {
-	[AttrIds.Hp]: "Hp",
-	[AttrIds.MaxHp]: "MaxHp",
-	[AttrIds.Speed]: "Speed",
-	[AttrIds.AtkSpe]: "AtkSpe",
-	[AttrIds.AtkMin]: "AtkMin ",
-	[AttrIds.AtkMax]: "AtkMax",
-	[AttrIds.Defense]: "Defense",
-	[AttrIds.MatkMin]: "MatkMin",
-	[AttrIds.MatkMax]: "MatkMax",
-	[AttrIds.Mdefense]: "Mdefense",
-	[AttrIds.DatkMin]: "DatkMin",
-	[AttrIds.DatkMax]: "DatkMax",
-	[AttrIds.Ddefense]: "Ddefense",
-	[AttrIds.Hit]: "Hit ",
-	[AttrIds.Crit]: "Crit",
-	[AttrIds.CritAdd]: "CritAdd",
-	[AttrIds.Dodge]: "Dodge",
-	[AttrIds.Cut]: "Cut",
-	[AttrIds.CutPre]: "CutPre",
-	[AttrIds.Poison]: "Poison",
-	[AttrIds.Paralysis]: "Paralysis",
-	[AttrIds.Toughness]: "Toughness",
-	[AttrIds.Lucky]: "Lucky",
-	[AttrIds.Damnation]: "Damnation",
+	Hp: "Hp",
+	MaxHp: "MaxHp",
+	Speed: "Speed",
+	AtkSpe: "AtkSpe",
+	AtkMin: "AtkMin",
+	AtkMax: "AtkMax",
+	Defense: "Defense",
+	MatkMin: "MatkMin",
+	MatkMax: "MatkMax",
+	Mdefense: "Mdefense",
+	DatkMin: "DatkMin",
+	DatkMax: "DatkMax",
+	Ddefense: "Ddefense",
+	Hit: "Hit",
+	Crit: "Crit",
+	CritAdd: "CritAdd",
+	Dodge: "Dodge",
+	Cut: "Cut",
+	CutPre: "CutPre",
+	Poison: "Poison",
+	Paralysis: "Paralysis",
+	Toughness: "Toughness",
+	Lucky: "Lucky",
+	Damnation: "Damnation",
 }
 
 export class Attribute {
-	// [x:string]: any;
-
 	[AttrIds.Hp]: number = 0;
 	[AttrIds.MaxHp]: number = 0;
 	[AttrIds.Speed]: number = 240;
@@ -197,25 +249,19 @@ export class Attribute {
 	[AttrIds.Damnation]: number = 0;
 
 	add(attr: Attribute): Attribute {
-		for (const attrid of AttrIdsArray) {
-			this[attrid] += attr[attrid];
+		for (const key of AttrArray) {
+			this[key] += attr[key];
 		}
 		return this;
 	}
 
 	addCopy(attr: Attribute): Attribute {
 		let attrn = new Attribute();
-		for (const attrid of AttrIdsArray) {
-			attrn[attrid] = this[attrid] + attr[attrid];
+		for (const key of AttrArray) {
+			attrn[key] += attr[key];
 		}
 		return attrn;
 	}
-
-	// fromJson(json: any){
-	// 	for (const key in json) {
-	// 		this[key] = json[key];
-	// 	}
-	// }
 }
 
 export enum ItemType {
@@ -223,7 +269,7 @@ export enum ItemType {
 	Coin, // 银币
 	Exp, // 经验
 	Consume = 100, // 消耗品
-	Waste, // 垃圾品
+	Waste,
 	ComMat, // 通用材料
 	DrugMat,// 药品材料
 	Drug,// 药品

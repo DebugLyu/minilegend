@@ -1,6 +1,5 @@
 import PlayerMod from "../app/role/PlayerMod";
 import Role from "../app/role/Role";
-import PlayerCtr from "../app/role/playerCtr";
 import PlayerData from "../app/role/PlayerData";
 
 class PlayerMgr {

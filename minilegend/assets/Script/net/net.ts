@@ -1,8 +1,7 @@
 import storge from "../common/Storge";
-import { genUUID, safeJson } from "../common/gFunc";
+import { genUUID } from "../common/gFunc";
 import { http } from "./http";
 import playerMgr from "../manager/PlayerMgr";
-import PlayerMod from "../app/role/PlayerMod";
 import GameSceneMgr from "../manager/GameSceneMgr";
 
 export namespace Net {

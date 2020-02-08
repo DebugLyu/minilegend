@@ -10,7 +10,7 @@
  *          buff类：魔法盾等
  *          debuff：施毒术等
  */
-import { SkillIds, SkillName, SkillDesc, SkillType, Attribute, AttrIds, SkillAtkType, SkillActType } from "../common/G"
+import { SkillIds, SkillName, SkillDesc, SkillType, Attribute, SkillAtkType, SkillActType, AttrIds } from "../common/G"
 import { random } from "../common/gFunc";
 
 export class SkillBase {

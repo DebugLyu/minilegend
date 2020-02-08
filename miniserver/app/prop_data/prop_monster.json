@@ -1,0 +1,24 @@
+{
+    "1000": {
+        "MonID": 1000,
+        "Name": "羊",
+        "ResID": 400100,
+        "MaxHp": 30,
+        "AtkMin": 1,
+        "AtkMax": 10,
+        "Defense": 1,
+        "MatkMin": 1,
+        "MatkMax": 10,
+        "Mdefense": 1,
+        "DatkMin": 1,
+        "DatkMax": 10,
+        "Ddefense": 1,
+        "Speed": 100,
+        "Skills": [30001],
+        "Items": [
+            [100, 100001, 10, 20],
+            [100, 100002, 10, 20]
+        ],
+        "DropNum": 10
+    }
+}

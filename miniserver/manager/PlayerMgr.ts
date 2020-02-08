@@ -1,28 +1,28 @@
-import player from "./player";
-import { redis } from "../util/redisdb";
+import Player from "../app/player/Player";
+import { redisdb } from "../util/redisdb";
 import { mysqldb } from "../util/mysqldb";
 import Token from "../util/token";
 
 let player_seed = 10000;
 
 class PlayerMgr {
-	async getPlayer(uuid: string): Promise<player> {
-		let pstr = await redis.getHash("players", uuid);
-		let p: player | null = null;
+	async getPlayer(uuid: string): Promise<Player> {
+		let pstr = await redisdb.getHash("players", uuid);
+		let p: Player | null = null;
 		if (pstr == null) {
 			let t = await mysqldb.getPlayer(uuid);
 			if (t == null) {
 				// 未注册角色
-				p = new player();
+				p = new Player();
 				p.init(uuid);
-				redis.setHash("players", uuid, p.toString());
+				redisdb.setHash("players", uuid, p.toString());
 			} else {
 				// mysql中存在
-				p = player.toObj(t.pinfo);
+				p = Player.toObj(t.pinfo);
 			}
 		} else {
 			//redis 中存在
-			p = player.toObj(pstr);
+			p = Player.toObj(pstr);
 		}
 		p.onlyid = player_seed++;
 		let token = Token.getToken(uuid);

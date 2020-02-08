@@ -1,5 +1,4 @@
 import { agentMgr } from "./common/AgentMgr";
-import { GateConfig } from "./config";
 import * as cluster from "cluster";
 import * as os  from "os";
 
@@ -12,5 +11,5 @@ if(cluster.isMaster){
         cluster.fork();
     // }
 }else{
-    agentMgr.start(GateConfig);
+    // agentMgr.start(GateConfig);
 }
