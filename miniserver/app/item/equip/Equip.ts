@@ -11,9 +11,9 @@ function attrRandom() {
 
 export default class Equip extends Item {
 	// 主属性
-	private attr: Attribute = new Attribute();
+	attr: Attribute = new Attribute();
 	// 炼化属性
-	private artiAttr: Attribute = new Attribute();
+	artiAttr: Attribute = new Attribute();
 	// 偏移属性
 	private attrOffset: Attribute = new Attribute();
 	private artiAttrOffset: Attribute = new Attribute();

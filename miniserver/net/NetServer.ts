@@ -3,7 +3,7 @@ import { ResInterface } from "../common/G";
 import playerMgr from "../manager/PlayerMgr";
 import http from "./http";
 import Llog from "../util/Log";
-// import { GameConfig } from "./etc/config";
+import equipMgr from "../manager/EquipMgr";
 
 let app = express();
 app.all('*', function (req, res, next) {
@@ -20,10 +20,13 @@ app.all('*', function (req, res, next) {
 
 app.get("/login", async (req, res: ResInterface) => {
     let uuid = req.query.uuid;
-
     let player = await playerMgr.getPlayer(uuid);
-
     http.reply(res, player);
+});
+
+app.get("/genEquip", (req, res: ResInterface) => {
+    let equip = equipMgr.genEquip(30001);
+    http.reply(res, equip);
 });
 
 app.post("/test", (req) => {

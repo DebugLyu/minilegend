@@ -1,5 +1,3 @@
-import { random } from "./gFunc"
-
 // 地图块 数据
 export const Cell = {
 	width: 256,

@@ -114,40 +114,45 @@ export class myhttp {
             req.end();
         })
     }
-/*
-    exports.sendPost = function (host: string, path: string, data:object) {
-        var contents = qs.stringify(data);
-        var options = {
-            host: host,
-            // port: 8081,
-            path: path,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Length': contents.length
-            }
-        };
-
-        var req = https.request(options, function (res) {
-            // console.log('STATUS:'+res.statusCode);
-            // console.log('HEADERS:'+JSON.stringify(res.headers));
-            res.setEncoding('utf8');
-            res.on('data', function (data) {
-                // console.log("data:",data);   //一段html代码
-                callback(data);
+    /*
+        exports.sendPost = function (host: string, path: string, data:object) {
+            var contents = qs.stringify(data);
+            var options = {
+                host: host,
+                // port: 8081,
+                path: path,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Length': contents.length
+                }
+            };
+    
+            var req = https.request(options, function (res) {
+                // console.log('STATUS:'+res.statusCode);
+                // console.log('HEADERS:'+JSON.stringify(res.headers));
+                res.setEncoding('utf8');
+                res.on('data', function (data) {
+                    // console.log("data:",data);   //一段html代码
+                    callback(data);
+                });
             });
-        });
-
-        req.write(contents);
-        req.end();
-    };
-*/
-    reply(res:ResInterface, data: object) {
+    
+            req.write(contents);
+            req.end();
+        };
+    */
+    reply(res: ResInterface, data: any) {
+        let str = "";
         if (data == null) {
-            data = {};
+
+        } else if (typeof data == "string" || typeof data == "number") {
+            str = String(data);
+        } else if (typeof data == "object") {
+            str = JSON.stringify(data);
         }
-        var jsonstr = JSON.stringify(data);
-        res.send(jsonstr);
+
+        res.send(str);
     };
 }
 

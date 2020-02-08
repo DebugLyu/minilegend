@@ -37,3 +37,30 @@ rs.del("players",  () => {
 });
 })
 
+
+
+
+
+
+let i = 0;
+let args = ["你好", "天啊"]
+let message = "nishi[??]shui[??]abc";
+while (true) {
+	let t = message.indexOf("??");
+	if (t == -1) {
+		console.log(11);
+		break;
+	}
+	let m = args[i];
+	if (m == null) {
+		console.log(22, i);
+		break;
+	}
+	message = message.replace(/\?\?/, args[i]);
+	i++;
+	if(i > 10){
+		console.log(33);
+		break;
+	}
+}
+console.log(message);

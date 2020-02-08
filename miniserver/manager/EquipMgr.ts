@@ -1,4 +1,9 @@
 import Equip from "../app/item/equip/Equip";
+import attributeMgr from "./AttributeMgr";
+import llog from "../util/Log";
+import itemMgr from "./ItemMgr";
+import { loge, ErrList } from "../common/ErrorList";
+import { EquipPos } from "../common/G";
 
 export interface EquipData {
     id:number;
@@ -9,9 +14,7 @@ export interface EquipData {
 }
 
 class EquipMgr {
-
     equipList:{[x:number]: EquipData} = {};
-
     // async init() {
     //     let getRes = (await import("../common/gFunc")).getRes;
     //     let data = await getRes("/prop_data/prop_equip", cc.JsonAsset);
@@ -29,18 +32,33 @@ class EquipMgr {
         return this.equipList[equipid];
     }
 
-    genEquip(equipid: number): Equip | null{
-        let equipData = this.getEquipData(equipid);
-        if(!equipData){
+    genEquip(itemid: number): Equip | null{
+        let itemdata = itemMgr.getItemData(itemid);
+        if(!itemdata){
+            loge(ErrList.Create_Equip_Error_ItemID, itemid);
             return null;
         }
+        let equipdata = this.getEquipData(itemdata.kind);
+        if(!equipdata){
+            loge(ErrList.Create_Equip_Error_EquipID, itemdata.name, itemdata.id, itemdata.kind);
+            return null;
+        }
+        let attrdata = attributeMgr.getAttrData(equipdata.attr);
+        if(!attrdata){
+            loge(ErrList.Create_Equip_Error_AttrID, itemdata.name, itemdata.id, equipdata.attr);
+            return null;
+        }
+
         let equip = new Equip();
+        equip.onlyid = 1;
+        equip.dataid = itemdata.kind;
+        equip.name = itemdata.name;
+        equip.num = 1;
+        equip.pos = -1;
+        attributeMgr.setAttr(equip.attr, equipdata.attr);
+
         return equip;
     }
-
-    // genEquip(){
-        
-    // }
 }
 
 let equipMgr = new EquipMgr();
