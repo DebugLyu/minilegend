@@ -12,7 +12,7 @@ export var http = {
      * @param cb
      */
     get: async function (path: string, params?: object, url?: string) {
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<any>((resolve) => {
             let xhr = cc.loader.getXMLHttpRequest();
             xhr.timeout = 10000;
             let str = "?";
@@ -26,7 +26,7 @@ export var http = {
                 url = gameMgr.rURL;
             }
             let requestURL = url + path + encodeURI(str);
-            
+
             Llog.log("RequestURL:" + requestURL);
             xhr.open("GET", requestURL, true);
             xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8")
@@ -42,6 +42,16 @@ export var http = {
                     resolve(safeJson(ret));
                 }
             }
+
+            xhr.onerror = () => {
+                // MsgBox.show(0, { msg: "网络连接失败！请检查网络设置", timeout: 3 })
+                resolve(null);
+            }
+
+            xhr.ontimeout = () => {
+                resolve(null);
+            }
+
             xhr.send();
         })
     },
@@ -57,7 +67,7 @@ export var http = {
      * @param cb
      */
     post: async function (path: string, body?: string | Document | Blob | ArrayBufferView | ArrayBuffer | FormData, params?: object, url?: string) {
-        return new Promise<object>((resolve, reject) => {
+        return new Promise<object>((resolve) => {
             let xhr = cc.loader.getXMLHttpRequest();
             xhr.timeout = 10000;
             if (url == null) {
@@ -81,6 +91,15 @@ export var http = {
 
             if (body) {
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            }
+
+
+            xhr.onerror = () => {
+                resolve(null);
+            }
+
+            xhr.ontimeout = () => {
+                resolve(null);
             }
 
             xhr.onreadystatechange = function () {
