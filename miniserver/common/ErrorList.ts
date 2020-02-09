@@ -1,4 +1,4 @@
-import llog from "../util/Log"
+import llog from "./LLog"
 import gameMgr from "../manager/GameMgr";
 
 export let ErrList = {

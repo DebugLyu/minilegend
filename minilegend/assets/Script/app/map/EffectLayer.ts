@@ -1,4 +1,4 @@
-import RoleEx from "../role/RoleEx";
+import RoleEx from "../../role/RoleEx";
 import { getNextPos, getRes } from "../../common/gFunc";
 import FlyEffect from "../skill/FlyEffect";
 import PlayerMgr from "../../manager/PlayerMgr";

@@ -1,4 +1,8 @@
 import { Attribute } from "../../common/G";
+import Equip from "../item/equip/Equip";
+import Item from "../item/Item";
+import LEvent from "../../common/EventListner";
+import { random } from "../../common/gFunc";
 
 export default class PlayerData {
 	// 绝对id 服务器专有 与 客户端 绝对id 不同。
@@ -12,18 +16,62 @@ export default class PlayerData {
 	// uuid
 	uuid: string = "";
 	// 等级
-	level: number = 0;
+	_level: number = 0;
+	get level() {
+		return this._level;
+	}
+	set level(n: number) {
+		this._level = n;
+		LEvent.emit("RoleDataChange", "level", n);
+	}
+
 	// 经验
-	exp: number = 0;
+	_exp: number = 0;
+	get exp() {
+		return this._exp;
+	}
+	set exp(n: number) {
+		this._exp = n;
+		LEvent.emit("RoleDataChange", "exp", n);
+	}
+
+	// 体力
+	_power: number = 0;
+	// private powerOffset: number = 0;
+	get power (){
+		// return this._power - this.powerOffset;
+		return this._power
+	}
+
+	set power (n:number){
+		// this.powerOffset = random(1000, 999999);
+		// this._power = n + this.powerOffset;
+		this._power = n;
+		LEvent.emit("RoleDataChange", "power", n);
+	}
 
 	// 当前装备
-	// equips: equip[] = [];
+	equips: Equip[] = [];
 	// 背包物品
-	// items: item[] = [];
+	items: Item[] = [];
 	// 元宝
-	gold: number = 0;
+	_gold: number = 0;
+	get gold() {
+		return this._gold;
+	}
+	set gold(n: number){
+		this._gold = n;
+		LEvent.emit("RoleDataChange", "gold", n);
+	}
 	// 银币
-	coin: number = 0;
+	_coin: number = 0;
+	get coin() {
+		return this._coin;
+	}
+	set coin(n: number) {
+		this._coin = n;
+		LEvent.emit("RoleDataChange", "coin", n);
+	}
 
 	// 最高地图
 	maxMap: number = 0;

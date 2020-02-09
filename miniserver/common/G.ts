@@ -46,6 +46,8 @@ export interface AttrDatas {
 	DatkMax2: number;
 	Ddefense1: number;
 	Ddefense2: number;
+}
+export interface ArtiAttrDatas {
 	Hit1: number;
 	Hit2: number;
 	Crit1: number;

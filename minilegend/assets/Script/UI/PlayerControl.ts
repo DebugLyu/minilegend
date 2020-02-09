@@ -1,6 +1,6 @@
 import { degree2Dir } from "../common/gFunc";
-import PlayerCtr from "../app/role/playerCtr";
-import Role from "../app/role/Role";
+import PlayerCtr from "../role/playerCtr";
+import Role from "../role/Role";
 import PlayerMgr from "../manager/PlayerMgr";
 import { ActState } from "../common/G";
 

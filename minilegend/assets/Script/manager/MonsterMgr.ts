@@ -1,29 +1,17 @@
-import Role from "../app/role/Role";
-import MonsterCtr from "../app/role/MonsterCtr";
+import Role from "../role/Role";
+import MonsterCtr from "../role/MonsterCtr";
 import Stage from "../app/map/Stage";
 import BattleScene from "../app/map/BattleScene";
 import { getRes } from "../common/gFunc";
 
 export class MonsterData {
-    monid = 0;
-    Name = "未知";
-    ResID = 0;
-
-    MaxHp = 0;// 当前生命值
-    Speed = 240;// 移动速度
-    AtkMin = 0;// 攻击力
-    AtkMax = 0;
-    Defense = 0;// 防御力
-    MatkMin = 0;// 魔法攻击力
-    MatkMax = 0;
-    Mdefense = 0;// 魔法防御力
-    DatkMin = 0;// 道术攻击力
-    DatkMax = 0;
-    Ddefense = 0;// 道术防御力
-
-    Skills = []; // 技能
-    Items = []; // 物品掉落列表
-    DropNum = 1 // 物品掉落数量
+    id = 0;
+    name = "未知";
+    resid = 0;
+    skill = []; // 技能
+    dropitem = []; // 物品掉落列表
+    dropnum = 1; // 物品掉落数量
+    attr = 0;
 }
 
 class MonsterMgr {
@@ -36,7 +24,16 @@ class MonsterMgr {
             console.error("Prop Monster read Error");
             return;
         }
-        this.monsterDataList = monsterjson.json;
+        let json = monsterjson.json;
+        for (const monid in json) {
+            if (json.hasOwnProperty(monid)) {
+                const obj = json[monid];
+                obj.skill = JSON.parse(obj.skill);
+                obj.dropitem = JSON.parse(obj.dropitem);
+            }
+        }
+        this.monsterDataList = json;
+
         let prefab = await getRes("prefab/role/MonsterRole", cc.Prefab);
         if (prefab == null) {
             console.error("Prop Monster read Error");

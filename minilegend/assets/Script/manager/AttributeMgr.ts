@@ -5,16 +5,20 @@
  */
 
 import { random } from "../common/gFunc";
-import { AttrDatas, Attribute, AttrIds } from "../common/G";
+import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas } from "../common/G";
 
-class  AttributeMgr {
-    attributeList: {[x:string]: AttrDatas} = {};
+class AttributeMgr {
+    attributeList: { [x: number]: AttrDatas } = {};
+    artiattrList: { [x: number]: ArtiAttrDatas } = {};
 
     async init() {
         let getRes = (await import("../common/gFunc")).getRes;
         let data = await getRes("/prop_data/prop_attribute", cc.JsonAsset);
         let json = data.json;
         this.attributeList = json;
+        let artidata = await getRes("prop_data/prop_artiattr", cc.JsonAsset);
+        let artijson = artidata.json;
+        this.artiattrList = artijson;
     }
 
     // async init(){
@@ -23,12 +27,12 @@ class  AttributeMgr {
     //     this.attributeList = data;
     // }
 
-    public getAttrData(id: number){
+    public getAttrData(id: number) {
         return this.attributeList[id];
     }
 
-    setAttr(attr:Attribute, id: number): Attribute{
-        let data:AttrDatas = this.getAttrData(id);
+    setAttr(attr: Attribute, attrid: number, artiid?: number): Attribute {
+        let data: AttrDatas = this.getAttrData(attrid);
         // let attr = new Attribute();
         // attr.Hp = random(data.Hp1, data.Hp2);
         attr[AttrIds.MaxHp] = random(data.MaxHp1, data.MaxHp2);
@@ -43,17 +47,22 @@ class  AttributeMgr {
         attr[AttrIds.DatkMin] = random(data.DatkMin1, data.DatkMin2);
         attr[AttrIds.DatkMax] = random(data.DatkMax1, data.DatkMax2);
         attr[AttrIds.Ddefense] = random(data.Ddefense1, data.Ddefense2);
-        attr[AttrIds.Hit] = random(data.Hit1, data.Hit2);
-        attr[AttrIds.Crit] = random(data.Crit1, data.Crit2);
-        attr[AttrIds.CritAdd] = random(data.CritAdd1, data.CritAdd2);
-        attr[AttrIds.Dodge] = random(data.Dodge1, data.Dodge2);
-        attr[AttrIds.Cut] = random(data.Cut1, data.Cut2);
-        attr[AttrIds.CutPre] = random(data.CutPre1, data.CutPre2);
-        attr[AttrIds.Poison] = random(data.Poison1, data.Poison2);
-        attr[AttrIds.Paralysis] = random(data.Paralysis1, data.Paralysis2);
-        attr[AttrIds.Toughness] = random(data.Toughness1, data.Toughness2);
-        attr[AttrIds.Lucky] = random(data.Lucky1, data.Lucky2);
-        attr[AttrIds.Damnation] = random(data.Damnation1, data.Damnation2);
+        if (artiid != null) {
+            let atridata = this.artiattrList[artiid];
+            if (atridata) {
+                attr[AttrIds.Hit] = random(atridata.Hit1, atridata.Hit2);
+                attr[AttrIds.Crit] = random(atridata.Crit1, atridata.Crit2);
+                attr[AttrIds.CritAdd] = random(atridata.CritAdd1, atridata.CritAdd2);
+                attr[AttrIds.Dodge] = random(atridata.Dodge1, atridata.Dodge2);
+                attr[AttrIds.Cut] = random(atridata.Cut1, atridata.Cut2);
+                attr[AttrIds.CutPre] = random(atridata.CutPre1, atridata.CutPre2);
+                attr[AttrIds.Poison] = random(atridata.Poison1, atridata.Poison2);
+                attr[AttrIds.Paralysis] = random(atridata.Paralysis1, atridata.Paralysis2);
+                attr[AttrIds.Toughness] = random(atridata.Toughness1, atridata.Toughness2);
+                attr[AttrIds.Lucky] = random(atridata.Lucky1, atridata.Lucky2);
+                attr[AttrIds.Damnation] = random(atridata.Damnation1, atridata.Damnation2);
+            }
+        }
         return attr;
     }
 }

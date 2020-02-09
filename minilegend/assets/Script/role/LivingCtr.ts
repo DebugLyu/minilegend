@@ -1,6 +1,6 @@
-import { getAnimation, actState2Str } from "../../common/gFunc";
+import { getAnimation, actState2Str } from "../common/gFunc";
 import LivingMod from "./LivingMod";
-import { ActState } from "../../common/G";
+import { ActState } from "../common/G";
 import WeaponCtr from "./weaponCtr";
 import Role from "./Role";
 

@@ -19,6 +19,8 @@ export default class Player {
 	level: number = 0;
 	// 经验
 	exp: number = 0;
+	// 体力
+	power: number = 0;
 
 	// 当前装备
 	equips: equip[] = [];

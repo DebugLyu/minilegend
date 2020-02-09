@@ -2,7 +2,7 @@ import express from "express";
 import { ResInterface } from "../common/G";
 import playerMgr from "../manager/PlayerMgr";
 import http from "./http";
-import Llog from "../util/Log";
+import Llog from "../common/LLog";
 import equipMgr from "../manager/EquipMgr";
 
 let app = express();

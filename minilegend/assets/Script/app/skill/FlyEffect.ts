@@ -1,6 +1,6 @@
 import { getAnimation } from "../../common/gFunc";
 import EffectLayer from "../map/EffectLayer";
-import Role from "../role/Role";
+import Role from "../../role/Role";
 import { LivingType } from "../../common/G";
 import { SkillBase } from "../../manager/SkillMgr";
 

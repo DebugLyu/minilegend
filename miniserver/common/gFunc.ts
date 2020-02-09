@@ -1,7 +1,7 @@
 import os = require("os");
 import fs = require("fs");
 import path = require('path'); //系统路径模块
-import Llog from "../util/Log";
+import Llog from "./LLog";
 
 export function RootDir(path: string): string {
 	path = "../" + path;

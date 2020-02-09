@@ -1,6 +1,6 @@
 import WebSocket = require("ws");
 import { Agent } from "./Agent";
-import Llog from "../util/Log";
+import Llog from "./LLog";
 
 let agent_seed_id = 100001;
 

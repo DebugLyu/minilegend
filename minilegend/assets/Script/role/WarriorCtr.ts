@@ -1,8 +1,8 @@
 import LivingCtr from "./LivingCtr";
 import WarriorMod from "./WarriorMod";
-import { ActState, SkillType, SkillActType, SkillAtkType, LivingType } from "../../common/G";
-import { SkillBase } from "../../manager/SkillMgr";
-import { getAnimation } from "../../common/gFunc";
+import { ActState, SkillType, SkillActType, SkillAtkType, LivingType } from "../common/G";
+import { SkillBase } from "../manager/SkillMgr";
+import { getAnimation } from "../common/gFunc";
 
 const { ccclass, property, menu } = cc._decorator;
 

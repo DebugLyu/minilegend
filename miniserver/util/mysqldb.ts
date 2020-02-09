@@ -1,5 +1,5 @@
 import mysql, { PoolConfig } from "mysql";
-import Llog from "./Log";
+import Llog from "../common/LLog";
 // var dbfrom = require('./dbform');
 let pool: mysql.Pool;
 

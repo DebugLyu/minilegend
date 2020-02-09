@@ -1,5 +1,5 @@
 import Thing from "./Thing";
-import { LivingType } from "../../common/G";
+import { LivingType } from "../common/G";
 import LivingCtr from "./LivingCtr";
 
 export default class LivingMod extends Thing {

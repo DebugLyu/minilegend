@@ -1,4 +1,4 @@
-import Role from "../../app/role/Role";
+import Role from "../../role/Role";
 import Stage from "../../app/map/Stage";
 import playerMgr from "../../manager/PlayerMgr";
 import { AttrIds } from "../../common/G";

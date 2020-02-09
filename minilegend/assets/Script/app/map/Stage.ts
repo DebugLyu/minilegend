@@ -6,7 +6,7 @@
 
 import mapMgr, { StageData } from "../../manager/MapMgr";
 import { ActState, Cell, dropInfo } from "../../common/G";
-import Role from "../role/Role";
+import Role from "../../role/Role";
 import { getMapSpr, getAnimation, getNextPos, getAngle, random, getRes } from "../../common/gFunc";
 import playerMgr from "../../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";

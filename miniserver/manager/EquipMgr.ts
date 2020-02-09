@@ -1,9 +1,7 @@
 import Equip from "../app/item/equip/Equip";
 import attributeMgr from "./AttributeMgr";
-import llog from "../util/Log";
 import itemMgr from "./ItemMgr";
 import { loge, ErrList } from "../common/ErrorList";
-import { EquipPos } from "../common/G";
 
 export interface EquipData {
     id:number;
