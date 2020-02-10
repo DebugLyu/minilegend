@@ -99,7 +99,7 @@ export async function getPropData(pname: string) {
      * @param type
      */
 export async function getRes<T extends typeof cc.Asset>(path: string, type: T): Promise<InstanceType<T>> {
-	return await new Promise(res => {
+	return new Promise(res => {
 		cc.loader.loadRes(path, type, (err, resource) => {
 			err && cc.warn(`载入资源失败, path=${path}, err=${err}`)
 			err ? res(null) : res(resource)

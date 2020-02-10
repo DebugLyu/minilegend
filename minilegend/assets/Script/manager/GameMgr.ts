@@ -6,7 +6,7 @@ import { getRes } from "../common/gFunc";
 import attributeMgr from "./AttributeMgr";
 import equipMgr from "./EquipMgr";
 import expMgr from "./ExpMgr";
-import MsgBox from "../common/MsgBox";
+import UIMgr from "./UIMgr";
 
 class GameMgr {
     config: any = null;
@@ -31,7 +31,7 @@ class GameMgr {
         await equipMgr.init();
 
         // 通用UI
-        await MsgBox.init();
+        await UIMgr.init();
 
         // 配置表
         let config = await getRes("/etc/config", cc.JsonAsset);
