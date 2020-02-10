@@ -2,7 +2,7 @@ import Role from "../role/Role";
 import MonsterCtr from "../role/MonsterCtr";
 import Stage from "../app/map/Stage";
 import BattleScene from "../app/map/BattleScene";
-import { getRes } from "../common/gFunc";
+import { getRes, safeJson } from "../common/gFunc";
 
 export class MonsterData {
     id = 0;
@@ -28,8 +28,8 @@ class MonsterMgr {
         for (const monid in json) {
             if (json.hasOwnProperty(monid)) {
                 const obj = json[monid];
-                obj.skill = JSON.parse(obj.skill);
-                obj.dropitem = JSON.parse(obj.dropitem);
+                obj.skill = safeJson(obj.skill);
+                obj.dropitem = safeJson(obj.dropitem);
             }
         }
         this.monsterDataList = json;

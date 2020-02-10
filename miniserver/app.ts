@@ -2,7 +2,10 @@ import gameMgr from "./manager/GameMgr";
 import { start as NetServer } from "./net/NetServer";
 
 gameMgr.init();
-// NetServer(gameMgr.config.port);
+gameMgr.regGameStart(() => {
+    NetServer(gameMgr.config.port);
+});
+
 
 /*
 let tt = 100;

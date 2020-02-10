@@ -1,5 +1,6 @@
 import { createClient, RedisClient, ClientOpts } from "redis";
 import { safeJson } from "../common/gFunc";
+import Llog from "../common/LLog";
 
 let rsc: RedisClient| null = null;
 
@@ -35,7 +36,7 @@ export namespace redisdb {
 
 	export function setHash(hash: string, key: string, value: string) {
 		return rsc?.hmset(hash, key, value, (err) => {
-			!err && console.log(err);
+			!err && Llog.log(err);
 		});
 	}
 
@@ -46,7 +47,7 @@ export namespace redisdb {
 					resolve(null);
 					return;
 				}
-				resolve(strlist[0]);
+				resolve(strlist);
 			});
 		});
 		return safeJson(str);

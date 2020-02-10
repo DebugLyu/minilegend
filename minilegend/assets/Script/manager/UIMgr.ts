@@ -43,7 +43,7 @@ class __UIMgr {
     notice(msg: string){
         let notice = cc.instantiate(this.prefabList["notice"]);
         notice.parent = cc.director.getScene();
-        let size = cc.director.getWinSize();
+        let size = cc.winSize;
         notice.x = size.width / 2;
         notice.y = size.height / 2;
 

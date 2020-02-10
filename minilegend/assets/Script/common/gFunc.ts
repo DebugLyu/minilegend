@@ -1,5 +1,6 @@
 import { ActState } from "./G";
 import { ItemData } from "../manager/ItemMgr";
+import Llog from "./LLog";
 
 let ActStateStr = {
 	[ActState.IDLE]: "idle",
@@ -85,7 +86,7 @@ export async function getPropData(pname: string) {
 		cc.loader.loadRes("/prop_data/" + pname, cc.JsonAsset, (error, jsondata: cc.JsonAsset) => {
 			if (error) {
 				resolve(null);
-				console.error("JSON: " + pname + " Error!");
+				Llog.error("JSON: " + pname + " Error!");
 				return;
 			}
 			resolve(jsondata.json);
@@ -225,14 +226,13 @@ export function safeJson(str: any) {
 				return obj;
 			}
 		} catch (error) {
-			console.error('Json parse Error:' + str + '>>> is not Json string');
-			console.error(error);
+			Llog.error('Json parse Error:' + str + '>>> is not Json string');
+			Llog.error(error);
 			return str;
 		}
 	} else if (typeof str == "object") {
 		return str;
 	}
-	console.error('Json parse Error:' + str + '>>> is not Json string');
 	return str;
 }
 
@@ -247,7 +247,7 @@ export function isJSON(str: string) {
 			}
 
 		} catch (e) {
-			console.error('error：' + str + '!!!' + e);
+			Llog.error('error：' + str + '!!!' + e);
 			return false;
 		}
 	}

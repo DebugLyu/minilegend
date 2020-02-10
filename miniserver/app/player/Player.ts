@@ -16,7 +16,7 @@ export default class Player {
 	// uuid
 	uuid: string = "";
 	// 等级
-	level: number = 0;
+	level: number = 1;
 	// 经验
 	exp: number = 0;
 	// 体力
@@ -25,7 +25,7 @@ export default class Player {
 	// 当前装备
 	equips: equip[] = [];
 	// 背包物品
-	items: { [x: string]: Item} = {};
+	items: { [x: string]: Item } = {};
 	// 元宝
 	gold: number = 0;
 	// 银币
@@ -42,7 +42,7 @@ export default class Player {
 
 	}
 
-	init(uuid: string, token?: string){
+	init(uuid: string, token?: string) {
 		this.uuid = uuid;
 		token && (this.token = token);
 	}
@@ -61,10 +61,12 @@ export default class Player {
 		}
 	}
 
-	static toObj(jsonstr: string) {
+	static toObj(obj: string | object) {
 		let newplayer = new Player();
-		let json = JSON.parse(jsonstr);
-		newplayer.fromJson(json);
+		if (typeof obj == "string") {
+			obj = JSON.parse(obj);
+		}
+		newplayer.fromJson(obj);
 		return newplayer;
 	}
 }

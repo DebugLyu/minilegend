@@ -95,14 +95,14 @@ export function safeJson(str: any) {
 				return obj;
 			}
 		} catch (error) {
-			console.error('Json parse Error:' + str + '>>> is not Json string');
-			console.error(error);
+			Llog.error('Json parse Error:' + str + '>>> is not Json string');
+			Llog.error(error);
 			return str;
 		}
 	} else if (typeof str == "object") {
 		return str;
 	}
-	console.error('Json parse Error:' + str + '>>> is not Json string');
+	// Llog.error('Json parse Error:' + str + '>>> is not Json string');
 	return str;
 }
 
@@ -117,7 +117,7 @@ export function isJSON(str: string) {
 			}
 
 		} catch (e) {
-			console.error('error：' + str + '!!!' + e);
+			Llog.error('error：' + str + '!!!' + e);
 			return false;
 		}
 	}
