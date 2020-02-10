@@ -9,6 +9,16 @@ function attrRandom() {
 	return random(random_min, random_max);
 }
 
+export interface EquipData {
+	id: number;      // 装备id
+	wear: number;    // 穿戴位置
+	inlook: number;  // 内观id
+	outlook: number; // 外观id
+	attr: number;    // 主属性id
+	arti: number;    // 副属性id
+	artinum: number; // 副属性个数
+}
+
 export default class Equip extends Item {
 	// 主属性
 	attr: Attribute = new Attribute();
@@ -18,9 +28,21 @@ export default class Equip extends Item {
 	private attrOffset: Attribute = new Attribute();
 	private artiAttrOffset: Attribute = new Attribute();
 
+	equipData: EquipData;
+
+
 	constructor() {
 		super();
 		this.randomOffset();
+		this.equipData = {
+			id: 0,      // 装备id
+			wear: 0,    // 穿戴位置
+			inlook: 0,  // 内观id
+			outlook: 0, // 外观id
+			attr: 0,    // 主属性id
+			arti: 0,    // 副属性id
+			artinum: 0, // 副属性最大个数
+		}
 	}
 
 	private randomOffset(isattr: boolean | null = null) {

@@ -4,7 +4,7 @@
     前后端代码 读取配置文件方式不同  其他相同
  */
 
-import { random } from "../common/gFunc";
+import { random, lRandom } from "../common/gFunc";
 import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas } from "../common/G";
 
 class AttributeMgr {

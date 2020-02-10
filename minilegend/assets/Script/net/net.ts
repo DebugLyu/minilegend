@@ -22,9 +22,7 @@ export namespace Net {
 			// 	}
 			// });
 			UIMgr.notice("网络连接失败，正在重连");
-			setTimeout(() => {
-				login();
-			}, 3 * 1000);
+			setTimeout(login, 3 * 1000);
 			return;
 		}
         // 登陆到主界面

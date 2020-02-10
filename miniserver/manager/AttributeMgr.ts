@@ -4,8 +4,8 @@
     前后端代码 读取配置文件方式不同  其他相同
  */
 
-import { random } from "../common/gFunc";
-import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas } from "../common/G";
+import { getRandomArrayItem, lRandom } from "../common/gFunc";
+import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas, AttrArray } from "../common/G";
 
 class AttributeMgr {
     attributeList: { [x: number]: AttrDatas } = {};
@@ -21,7 +21,7 @@ class AttributeMgr {
     //     this.artiattrList = artijson;
     // }
 
-    async init(){
+    async init() {
         let RootDir = (await import("../common/gFunc")).RootDir;
         let data = require(RootDir("../app/prop_data/prop_attribute"));
         this.attributeList = data;
@@ -33,39 +33,56 @@ class AttributeMgr {
         return this.attributeList[id];
     }
 
-    setAttr(attr: Attribute, attrid: number, artiid?: number): Attribute {
+    setAttr(attr: Attribute, attrid: number): Attribute {
         let data: AttrDatas = this.getAttrData(attrid);
         // let attr = new Attribute();
         // attr.Hp = random(data.Hp1, data.Hp2);
-        attr[AttrIds.MaxHp] = random(data.MaxHp1, data.MaxHp2);
-        attr[AttrIds.Speed] = random(data.Speed1, data.Speed2);
-        attr[AttrIds.AtkSpe] = random(data.AtkSpe1, data.AtkSpe2);
-        attr[AttrIds.AtkMin] = random(data.AtkMin1, data.AtkMin2);
-        attr[AttrIds.AtkMax] = random(data.AtkMax1, data.AtkMax2);
-        attr[AttrIds.Defense] = random(data.Defense1, data.Defense2);
-        attr[AttrIds.MatkMin] = random(data.MatkMin1, data.MatkMin2);
-        attr[AttrIds.MatkMax] = random(data.MatkMax1, data.MatkMax2);
-        attr[AttrIds.Mdefense] = random(data.Mdefense1, data.Mdefense2);
-        attr[AttrIds.DatkMin] = random(data.DatkMin1, data.DatkMin2);
-        attr[AttrIds.DatkMax] = random(data.DatkMax1, data.DatkMax2);
-        attr[AttrIds.Ddefense] = random(data.Ddefense1, data.Ddefense2);
-        if (artiid != null) {
-            let atridata = this.artiattrList[artiid];
-            if (atridata) {
-                attr[AttrIds.Hit] = random(atridata.Hit1, atridata.Hit2);
-                attr[AttrIds.Crit] = random(atridata.Crit1, atridata.Crit2);
-                attr[AttrIds.CritAdd] = random(atridata.CritAdd1, atridata.CritAdd2);
-                attr[AttrIds.Dodge] = random(atridata.Dodge1, atridata.Dodge2);
-                attr[AttrIds.Cut] = random(atridata.Cut1, atridata.Cut2);
-                attr[AttrIds.CutPre] = random(atridata.CutPre1, atridata.CutPre2);
-                attr[AttrIds.Poison] = random(atridata.Poison1, atridata.Poison2);
-                attr[AttrIds.Paralysis] = random(atridata.Paralysis1, atridata.Paralysis2);
-                attr[AttrIds.Toughness] = random(atridata.Toughness1, atridata.Toughness2);
-                attr[AttrIds.Lucky] = random(atridata.Lucky1, atridata.Lucky2);
-                attr[AttrIds.Damnation] = random(atridata.Damnation1, atridata.Damnation2);
+        attr[AttrIds.MaxHp] = lRandom(data.MaxHp1, data.MaxHp2);
+        attr[AttrIds.Speed] = lRandom(data.Speed1, data.Speed2);
+        attr[AttrIds.AtkSpe] = lRandom(data.AtkSpe1, data.AtkSpe2);
+        attr[AttrIds.AtkMin] = lRandom(data.AtkMin1, data.AtkMin2);
+        attr[AttrIds.AtkMax] = lRandom(data.AtkMax1, data.AtkMax2);
+        attr[AttrIds.Defense] = lRandom(data.Defense1, data.Defense2);
+        attr[AttrIds.MatkMin] = lRandom(data.MatkMin1, data.MatkMin2);
+        attr[AttrIds.MatkMax] = lRandom(data.MatkMax1, data.MatkMax2);
+        attr[AttrIds.Mdefense] = lRandom(data.Mdefense1, data.Mdefense2);
+        attr[AttrIds.DatkMin] = lRandom(data.DatkMin1, data.DatkMin2);
+        attr[AttrIds.DatkMax] = lRandom(data.DatkMax1, data.DatkMax2);
+        attr[AttrIds.Ddefense] = lRandom(data.Ddefense1, data.Ddefense2);
+
+        return attr;
+    }
+    setArtiAttr(arti: Attribute, artiid: number, num: number) {
+        let atridata = this.artiattrList[artiid];
+        if (atridata) {
+            let list: { id: number, min: number, max: number }[] = [];
+            let input = (info: { id: number, min: number, max: number }) => {
+                if (info.min > 0) {
+                    if (info.max < info.min) {
+                        info.max = info.min;
+                    }
+                    list.push(info);
+                }
+            }
+            input({ id: AttrIds.Hit, min: atridata.Hit1, max: atridata.Hit2 });
+            input({ id: AttrIds.Crit, min: atridata.Crit1, max: atridata.Crit2 });
+            input({ id: AttrIds.CritAdd, min: atridata.CritAdd1, max: atridata.CritAdd2 });
+            input({ id: AttrIds.Dodge, min: atridata.Dodge1, max: atridata.Dodge2 });
+            input({ id: AttrIds.Cut, min: atridata.Cut1, max: atridata.Cut2 });
+            input({ id: AttrIds.CutPre, min: atridata.CutPre1, max: atridata.CutPre2 });
+            input({ id: AttrIds.Poison, min: atridata.Poison1, max: atridata.Poison2 });
+            input({ id: AttrIds.Paralysis, min: atridata.Paralysis1, max: atridata.Paralysis2 });
+            input({ id: AttrIds.Toughness, min: atridata.Toughness1, max: atridata.Toughness2 });
+            input({ id: AttrIds.Lucky, min: atridata.Lucky1, max: atridata.Lucky2 });
+            input({ id: AttrIds.Damnation, min: atridata.Damnation1, max: atridata.Damnation2 });
+
+            let n = lRandom(1, num);
+            for (let i = 0; i < n; i++) {
+                let t = getRandomArrayItem(list);
+                arti[t.id as AttrIds] = lRandom(t.min, t.max);
             }
         }
-        return attr;
+        return arti;
     }
 }
 

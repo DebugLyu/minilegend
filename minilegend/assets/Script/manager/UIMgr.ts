@@ -11,8 +11,11 @@ interface MsgboxInfo {
 class __UIMgr {
     private prefabList: { [x: string]: cc.Prefab } = {};
     async init() {
+        // 通用提示框
         let msgbox = await getRes("prefab/common/MsgBox", cc.Prefab);
         this.prefabList["msgbox"] = msgbox;
+
+        // 通用通知
         let notice = await getRes("prefab/common/Notice", cc.Prefab);
         this.prefabList["notice"] = notice;
     }

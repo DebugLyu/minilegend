@@ -1,15 +1,8 @@
-import Equip from "../app/item/equip/Equip";
+import Equip, { EquipData } from "../app/item/equip/Equip";
 import attributeMgr from "./AttributeMgr";
 import itemMgr from "./ItemMgr";
 import { loge, ErrList } from "../common/ErrorList";
 
-export interface EquipData {
-    id:number;
-    pos:number;
-    inlook:number;
-    outlook:number;
-    attr:number;
-}
 
 class EquipMgr {
     equipList:{[x:number]: EquipData} = {};
@@ -49,12 +42,12 @@ class EquipMgr {
 
         let equip = new Equip();
         equip.onlyid = 1;
-        equip.dataid = itemdata.kind;
-        equip.name = itemdata.name;
+        equip.equipData = equipdata;
+        equip.itemData = itemdata;
         equip.num = 1;
         equip.pos = -1;
         attributeMgr.setAttr(equip.attr, equipdata.attr);
-
+        attributeMgr.setArtiAttr(equip.artiAttr, equipdata.arti, equipdata.artinum);
         return equip;
     }
 }

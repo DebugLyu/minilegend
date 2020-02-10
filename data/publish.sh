@@ -6,3 +6,4 @@ for file in $SRC ; do
 done
 
 cp -rf $OUT/* ../minilegend/assets/resources/prop_data/
+cp -rf $OUT/* ../miniserver/app/prop_data/
