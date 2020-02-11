@@ -1,4 +1,4 @@
-import { getRes, RootDir } from "../common/gFunc";
+import { RootDir } from "../common/gFunc";
 
 export class MonsterData {
     monid = 0;

@@ -4,10 +4,10 @@ import monsterMgr from "./MonsterMgr";
 import skillMgr from "./SkillMgr";
 import equipMgr from "./EquipMgr";
 import { mysqldb } from "../util/mysqldb";
-import { getRes } from "../common/gFunc";
 import { redisdb } from "../util/redisdb";
 import attributeMgr from "./AttributeMgr";
 import expMgr from "./ExpMgr";
+import { RootDir } from "../common/gFunc";
 
 class GameMgr {
     config: any = null;
@@ -30,7 +30,7 @@ class GameMgr {
         // 装备管理器
         await equipMgr.init();
 
-        let config = await getRes("../etc/config");
+        let config = require(RootDir("../etc/config"));
         if (config == null) {
             throw "Config Error";
         }
