@@ -1,37 +1,48 @@
 import { Gird } from "../common/G";
+import { getRes } from "../common/gFunc";
 
-export class StageData {
-	stageid: number = 0;
-	resid: number = 0;
-	width: number = 0;
-	height: number = 0;
-	grid_width: number = 0;
-	grid_height: number = 0;
-	rows: number = 0;
-	lines: number = 0;
-	boss: boolean = false;
-	name: string = "";
-	startPos: { x: number, y: number } = { x: 0, y: 0 };
-	trancePos: { tomap: number, x: number, y: number }[] = [];
-	monster:[{monid:number, x:number, y: number}][] = [];
-	mapInfo: number[][] = [];
+export interface PlatData {
+	platid: number;
+	resid: number;
+	width: number;
+	height: number;
+	grid_width: number;
+	grid_height: number;
+	rows: number;
+	lines: number;
+	boss: boolean;
+	name: string;
+	startPos: { x: number, y: number };
+	trancePos: { tomap: number, x: number, y: number }[];
+	monster:[{monid:number, x:number, y: number}][];
+	mapInfo: number[][];
 }
 
-export class MapData {
-	mapId: number = 0;
-	mapName: string = "";
-	startStage: number = 0;
-	stageList: StageData[] = [];
+export interface StageData {
+	id: number;
+	name:string;
+	startplat:number;
+	platnum:number;
+	droplist:number[];
+}
+
+export interface MapData {
+	id: number;
+	name: string;
+	stage: number[];
 }
 
 class MapMgr {
 	private mapDatas: { [index: number]: MapData } = {};
+	private stageDatas: {[index: number]: StageData} = {};
 
 
 	async init() {
-	    let getRes = (await import("../common/gFunc")).getRes;
 	    let data = await getRes("/prop_data/prop_map", cc.JsonAsset);
-	    let json = data.json;
+		let json = data.json;
+		let stagedata = await getRes("/prop_data/prop_stage", cc.JsonAsset);
+		let stagejson = stagedata.json;
+		this.stageDatas = stagejson;
 	    this.mapDatas = json;
 	}
 
@@ -41,17 +52,28 @@ class MapMgr {
 	// 	this.mapDatas = data;
 	// }
 
-
-
 	getMapData(mapid: number): MapData {
 		return this.mapDatas[mapid];
 	}
 
-	getStageData(mapid: number, stageid: number): StageData {
-		let mapdata = this.getMapData(mapid);
-		if (mapdata) {
-			return mapdata.stageList[stageid];
+	getStageData(stageid: number): StageData{
+		return this.stageDatas[stageid];
+	}
+
+	getPlatData(platid: number): PlatData {
+		let data = (async ()=>{
+			let platdata = await getRes("/prop_data/plats/plat_"+ platid, cc.JsonAsset);
+			return platdata.json;
+		})();
+		
+		if(data){
+			return data as unknown as PlatData;
 		}
+		// let mapdata = this.getMapData(mapid);
+
+		// if (mapdata) {
+		// 	return mapdata.stageList[stageid];
+		// }
 		return null;
 	}
 

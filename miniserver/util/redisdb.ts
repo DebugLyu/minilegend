@@ -25,7 +25,7 @@ export namespace redisdb {
 
 	export function set(key: string, value: string) {
 		return rsc?.set(key, value, function (err) {
-			!err && console.log(err);
+			err && console.log(err);
 		});
 	}
 
@@ -36,7 +36,7 @@ export namespace redisdb {
 
 	export function setHash(hash: string, key: string, value: string) {
 		return rsc?.hmset(hash, key, value, (err) => {
-			!err && Llog.log(err);
+			err && Llog.log(err);
 		});
 	}
 

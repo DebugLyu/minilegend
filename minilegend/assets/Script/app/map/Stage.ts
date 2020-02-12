@@ -4,7 +4,7 @@
  *      掉落物品
  */
 
-import mapMgr, { StageData } from "../../manager/MapMgr";
+import mapMgr, { StageData, PlatData } from "../../manager/MapMgr";
 import { ActState, Cell, dropInfo } from "../../common/G";
 import Role from "../../role/Role";
 import { getMapSpr, getAnimation, getNextPos, getAngle, random, getRes } from "../../common/gFunc";
@@ -21,8 +21,8 @@ let OutRand = 1;
 @menu("map/stage")
 export default class Stage extends cc.Component {
     nodeArray: cc.Node[][] = [];
-    stageId: number = 0;
-    stageData: StageData = null;
+    platId: number = 0;
+    stageData: PlatData = null;
     effectLayer: EffectLayer = null;
 
     // 主角色
@@ -85,10 +85,10 @@ export default class Stage extends cc.Component {
         this.effectLayer.cleanAllEffect();
     }
 
-    changeStage(stageData: StageData) {
+    changePlat(platdata: PlatData) {
         this.clearStage();
-        this.stageId = stageData.stageid;
-        this.stageData = stageData;
+        this.platId = platdata.platid;
+        this.stageData = platdata;
 
         this.node.setPosition(RootPos);
         this.checkPlayerPos();

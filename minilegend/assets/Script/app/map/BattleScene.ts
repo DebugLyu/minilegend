@@ -6,12 +6,13 @@
 
 import { toChineseNum, getRes } from "../../common/gFunc";
 import Stage from "./Stage";
-import MapMgr, { MapData, StageData } from "../../manager/MapMgr";
+import MapMgr, { MapData, StageData, PlatData } from "../../manager/MapMgr";
 import Role from "../../role/Role";
 import { LivingType, dropInfo } from "../../common/G";
 import MonsterMgr from "../../manager/MonsterMgr";
 import playerMgr from "../../manager/PlayerMgr";
 import EndBattle from "./EndBattle";
+import mapMgr from "../../manager/MapMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 @ccclass
@@ -22,11 +23,12 @@ export default class BattleScene extends cc.Component {
 
 	// 副本数据
 	mapData: MapData = null;
-	stageData: StageData = null;
+	platData: PlatData = null;
 	private mapId: number = 0;
 	private stageId: number = 0;
+	private platId: number = 0;
 	private get isBossStage(): boolean {
-		return this.stageData.boss;
+		return this.platData.boss;
 	}
 	private role: Role = null;
 	roleLayer: cc.Node = null;
@@ -40,10 +42,10 @@ export default class BattleScene extends cc.Component {
 	private waveNode: cc.Node = null;
 	// 当前关卡是否完成
 	get isFinish(): boolean {
-		if (!this.stageData) {
+		if (!this.platData) {
 			return false;
 		}
-		return this.wave == this.stageData.monster.length && this.wave == this.stageData.monster.length;
+		return this.wave == this.platData.monster.length && this.wave == this.platData.monster.length;
 	}
 
 	start() {
@@ -63,16 +65,16 @@ export default class BattleScene extends cc.Component {
 		this.endBattle = await getRes("/prefab/battle/EndBattle", cc.Prefab);
 	}
 
-	loadMap(mapid: number): void {
-		this.mapId = mapid;
-		this.mapData = MapMgr.getMapData(mapid);
-		this.loadStage(this.mapData.startStage)
+	loadStage(stageid: number): void {
+		this.stageId = stageid;
+		let stagedata = MapMgr.getStageData(stageid);
+		this.loadPlat(stagedata.startplat);
 	}
 
-	private loadStage(stageid) {
-		this.stageId = stageid;
-		this.stageData = this.mapData.stageList[stageid];
-		this.stage.changeStage(this.stageData);
+	private loadPlat(platid: number) {
+		this.platId = platid;
+		this.platData = mapMgr.getPlatData(platid);
+		this.stage.changePlat(this.platData);
 		this.wave = 0;
 		this.checkWave();
 		if (this.role) {
@@ -116,7 +118,7 @@ export default class BattleScene extends cc.Component {
 	}
 
 	private nextWave() {
-		let monsterlist = this.stageData.monster[this.wave - 1];
+		let monsterlist = this.platData.monster[this.wave - 1];
 		for (const moninfo of monsterlist) {
 			MonsterMgr.genMonster(moninfo.monid, this, moninfo.x, moninfo.y);
 		}
@@ -126,7 +128,7 @@ export default class BattleScene extends cc.Component {
 		if (this.getMonsterNum() > 0) {
 			return;
 		}
-		if (this.wave == this.stageData.monster.length) {
+		if (this.wave == this.platData.monster.length) {
 			// 当前关卡完毕 获得物品
 			this.addDropItem();
 			setTimeout(() => {
@@ -151,12 +153,12 @@ export default class BattleScene extends cc.Component {
 	}
 
 	roleEnter(role: Role) {
-		role.enterStage(this.mapId, this.stageId);
+		role.enterPlat(this.platId, this.mapId, this.stageId);
 		this.roleList[role.model.onlyid] = role;
 
 		if (playerMgr.isMainRole(role.model.onlyid)) {
-			role.x = this.stageData.startPos.x;
-			role.y = this.stageData.startPos.y;
+			role.x = this.platData.startPos.x;
+			role.y = this.platData.startPos.y;
 		}
 
 		role.node.parent = this.roleLayer;
@@ -218,11 +220,11 @@ export default class BattleScene extends cc.Component {
 	private checkTransport() {
 		if (this.isFinish) {
 			let mainrole = playerMgr.mainRole;
-			for (const _ in this.stageData.trancePos) {
-				let trpos = this.stageData.trancePos[_];
+			for (const _ in this.platData.trancePos) {
+				let trpos = this.platData.trancePos[_];
 				let trrect = cc.rect(trpos.x - 1, trpos.y - 1, 3, 5);
 				if (trrect.contains(cc.v2(mainrole.x, mainrole.y))) {
-					this.loadStage(Number(trpos.tomap));
+					this.loadPlat(Number(trpos.tomap));
 					return;
 				}
 			}

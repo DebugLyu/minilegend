@@ -6,6 +6,7 @@ export default class Thing {
     // 地图坐标
     mapid: number = 0;
     stageid: number = 0;
+    platid: number = 0;
     x: number = 0;
     y: number = 0;
 

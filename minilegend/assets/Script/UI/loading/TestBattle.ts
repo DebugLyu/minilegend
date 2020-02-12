@@ -17,8 +17,8 @@ export default class TestBattle extends cc.Component {
 	@property(BattleScene)
 	battleScene: BattleScene = null;
 
-	async onLoad() {
-		await gameMgr.init();
+	onLoad() {
+		// await gameMgr.init();
 		playerMgr.mainRole = this.role;// addPlayer(this.role);
 	}
 
@@ -29,7 +29,7 @@ export default class TestBattle extends cc.Component {
 		// manager.enabledDebugDraw = true;
 		// manager.enabledDrawBoundingBox = true;
 		setTimeout(() => {
-			this.battleScene.loadMap(1001);
+			this.battleScene.loadStage(1001);
 		}, 2000);
 
 		setTimeout(async () => {

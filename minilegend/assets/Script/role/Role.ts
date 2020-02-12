@@ -101,13 +101,10 @@ export default class Role extends cc.Component {
         this.stage.effectLayer.addRoleEx(this.model.onlyid, this);
     }
 
-    enterStage(mapid: number, stageid: number) {
-        this.model.mapid = mapid;
-        if (this.model.stageid == stageid) {
-            return;
-        }
-
-        this.model.stageid = stageid;
+    enterPlat(platid: number, mapid: number = null, stageid: number = null) {
+        this.model.platid = platid;
+        mapid && (this.model.mapid = mapid);
+        stageid && (this.model.stageid = stageid);
     }
 
     findTarget(targettype: LivingType): Role {
@@ -185,8 +182,8 @@ export default class Role extends cc.Component {
         let grid = 0;
 
         while (true) {
-            let stagedata = MapMgr.getStageData(this.model.mapid, this.model.stageid);
-            if (!stagedata) {
+            let platdata = MapMgr.getPlatData(this.model.platid);
+            if (!platdata) {
                 break;
             }
             let tryxy = (tx: number = 0, ty: number = 0) => {
@@ -194,7 +191,7 @@ export default class Role extends cc.Component {
                 npos = ppos.add(apos);
                 let tnc_pos = MapMgr.pixPos2GirdPos(npos);
 
-                grid = stagedata.mapInfo[tnc_pos.y][tnc_pos.x];
+                grid = platdata.mapInfo[tnc_pos.y][tnc_pos.x];
                 if (grid > 0) {
                     return true;
                 }
@@ -203,11 +200,11 @@ export default class Role extends cc.Component {
             // 先判断 下一点 是否超界
             let nc_pos = MapMgr.pixPos2GirdPos(npos);
             let y_ckecn = false, x_check = false;
-            if (nc_pos.y < 0 || nc_pos.y >= stagedata.mapInfo.length) {
-                nc_pos.y = stagedata.mapInfo.length - 1;
+            if (nc_pos.y < 0 || nc_pos.y >= platdata.mapInfo.length) {
+                nc_pos.y = platdata.mapInfo.length - 1;
                 y_ckecn = true;
             }
-            if ((nc_pos.x < 0 || nc_pos.x >= stagedata.mapInfo[nc_pos.y].length)) {
+            if ((nc_pos.x < 0 || nc_pos.x >= platdata.mapInfo[nc_pos.y].length)) {
                 x_check = true;
             }
             // y轴超界 判断x轴
@@ -224,7 +221,7 @@ export default class Role extends cc.Component {
                 break;
             }
             // 不超界的情况下，判断是否可走
-            grid = stagedata.mapInfo[nc_pos.y][nc_pos.x];
+            grid = platdata.mapInfo[nc_pos.y][nc_pos.x];
             if (grid > 0) {
                 break;
             }

@@ -29,16 +29,16 @@ export default class TestLayer extends cc.Component {
     }
 
     onAddMonsterClicked(e, d) {
-        let random_x = random(this.battleScene.stageData.lines);;
-        let random_y = random(this.battleScene.stageData.rows);;
+        let random_x = random(this.battleScene.platData.lines);;
+        let random_y = random(this.battleScene.platData.rows);;
         let vailed = true;
         while (vailed) {
-            let info = this.battleScene.stageData.mapInfo;
+            let info = this.battleScene.platData.mapInfo;
             if (info[random_y][random_x] > 0) {
                 vailed = false;
             } else {
-                random_x = random(this.battleScene.stageData.lines);
-                random_y = random(this.battleScene.stageData.rows);
+                random_x = random(this.battleScene.platData.lines);
+                random_y = random(this.battleScene.platData.rows);
             }
         }
         MonsterMgr.genMonster(1000, this.battleScene, random_x, random_y);

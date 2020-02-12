@@ -1,53 +1,69 @@
-export class StageData {
-	stageid: number = 0;
-	resid: number = 0;
-	width: number = 0;
-	height: number = 0;
-	grid_width: number = 0;
-	grid_height: number = 0;
-	rows: number = 0;
-	lines: number = 0;
-	boss: boolean = false;
-	name: string = "";
-	startPos: { x: number, y: number } = { x: 0, y: 0 };
-	trancePos: { tomap: number, x: number, y: number }[] = [];
-	monster:[{monid:number, x:number, y: number}][] = [];
-	mapInfo: number[][] = [];
+import { RootDir } from "../common/gFunc";
+
+export interface PlatData {
+	platid: number;
+	resid: number;
+	width: number;
+	height: number;
+	grid_width: number;
+	grid_height: number;
+	rows: number;
+	lines: number;
+	boss: boolean;
+	name: string;
+	startPos: { x: number, y: number };
+	trancePos: { tomap: number, x: number, y: number }[];
+	monster: [{ monid: number, x: number, y: number }][];
+	mapInfo: number[][];
 }
 
-export class MapData {
-	mapId: number = 0;
-	mapName: string = "";
-	startStage: number = 0;
-	stageList: StageData[] = [];
+export interface StageData {
+	id: number;
+	name: string;
+	startplat:number;
+	platnum:number;
+	droplist: number[];
+}
+
+export interface MapData {
+	id: number;
+	name: string;
+	stage: number[];
 }
 
 class MapMgr {
 	private mapDatas: { [index: number]: MapData } = {};
+	private stageDatas: { [index: number]: StageData } = {};
+
 
 	// async init() {
-	//     let getRes = (await import("../common/gFunc")).getRes;
 	//     let data = await getRes("/prop_data/prop_map", cc.JsonAsset);
-	//     let json = data.json;
+	// 	let json = data.json;
+	// 	let stagedata = await getRes("/prop_data/prop_stage", cc.JsonAsset);
+	// 	let stagejson = stagedata.json;
+	// 	this.stageDatas = stagejson;
 	//     this.mapDatas = json;
 	// }
 
-	async init() {
-		let RootDir = (await import("../common/gFunc")).RootDir;
+	init() {
 		let data = require(RootDir("../app/prop_data/prop_map"));
 		this.mapDatas = data;
+		let stagedata = require(RootDir("../app/prop_data/prop_stage"));
+		this.stageDatas = stagedata;
 	}
+
 
 	getMapData(mapid: number): MapData {
 		return this.mapDatas[mapid];
 	}
 
-	getStageData(mapid: number, stageid: number): StageData|null {
-		let mapdata = this.getMapData(mapid);
-		if (mapdata) {
-			return mapdata.stageList[stageid];
-		}
-		return null;
+	getStageData(stageid: number): StageData {
+		return this.stageDatas[stageid];
+	}
+
+	getPlatData(platid: number): PlatData | null {
+		let data = require(RootDir("../app/prop_data/plats/plat_" + platid));
+		return data;
 	}
 }
 
