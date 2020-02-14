@@ -174,6 +174,29 @@
             <filename>img_money.png</filename>
             <filename>img_vcoin.png</filename>
             <filename>img_map_npc.png</filename>
+            <filename>img_paper_11.png</filename>
+            <filename>img_paper_13.png</filename>
+            <filename>img_paper_15.png</filename>
+            <filename>img_title_win02.png</filename>
+            <filename>img_title_win03.png</filename>
+            <filename>btn_close_sel.png</filename>
+            <filename>btn_com13_sel.png</filename>
+            <filename>btn_com14_sel.png</filename>
+            <filename>btn_green01_sel.png</filename>
+            <filename>btn_green02_sel.png</filename>
+            <filename>btn_green03_sel.png</filename>
+            <filename>btn_green05_sel.png</filename>
+            <filename>btn_minus_sel.png</filename>
+            <filename>btn_plus_sel.png</filename>
+            <filename>btn_red_sel.png</filename>
+            <filename>btn_table01.png</filename>
+            <filename>btn_table02_sel.png</filename>
+            <filename>btn_table03_sel.png</filename>
+            <filename>img_bg_itemlist01.png</filename>
+            <filename>img_bg_itemlist02.jpg</filename>
+            <filename>img_bg_tex01.png</filename>
+            <filename>img_bg_tex02.png</filename>
+            <filename>img_bg_tex04.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
