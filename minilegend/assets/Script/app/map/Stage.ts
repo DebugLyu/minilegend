@@ -12,6 +12,7 @@ import playerMgr from "../../manager/PlayerMgr";
 import EffectLayer from "./EffectLayer";
 import BattleScene from "./BattleScene";
 import itemMgr from "../../manager/ItemMgr";
+import Llog from "../../common/LLog";
 
 const { ccclass, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;
@@ -298,7 +299,7 @@ export default class Stage extends cc.Component {
         for (const iteminfo of itemlist) {
             let pos = this.getEmptyCell(gridpos);
             if (pos == null) {
-                console.log("Error: drop item too match");
+                Llog.log("Error: drop item too match");
                 break;
             }
             let itemdata = itemMgr.getItemData(iteminfo.itemid);

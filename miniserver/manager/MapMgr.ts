@@ -52,6 +52,9 @@ class MapMgr {
 		this.stageDatas = stagedata;
 	}
 
+	getAllMapData() {
+		return this.mapDatas;
+	}
 
 	getMapData(mapid: number): MapData {
 		return this.mapDatas[mapid];
