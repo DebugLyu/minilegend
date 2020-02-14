@@ -16,7 +16,7 @@ export default class PlayerData {
 	// uuid
 	uuid: string = "";
 	// 等级
-	_level: number = 0;
+	private _level: number = 0;
 	get level() {
 		return this._level;
 	}
@@ -26,7 +26,7 @@ export default class PlayerData {
 	}
 
 	// 经验
-	_exp: number = 0;
+	private _exp: number = 0;
 	get exp() {
 		return this._exp;
 	}
@@ -36,16 +36,12 @@ export default class PlayerData {
 	}
 
 	// 体力
-	_power: number = 0;
-	// private powerOffset: number = 0;
+	private _power: number = 0;
 	get power (){
-		// return this._power - this.powerOffset;
 		return this._power
 	}
 
 	set power (n:number){
-		// this.powerOffset = random(1000, 999999);
-		// this._power = n + this.powerOffset;
 		this._power = n;
 		LEvent.emit("RoleDataChange", "power", n);
 	}
@@ -55,7 +51,7 @@ export default class PlayerData {
 	// 背包物品
 	items: Item[] = [];
 	// 元宝
-	_gold: number = 0;
+	private _gold: number = 0;
 	get gold() {
 		return this._gold;
 	}
@@ -64,7 +60,7 @@ export default class PlayerData {
 		LEvent.emit("RoleDataChange", "gold", n);
 	}
 	// 银币
-	_coin: number = 0;
+	private _coin: number = 0;
 	get coin() {
 		return this._coin;
 	}

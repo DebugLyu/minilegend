@@ -1,5 +1,5 @@
 import { Gird } from "../common/G";
-import { getRes } from "../common/gFunc";
+import { getRes, safeJson } from "../common/gFunc";
 
 export interface PlatData {
 	platid: number;
@@ -21,6 +21,7 @@ export interface PlatData {
 export interface StageData {
 	id: number;
 	name:string;
+	bg:string;
 	startplat:number;
 	platnum:number;
 	droplist:number[];
@@ -40,10 +41,17 @@ class MapMgr {
 	async init() {
 	    let data = await getRes("/prop_data/prop_map", cc.JsonAsset);
 		let json = data.json;
+		for (const mapid in json) {
+			if (json.hasOwnProperty(mapid)) {
+				const mapdata = json[mapid];
+				mapdata.stage = safeJson(mapdata.stage);
+			}
+		}
+		this.mapDatas = json;
+
 		let stagedata = await getRes("/prop_data/prop_stage", cc.JsonAsset);
 		let stagejson = stagedata.json;
 		this.stageDatas = stagejson;
-	    this.mapDatas = json;
 	}
 
 	// async init() {
@@ -51,6 +59,10 @@ class MapMgr {
 	// 	let data = require(RootDir("../app/prop_data/prop_map"));
 	// 	this.mapDatas = data;
 	// }
+
+	getAllMapData(){
+		return this.mapDatas;
+	}
 
 	getMapData(mapid: number): MapData {
 		return this.mapDatas[mapid];

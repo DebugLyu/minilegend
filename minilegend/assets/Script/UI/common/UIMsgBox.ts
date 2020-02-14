@@ -33,13 +33,26 @@ export default class UIMsgBox extends cc.Component {
             if(okCallback){
                 okCallback();
             }
-            this.node.destroy();
+            this.clear();
         });
         this.cancelBtn.on("click", () => {
             if(cancelCallback){
                 cancelCallback();
             }
-            this.node.destroy();
+            this.clear();
         });
+    }
+
+
+    /**
+     *  特殊调用，配合删除动画，直接删除父节点
+     * */ 
+    clear(){
+        cc.tween(this.node)
+            .to(0.3, {scale: 0.1}, {easing: "backInOut"})
+            .call(() => {
+                this.node.parent.destroy();
+            })
+            .start();
     }
 }
