@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>10001.png</key>
+            <key>30001.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,96},{56,78}}</string>
@@ -17,7 +17,7 @@
                 <key>sourceSize</key>
                 <string>{512,512}</string>
             </dict>
-            <key>10002.png</key>
+            <key>30002.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,2},{92,104}}</string>
@@ -40,7 +40,7 @@
             <key>size</key>
             <string>{128,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:fcc69e6639d91a70c01926ffabeae873$</string>
+            <string>$TexturePacker:SmartUpdate:f8f2fa992d7306122f3c3da7d1e90bfb$</string>
             <key>textureFileName</key>
             <string>inlook_w.png</string>
         </dict>

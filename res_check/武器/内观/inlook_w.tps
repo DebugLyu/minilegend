@@ -146,8 +146,8 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>10002.png</filename>
-            <filename>10001.png</filename>
+            <filename>30002.png</filename>
+            <filename>30001.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

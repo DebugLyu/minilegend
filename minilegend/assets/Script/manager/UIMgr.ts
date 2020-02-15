@@ -68,6 +68,10 @@ class __UIMgr {
             .start();
     }
 
+    showItemDetail(itemid: number){
+
+    }
+
     async showUI(path: string) {
         if (this.prefabList[path] == null) {
             this.prefabList[path] = await getRes(path, cc.Prefab);

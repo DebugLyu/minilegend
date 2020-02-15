@@ -19,7 +19,9 @@
     "@types/redis": "^2.8.14",
     "mysql": "^2.18.1",
     "redis": "^2.8.0",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.9.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

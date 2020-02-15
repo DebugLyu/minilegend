@@ -151,8 +151,14 @@
             <filename>10278.png</filename>
             <filename>10279.png</filename>
             <filename>10280.png</filename>
-            <filename>01011.png</filename>
-            <filename>01001.png</filename>
+            <filename>img_frame_item06.png</filename>
+            <filename>img_frame_item01.png</filename>
+            <filename>img_frame_item02.png</filename>
+            <filename>img_frame_item03.png</filename>
+            <filename>img_frame_item04.png</filename>
+            <filename>img_frame_item05.png</filename>
+            <filename>30002.png</filename>
+            <filename>30001.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
