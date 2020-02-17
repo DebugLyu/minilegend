@@ -15,6 +15,7 @@ class __UIMgr {
         // 通用背景框
         let nodebg = await getRes("prefab/common/NodeBg", cc.Prefab);
         this.prefabList["nodebg"] = nodebg;
+        
         // 通用提示框
         let msgbox = await getRes("prefab/common/MsgBox", cc.Prefab);
         this.prefabList["msgbox"] = msgbox;
