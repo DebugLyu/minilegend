@@ -10,6 +10,7 @@ function attrRandom() {
 }
 
 export default class Equip extends Item {
+	equipid: number = 0;
 	// 主属性
 	private attr: Attribute = new Attribute();
 	// 炼化属性

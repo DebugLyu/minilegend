@@ -6,7 +6,7 @@ export default abstract class Item {
 	// 名字
 	name: string = "";
 	// 数据id
-	dataid: number = 0;
+	itemid: number = 0;
 	// 所在位置 <10 在身上装备    >10 在背包    >1000 在仓库
 	pos: number = 0;
 

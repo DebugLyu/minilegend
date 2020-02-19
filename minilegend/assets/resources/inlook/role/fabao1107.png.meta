@@ -1,5 +1,5 @@
 {
-  "ver": "2.3.3",
+  "ver": "2.3.4",
   "uuid": "2b27f7fa-a486-480d-9f4c-e612e28b43fe",
   "type": "sprite",
   "wrapMode": "clamp",
@@ -7,6 +7,8 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
+  "width": 360,
+  "height": 360,
   "platformSettings": {},
   "subMetas": {
     "fabao1107": {

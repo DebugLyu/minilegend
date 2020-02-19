@@ -1,5 +1,5 @@
 {
-  "ver": "2.3.3",
+  "ver": "2.3.4",
   "uuid": "38c2145c-2932-4be4-865f-63b4568428a5",
   "type": "sprite",
   "wrapMode": "clamp",
@@ -7,6 +7,8 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
+  "width": 179,
+  "height": 64,
   "platformSettings": {},
   "subMetas": {
     "ui_battle_round_1": {

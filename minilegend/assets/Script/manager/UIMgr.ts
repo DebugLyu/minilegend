@@ -1,4 +1,9 @@
 import { getRes } from "../common/gFunc";
+import UIItemDetail from "../UI/item/UIEquipDetail";
+import { Attribute, ItemType } from "../common/G";
+import itemMgr from "./ItemMgr";
+import Item from "../app/item/Item";
+import Equip from "../app/item/equip/Equip";
 
 interface MsgboxInfo {
     msg: string;
@@ -9,13 +14,14 @@ interface MsgboxInfo {
 
 class __UIMgr {
     nodeList: cc.Node[] = [];
+
     private prefabList: { [x: string]: cc.Prefab } = {};
 
     async init() {
         // 通用背景框
         let nodebg = await getRes("prefab/common/NodeBg", cc.Prefab);
         this.prefabList["nodebg"] = nodebg;
-        
+
         // 通用提示框
         let msgbox = await getRes("prefab/common/MsgBox", cc.Prefab);
         this.prefabList["msgbox"] = msgbox;
@@ -23,6 +29,9 @@ class __UIMgr {
         // 通用通知
         let notice = await getRes("prefab/common/Notice", cc.Prefab);
         this.prefabList["notice"] = notice;
+
+        let itemDetail = await getRes("prefab/itemDetail", cc.Prefab);
+        this.prefabList["itemDetail"] = itemDetail;
     }
 
     msgBox(type: number = 0, info: MsgboxInfo) {
@@ -69,8 +78,29 @@ class __UIMgr {
             .start();
     }
 
-    showItemDetail(itemid: number){
+    showItemDetail(item: Item);
+    showItemDetail(itemid: number);
+    showItemDetail(item: number | Item) {
+        if (typeof item == "number") {
+            let itemdata = itemMgr.getItemData(item);
+            if (itemdata.type == ItemType.Equip) {
+                this.showUI("prefab/itemDetail").then((itemDetail) => {
+                    let detail = itemDetail.getComponent(UIItemDetail);
+                    detail.setAttr(item);
+                });
+            }
+        } else {
+            if(item instanceof Equip){
+                this.showUI("prefab/itemDetail").then((itemDetail) => {
+                    let detail = itemDetail.getComponent(UIItemDetail);
+                    detail.setAttr(item.itemid, item);
+                });
+            }
+        }
+    }
 
+    closeItemDetail() {
+        this.hideUI();
     }
 
     async showUI(path: string) {
@@ -89,13 +119,15 @@ class __UIMgr {
             .set({ scale: 0.2 })
             .to(0.5, { scale: 1 }, { easing: 'sineOutIn' })
             .start();
+
+        return node;
     }
 
     /**
      * 关闭UI
      * @param node 子节点 或 节点名字 或 null（当前最上层节点）
      */
-    hideUI(nodeOrStrOrNul: cc.Node | string | null) {
+    hideUI(nodeOrStrOrNul?: cc.Node | string) {
         let node: cc.Node = null;
         if (typeof nodeOrStrOrNul == "string") {
             for (const n of this.nodeList) {

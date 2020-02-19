@@ -1,5 +1,5 @@
 {
-  "ver": "2.3.3",
+  "ver": "2.3.4",
   "uuid": "8765340f-6b1e-413c-8da7-45d5b1a3c2ee",
   "type": "sprite",
   "wrapMode": "clamp",
@@ -7,6 +7,8 @@
   "premultiplyAlpha": false,
   "genMipmaps": false,
   "packable": true,
+  "width": 340,
+  "height": 207,
   "platformSettings": {},
   "subMetas": {
     "xsboss": {

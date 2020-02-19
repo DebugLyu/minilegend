@@ -17,7 +17,6 @@ app.all('*', function (req, res, next) {
     else next();
 });
 
-
 app.get("/login", async (req, res: ResInterface) => {
     let uuid = req.query.uuid;
     let player = await playerMgr.getPlayer(uuid);
@@ -35,7 +34,7 @@ app.post("/test", (req) => {
 
 
 
-export function start(port: number){
+export function start(port: number) {
     app.listen(port, () => {
         Llog.info('Listen on port ', port);
     });
