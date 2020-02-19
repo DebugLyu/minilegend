@@ -147,10 +147,10 @@ export default class UIEquipDetail extends cc.Component {
         // let str = `${AttrStrCn[attrid]}: ${num} ~ ${num2}`;
         let nnode = cc.instantiate(this.baseAttrNode);
         nnode.active = true;
-        let namelbl = cc.find("attrnum/attr", nnode).getComponent(cc.Label);
+        let namelbl = cc.find("attr", nnode).getComponent(cc.Label);
         namelbl.string = AttrStrCn[attrid];
-        let numlbl = cc.find("attrnum/num", nnode).getComponent(cc.Label);
-        numlbl.string = num + "" + (num2 ? (" ~ " + num2) : "");
+        let numlbl = cc.find("num", nnode).getComponent(cc.Label);
+        numlbl.string = num + "" + (num2 ? (" - " + num2) : "");
         nnode.parent = this.baseAttrNode.parent;
     }
 
@@ -160,9 +160,9 @@ export default class UIEquipDetail extends cc.Component {
         }
         let nnode = cc.instantiate(this.artiAttrNode);
         nnode.active = true;
-        let namelbl = cc.find("attrnum/attr", nnode).getComponent(cc.Label);
+        let namelbl = cc.find("attr", nnode).getComponent(cc.Label);
         namelbl.string = AttrStrCn[attrid];
-        let numlbl = cc.find("attrnum/num", nnode).getComponent(cc.Label);
+        let numlbl = cc.find("num", nnode).getComponent(cc.Label);
         numlbl.string = String(num);
         nnode.parent = this.artiAttrNode.parent;
     }

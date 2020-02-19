@@ -2,6 +2,7 @@ import Equip, { EquipData } from "../app/item/equip/Equip";
 import attributeMgr from "./AttributeMgr";
 import itemMgr from "./ItemMgr";
 import { loge, ErrList } from "../common/ErrorList";
+import { AttrIds } from "../common/G";
 
 
 class EquipMgr {
@@ -41,13 +42,27 @@ class EquipMgr {
         }
 
         let equip = new Equip();
-        equip.onlyid = 1;
         equip.equipData = equipdata;
         equip.itemData = itemdata;
         equip.num = 1;
         equip.pos = -1;
+
         attributeMgr.setAttr(equip.attr, equipdata.attr);
+        for (const key in equip.attr) {
+            if (equip.attr.hasOwnProperty(key)) {
+                let attrid:AttrIds = Number(key);
+                const value = equip.attr[attrid];
+                equip.setAttr(attrid, value);
+            }
+        }
         attributeMgr.setArtiAttr(equip.artiAttr, equipdata.arti, equipdata.artinum);
+        for (const key in equip.artiAttr) {
+            if (equip.artiAttr.hasOwnProperty(key)) {
+                let attrid:AttrIds = Number(key);
+                const value = equip.artiAttr[attrid];
+                equip.setArtiAttr(attrid, value);
+            }
+        }
         return equip;
     }
 }

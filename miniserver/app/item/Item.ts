@@ -1,4 +1,6 @@
 import { ItemType } from "../../common/G";
+import { getRandomString } from "../../common/gFunc";
+import { md5 } from "../../util/crypto";
 
 export interface ItemData {
 	id: number, // id	
@@ -14,7 +16,9 @@ export interface ItemData {
 
 export default abstract class Item {
 	// 唯一id 
-	onlyid: number = 0;
+	onlyid: string = md5(getRandomString(10) + "" + Date.now() + getRandomString(9)) ;
+	// 数据id 
+	itemid: number = 0;
 	// 名字
 	name: string = "";
 	// 数据
@@ -29,6 +33,7 @@ export default abstract class Item {
 		price: 0, // 出售价格	
 		desc: "", // 简介
 	}
+	
 	get itemData (){
 		return this._itemData;
 	}
@@ -36,7 +41,7 @@ export default abstract class Item {
 		this._itemData = n;
 		this.name = n.name;
 	}
-	// 位置 <10 在身上装备    >10 在背包    >1000 在仓库
+	// 位置 <10 在身上装备    >100 在背包    >1000 在仓库
 	pos: number = 0;
 
 	// 类型

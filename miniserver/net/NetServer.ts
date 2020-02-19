@@ -4,6 +4,8 @@ import playerMgr from "../manager/PlayerMgr";
 import http from "./http";
 import Llog from "../common/LLog";
 import equipMgr from "../manager/EquipMgr";
+import { ErrList } from "../common/ErrorList";
+import itemMgr from "../manager/ItemMgr";
 
 let app = express();
 app.all('*', function (req, res, next) {
@@ -21,6 +23,32 @@ app.get("/login", async (req, res: ResInterface) => {
     let uuid = req.query.uuid;
     let player = await playerMgr.getPlayer(uuid);
     http.reply(res, player);
+});
+
+app.get("/createEquip", async (req, res: ResInterface) => {
+    let uuid = req.query.uuid;
+    let token = req.query.token;
+    let itemid = req.query.itemid;
+    let num = req.query.num;
+
+    let player = await playerMgr.getPlayer(uuid);
+    if(player.token != token){
+        http.reply(res, {ecode: ErrList.Need_ReLogin});
+        return;
+    }
+    let item = itemMgr.genItem(itemid, num);
+    if(typeof item == "number"){
+        http.reply(res, {ecode: item});
+        return;
+    }
+    player.addItem(item);
+    http.reply(res, player.items);
+});
+
+app.get("/createItem", async (req, res: ResInterface) => {
+    // let uuid = req.query.uuid;
+    // let player = await playerMgr.getPlayer(uuid);
+    // http.reply(res, player);
 });
 
 app.get("/genEquip", (req, res: ResInterface) => {

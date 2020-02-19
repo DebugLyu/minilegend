@@ -15,18 +15,18 @@ class PlayerMgr {
 				// 未注册角色
 				p = new Player();
 				p.init(uuid);
-				redisdb.setHash("players", uuid, p.toString());
 			} else {
 				// mysql中存在
 				p = Player.toObj(t.pinfo);
 			}
+			p.onlyid = player_seed++;
+			let token = Token.getToken(uuid);
+			p.token = token;
+			redisdb.setHash("players", uuid, p.toString());
 		} else {
 			//redis 中存在
 			p = Player.toObj(pstr);
 		}
-		p.onlyid = player_seed++;
-		let token = Token.getToken(uuid);
-		p.token = token;
 		return p;
 	}
 }

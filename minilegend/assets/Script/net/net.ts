@@ -4,6 +4,8 @@ import { http } from "./http";
 import playerMgr from "../manager/PlayerMgr";
 import GameSceneMgr from "../manager/GameSceneMgr";
 import UIMgr from "../manager/UIMgr";
+import Llog from "../common/LLog";
+import LEvent from "../common/EventListner";
 
 export namespace Net {
 	export function login(){
@@ -29,14 +31,25 @@ export namespace Net {
 
 	export namespace gm {
 		export function createItem() {
-			http.get("/createItem").then(res => {
+			http.get("/createItem", {
+				uuid: playerMgr.mainData.uuid,
+				token: playerMgr.mainData.token,
+				// itemid: 
+			}).then(res => {
 
 			});
 		}
 
 		export function createEquip() {
-			http.get("/createEquip").then(res => {
-
+			http.get("/createEquip", {
+				uuid: playerMgr.mainData.uuid,
+				token: playerMgr.mainData.token,
+				itemid: 30001,
+				num: 1,
+			}).then(res => {
+				// Llog.info(res);
+				playerMgr.mainData.items = res;
+				LEvent.emit("ItemUpdate");
 			});
 		}
 	}

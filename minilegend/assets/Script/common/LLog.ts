@@ -9,13 +9,13 @@ class LLog {
     public log(message: any, ...args: any[]) {
         if(gameMgr.config.dev){
             console.log(message, ...args);
-            this.debugTrace();
+            // this.debugTrace();
         }
     }
 
     public error(message: any, ...args: any[]) {
         console.error(message, ...args);
-        this.debugTrace();
+        // this.debugTrace();
     }
 
     public debug(message: any, ...args: any[]) {

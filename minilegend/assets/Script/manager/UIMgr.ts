@@ -4,6 +4,7 @@ import { Attribute, ItemType } from "../common/G";
 import itemMgr from "./ItemMgr";
 import Item from "../app/item/Item";
 import Equip from "../app/item/equip/Equip";
+import UIEquipDetail from "../UI/item/UIEquipDetail";
 
 interface MsgboxInfo {
     msg: string;
@@ -29,9 +30,6 @@ class __UIMgr {
         // 通用通知
         let notice = await getRes("prefab/common/Notice", cc.Prefab);
         this.prefabList["notice"] = notice;
-
-        let itemDetail = await getRes("prefab/itemDetail", cc.Prefab);
-        this.prefabList["itemDetail"] = itemDetail;
     }
 
     msgBox(type: number = 0, info: MsgboxInfo) {
@@ -84,15 +82,15 @@ class __UIMgr {
         if (typeof item == "number") {
             let itemdata = itemMgr.getItemData(item);
             if (itemdata.type == ItemType.Equip) {
-                this.showUI("prefab/itemDetail").then((itemDetail) => {
-                    let detail = itemDetail.getComponent(UIItemDetail);
+                this.showUI("prefab/item/EquipDetail").then((equipDetail) => {
+                    let detail = equipDetail.getComponent(UIEquipDetail);
                     detail.setAttr(item);
                 });
             }
         } else {
             if(item instanceof Equip){
-                this.showUI("prefab/itemDetail").then((itemDetail) => {
-                    let detail = itemDetail.getComponent(UIItemDetail);
+                this.showUI("prefab/item/EquipDetail").then((equipDetail) => {
+                    let detail = equipDetail.getComponent(UIEquipDetail);
                     detail.setAttr(item.itemid, item);
                 });
             }
@@ -111,13 +109,14 @@ class __UIMgr {
         let bg = cc.instantiate(this.prefabList["nodebg"]);
         let node = cc.instantiate(this.prefabList[path]);
         node.parent = bg;
+        node.x = node.y = 0;
         node.name = "bgnode";
         bg.parent = cc.director.getScene();
         this.nodeList.push(node);
 
         cc.tween(node)
             .set({ scale: 0.2 })
-            .to(0.5, { scale: 1 }, { easing: 'sineOutIn' })
+            .to(0.5, { scale: 1 }, { easing: 'backOut' })
             .start();
 
         return node;
@@ -144,7 +143,7 @@ class __UIMgr {
             return;
         }
         cc.tween(node)
-            .to(0.5, { scale: 0.2 }, { easing: "sineOutIn" })
+            .to(0.5, { scale: 0.2 }, { easing: "backIn" })
             .call(() => {
                 node.parent.destroy();
             })

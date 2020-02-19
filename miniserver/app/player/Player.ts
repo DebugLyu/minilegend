@@ -1,7 +1,9 @@
-import { Attribute, AttrIds } from "../../common/G";
+import { Attribute, ItemType, AttrIds } from "../../common/G";
 import equip from "../item/equip/Equip";
 import Item from "../item/Item";
 import { safeJson } from "../../common/gFunc";
+import { ErrList } from "../../common/ErrorList";
+import { redisdb } from "../../util/redisdb";
 
 export default class Player {
 	[x: string]: any;
@@ -25,7 +27,7 @@ export default class Player {
 	// 当前装备
 	equips: equip[] = [];
 	// 背包物品
-	items: { [x: string]: Item } = {};
+	items:  Item[] = [];
 	// 元宝
 	gold: number = 0;
 	// 银币
@@ -38,13 +40,37 @@ export default class Player {
 	// 属性
 	attr: Attribute = new Attribute();
 
-	test() {
-
+	constructor(){
+		this.attr.initRole();
 	}
 
 	init(uuid: string, token?: string) {
 		this.uuid = uuid;
 		token && (this.token = token);
+	}
+
+	getItem(itemid: number) : Item | null{
+		for (const item of this.items) {
+			if(item.itemid == itemid){
+				return item;
+			}
+		}
+		return null;
+	}
+
+	addItem(item: Item) : number{
+		if(item.type == ItemType.Equip){
+			this.items.push(item);
+		}else{
+			let curitem = this.getItem(item.itemid);
+			if(curitem == null){
+				this.items.push(item);
+			}else{
+				curitem.num += item.num;
+			}
+		}
+		this.update();
+		return ErrList.SUCCESS;
 	}
 
 	toString() {
@@ -68,5 +94,9 @@ export default class Player {
 		}
 		newplayer.fromJson(obj);
 		return newplayer;
+	}
+
+	update(){
+		redisdb.setHash("players", this.uuid, this.toString());
 	}
 }

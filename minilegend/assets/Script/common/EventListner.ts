@@ -4,14 +4,17 @@
 let EventSeed = 10000;
 
 class EventListener {
-    private eventlist: { [x: string]: { [y: number]: ((...param: any[]) => void) } } = {};
+    private eventlist: { [x: string]: { [y: number]: { f: ((...param: any[]) => void), t: any} } } = {};
 
-    on(key: string, func: (...args: any[]) => void) {
+    on(key: string, func: (...args: any[]) => void, target?: any) {
         EventSeed++
         if (this.eventlist[key] == null) {
             this.eventlist[key] = [];
         }
-        this.eventlist[key][EventSeed] = func;
+        this.eventlist[key][EventSeed] = { 
+            f: func, 
+            t : target
+        };
         return EventSeed;
     }
 
@@ -27,8 +30,8 @@ class EventListener {
             delete funclist[param];
         } else {
             for (const key in funclist) {
-                const func = funclist[key];
-                if (func == param) {
+                const fobj = funclist[key];
+                if (fobj.f == param) {
                     delete funclist[key];
                     break;
                 }
@@ -43,11 +46,17 @@ class EventListener {
         }
 
         for (const _ in funclist) {
-            let func = funclist[_];
-            if (func == null) {
+            let fobj = funclist[_];
+            if (fobj == null) {
                 continue;
             }
-            func(params);
+            let f = fobj.f;
+            let t = fobj.t;
+            if(t != null){
+                f.call(t, params);
+            }else{
+                f(params);
+            }
         }
     }
 }

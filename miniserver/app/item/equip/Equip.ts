@@ -33,6 +33,7 @@ export default class Equip extends Item {
 
 	constructor() {
 		super();
+		this.type = ItemType.Equip;
 		this.randomOffset();
 		this.equipData = {
 			id: 0,      // 装备id

@@ -18,6 +18,13 @@ export interface ResInterface {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
+
+export const MaxPower = 20; // 最大体力值
+export const StartMapStage = { map: 10001, stage: 10001}; // 起始场景
+
+export const ItemBagHolder = 100;
+
+
 export interface AttrDatas {
 	ID: number;
 	Hp1: number;
@@ -127,37 +134,64 @@ export let AttrArray = [
 ]
 
 export const AttrStr = {
-	Hp: "Hp",
-	MaxHp: "MaxHp",
-	Speed: "Speed",
-	AtkSpe: "AtkSpe",
-	AtkMin: "AtkMin",
-	AtkMax: "AtkMax",
-	Defense: "Defense",
-	MatkMin: "MatkMin",
-	MatkMax: "MatkMax",
-	Mdefense: "Mdefense",
-	DatkMin: "DatkMin",
-	DatkMax: "DatkMax",
-	Ddefense: "Ddefense",
-	Hit: "Hit",
-	Crit: "Crit",
-	CritAdd: "CritAdd",
-	Dodge: "Dodge",
-	Cut: "Cut",
-	CutPre: "CutPre",
-	Poison: "Poison",
-	Paralysis: "Paralysis",
-	Toughness: "Toughness",
-	Lucky: "Lucky",
-	Damnation: "Damnation",
+	[AttrIds.Hp]: "Hp",
+	[AttrIds.MaxHp]: "MaxHp",
+	[AttrIds.Speed]: "Speed",
+	[AttrIds.AtkSpe]: "AtkSpe",
+	[AttrIds.AtkMin]: "AtkMin",
+	[AttrIds.AtkMax]: "AtkMax",
+	[AttrIds.Defense]: "Defense",
+	[AttrIds.MatkMin]: "MatkMin",
+	[AttrIds.MatkMax]: "MatkMax",
+	[AttrIds.Mdefense]: "Mdefense",
+	[AttrIds.DatkMin]: "DatkMin",
+	[AttrIds.DatkMax]: "DatkMax",
+	[AttrIds.Ddefense]: "Ddefense",
+	[AttrIds.Hit]: "Hit",
+	[AttrIds.Crit]: "Crit",
+	[AttrIds.CritAdd]: "CritAdd",
+	[AttrIds.Dodge]: "Dodge",
+	[AttrIds.Cut]: "Cut",
+	[AttrIds.CutPre]: "CutPre",
+	[AttrIds.Poison]: "Poison",
+	[AttrIds.Paralysis]: "Paralysis",
+	[AttrIds.Toughness]: "Toughness",
+	[AttrIds.Lucky]: "Lucky",
+	[AttrIds.Damnation]: "Damnation",
+}
+
+export const AttrStrCn = {
+	[AttrIds.Hp]: "血量",
+	[AttrIds.MaxHp]: "血量最大值",
+	[AttrIds.Speed]: "速度",
+	[AttrIds.AtkSpe]: "攻击速度",
+	[AttrIds.AtkMin]: "攻击力",
+	[AttrIds.AtkMax]: "攻击力",
+	[AttrIds.Defense]: "物理防御",
+	[AttrIds.MatkMin]: "魔法攻击",
+	[AttrIds.MatkMax]: "魔法攻击",
+	[AttrIds.Mdefense]: "魔法防御",
+	[AttrIds.DatkMin]: "道术攻击",
+	[AttrIds.DatkMax]: "道术攻击",
+	[AttrIds.Ddefense]: "道术防御",
+	[AttrIds.Hit]: "命中",
+	[AttrIds.Crit]: "暴击",
+	[AttrIds.CritAdd]: "暴击加成",
+	[AttrIds.Dodge]: "闪避",
+	[AttrIds.Cut]: "切割率",
+	[AttrIds.CutPre]: "切割伤害加成",
+	[AttrIds.Poison]: "中毒率",
+	[AttrIds.Paralysis]: "麻痹率",
+	[AttrIds.Toughness]: "韧性",
+	[AttrIds.Lucky]: "幸运",
+	[AttrIds.Damnation]: "诅咒",
 }
 
 export class Attribute {
 	[AttrIds.Hp]: number = 0;
 	[AttrIds.MaxHp]: number = 0;
-	[AttrIds.Speed]: number = 240;
-	[AttrIds.AtkSpe]: number = 1500;
+	[AttrIds.Speed]: number = 0;
+	[AttrIds.AtkSpe]: number = 0;
 	[AttrIds.AtkMin]: number = 0;
 	[AttrIds.AtkMax]: number = 0;
 	[AttrIds.Defense]: number = 0;
@@ -178,6 +212,11 @@ export class Attribute {
 	[AttrIds.Toughness]: number = 0;
 	[AttrIds.Lucky]: number = 0;
 	[AttrIds.Damnation]: number = 0;
+
+	initRole(){
+		this[AttrIds.Speed] = 240;
+		this[AttrIds.AtkSpe] = 1500;
+	}
 
 	add(attr: Attribute): Attribute {
 		for (const key of AttrArray) {

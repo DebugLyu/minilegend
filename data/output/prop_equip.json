@@ -2,7 +2,7 @@
   "30001": {
     "id": 30001,
     "wear": 1,
-    "inlook": "",
+    "inlook": 30001,
     "outlook": "",
     "attr": 10001,
     "artinum": 1,
@@ -12,7 +12,7 @@
   "30002": {
     "id": 30002,
     "wear": 1,
-    "inlook": "",
+    "inlook": 30002,
     "outlook": "",
     "attr": 10002,
     "artinum": 2,

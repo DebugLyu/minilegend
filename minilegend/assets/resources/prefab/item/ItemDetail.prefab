@@ -40,10 +40,13 @@
       },
       {
         "__id__": 66
+      },
+      {
+        "__id__": 67
       }
     ],
     "_prefab": {
-      "__id__": 67
+      "__id__": 68
     },
     "_opacity": 255,
     "_color": {
@@ -56,7 +59,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 500,
-      "height": 301.76
+      "height": 296.76
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -139,7 +142,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        123.38,
+        120.88,
         0,
         0,
         0,
@@ -624,7 +627,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        85.88,
+        83.38,
         0,
         0,
         0,
@@ -1156,7 +1159,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -74.12,
+        -76.62,
         0,
         0,
         0,
@@ -1691,7 +1694,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 500,
-      "height": 10
+      "height": 5
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -2247,7 +2250,7 @@
     "_layoutSize": {
       "__type__": "cc.Size",
       "width": 500,
-      "height": 10
+      "height": 5
     },
     "_resize": 1,
     "_N$layoutType": 3,
@@ -2325,7 +2328,7 @@
     "_layoutSize": {
       "__type__": "cc.Size",
       "width": 500,
-      "height": 301.76
+      "height": 296.76
     },
     "_resize": 1,
     "_N$layoutType": 2,
@@ -2373,6 +2376,16 @@
     "btn2": {
       "__id__": 54
     },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.BlockInputEvents",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
     "_id": ""
   },
   {
