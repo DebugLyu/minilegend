@@ -1,8 +1,8 @@
-import { Attribute } from "../../common/G";
+import { Attribute, ItemType } from "../../common/G";
 import Equip from "../item/equip/Equip";
 import Item from "../item/Item";
 import LEvent from "../../common/EventListner";
-import { random } from "../../common/gFunc";
+import { random, safeJson } from "../../common/gFunc";
 
 export default class PlayerData {
 	// 绝对id 服务器专有 与 客户端 绝对id 不同。
@@ -47,7 +47,7 @@ export default class PlayerData {
 	}
 
 	// 当前装备
-	equips: Equip[] = [];
+	equips: { [x: number]: Equip } = {};
 	// 背包物品
 	items: Item[] = [];
 	// 元宝
@@ -75,4 +75,44 @@ export default class PlayerData {
 	maxStage: number = 0;
 	// 属性
 	attr: Attribute = new Attribute();
+
+	fromJson(json: any) {
+		for (const key in json) {
+			if (key == "items"){
+				this.itemFromJson(json[key]);
+				continue;
+			}
+			if (key == "equips") {
+				this.equipFromJson(json[key]);
+				continue;
+			}
+			this[key] = safeJson(json[key]);
+		}
+	}
+
+	equipFromJson(json:any){
+		this.equips = {};
+		for (const datakey in json) {
+			const data = json[datakey];
+			let equip: Equip = new Equip();
+			equip.fromJson(data);
+			this.equips[equip.equipData.wear] = equip;
+		}
+	}
+
+	itemFromJson(json: any){
+		this.items = [];
+		for (const datakey in json) {
+			const data = json[datakey];
+			let item: Item = null;
+			if (data.type == ItemType.Equip) {
+				item = new Equip();
+			}
+			if (item == null) {
+				continue;
+			}
+			item.fromJson(data);
+			this.items.push(item);
+		}
+	}
 }

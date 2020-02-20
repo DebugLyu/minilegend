@@ -4,6 +4,7 @@ import itemMgr from "../../manager/ItemMgr";
 import equipMgr from "../../manager/EquipMgr";
 import attributeMgr from "../../manager/AttributeMgr";
 import Equip from "../../app/item/equip/Equip";
+import { Net } from "../../net/net";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -31,8 +32,7 @@ export default class UIEquipDetail extends cc.Component {
     @property(cc.Node)
     btn2: cc.Node = null;
 
-
-
+    onlyid: string = null;
     itemid: number = 0;
     type: ItemType = ItemType.Equip;
 
@@ -50,6 +50,8 @@ export default class UIEquipDetail extends cc.Component {
         close.on("click", () => {
             UIMgr.hideUI(this.node);
         });
+
+        this.btn1.on("click", this.equipOn, this);
     }
 
     setAttr(itemid: number, equip?: Equip) {
@@ -61,6 +63,8 @@ export default class UIEquipDetail extends cc.Component {
         this.type = itemdata.type;
         this.itemid = itemid;
         this.itemName = itemdata.name;
+
+        this.icon.spriteFrame = itemMgr.getItemSpriteFrame(itemdata.icon);
         // 判断是否有属性存在
         if (equip == null){
             // 没有属性 则显示 配置表常规属性
@@ -106,13 +110,14 @@ export default class UIEquipDetail extends cc.Component {
             }
         }else{
             // 有属性 显示装备属性
+            this.onlyid = equip.onlyid;
             for (const key of AttrArray) {
-                let value = equip.getAttr(key);
-                if (value == 0 || key == AttrIds.AtkMax ||
-                    key == AttrIds.MatkMax || key == AttrIds.DatkMax) {
-                    continue;
-                }
                 if (key < AttrIds.Hit) {
+                    let value = equip.getAttr(key);
+                    if (value == 0 || key == AttrIds.AtkMax ||
+                        key == AttrIds.MatkMax || key == AttrIds.DatkMax) {
+                        continue;
+                    }
                     let tmp = {
                         [AttrIds.Defense]: AttrIds.Defense,
                         [AttrIds.Mdefense]: AttrIds.Mdefense,
@@ -122,13 +127,16 @@ export default class UIEquipDetail extends cc.Component {
                         [AttrIds.DatkMin]: AttrIds.DatkMin,
                     }
                     if (tmp[key] != null) {
-                        let value2 = equip.getAttr[tmp[key]];
+                        let value2 = equip.getAttr(tmp[key]);
                         this.addBaseAttr(key, value, value2);
                     } else {
                         this.addBaseAttr(key, value);
                     }
                 } else {
-                    value = equip.getArtiAttr(key);
+                    let value = equip.getArtiAttr(key);
+                    if(value <= 0){
+                        continue;
+                    }
                     this.addArtiAttr(key, value);
                 }
             }
@@ -167,5 +175,10 @@ export default class UIEquipDetail extends cc.Component {
         nnode.parent = this.artiAttrNode.parent;
     }
 
-
+    equipOn(){
+        if(this.onlyid == null){
+            return;
+        }
+        Net.equipOn({onlyid: this.onlyid});
+    }
 }

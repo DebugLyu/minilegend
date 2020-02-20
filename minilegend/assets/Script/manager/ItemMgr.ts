@@ -12,12 +12,16 @@ export interface ItemData {
 
 class ItemMgr {
 	private itemList: { [key: number]: ItemData } = {};
+	itemAtlas: cc.SpriteAtlas = null;
 
 	async init() {
 	    let getRes = (await import("../common/gFunc")).getRes;
 	    let data = await getRes("/prop_data/prop_item", cc.JsonAsset);
 	    let json = data.json;
-	    this.itemList = json;
+		this.itemList = json;
+		
+		let itemAtlas = await getRes("item/ItemIcon", cc.SpriteAtlas);
+		this.itemAtlas = itemAtlas;
 	}
 
 	// async init() {
@@ -28,6 +32,11 @@ class ItemMgr {
 
 	getItemData(itemid: number): ItemData {
 		return this.itemList[itemid];
+	}
+
+	getItemSpriteFrame(sf: string): cc.SpriteFrame{
+		let csp = this.itemAtlas.getSpriteFrame(sf);
+		return csp;
 	}
 }
 let itemMgr = new ItemMgr();

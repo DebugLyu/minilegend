@@ -60,10 +60,6 @@ export default class Item {
 
 	fromJson(json: any) {
 		for (const key in json) {
-			// if(key == "attr"){
-			// 	this.attr.fromJson(json[key]);
-			// 	continue;
-			// }
 			this[key] = safeJson(json[key]);
 		}
 	}

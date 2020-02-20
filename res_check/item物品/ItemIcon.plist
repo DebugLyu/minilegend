@@ -173,6 +173,32 @@
                 <key>sourceSize</key>
                 <string>{70,70}</string>
             </dict>
+            <key>img_item_better.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{235,2},{15,15}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{15,15}}</string>
+                <key>sourceSize</key>
+                <string>{15,15}</string>
+            </dict>
+            <key>img_item_worse.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{218,2},{15,15}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{15,15}}</string>
+                <key>sourceSize</key>
+                <string>{15,15}</string>
+            </dict>
         </dict>
         <key>metadata</key>
         <dict>
@@ -183,7 +209,7 @@
             <key>size</key>
             <string>{256,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:937c323e05f3f2def0bb53183e565f63$</string>
+            <string>$TexturePacker:SmartUpdate:591c1b909d3e02626f048c910a3742e1:1/1$</string>
             <key>textureFileName</key>
             <string>ItemIcon.png</string>
         </dict>

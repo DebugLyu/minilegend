@@ -3,7 +3,7 @@ import gameMgr from "../manager/GameMgr";
 class LLog {
 
     private debugTrace() {
-        console.trace();
+        // console.trace();
     }
 
     public log(message: any, ...args: any[]) {

@@ -17,8 +17,9 @@ export default class UILabelSort extends cc.Component {
         let sx = -this.node.width / 2;
         let cx = 0;
         for (const node of nodes) {
-            node.x = sx - cx;
-            cx = node.x + node.width + 5;
+            node.anchorX = 0;
+            node.x = cx + sx;
+            cx += node.width + 10;
         }
     }
 }

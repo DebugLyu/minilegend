@@ -1,5 +1,5 @@
 import { ItemType } from "../../common/G";
-import { getRandomString } from "../../common/gFunc";
+import { getRandomString, safeJson } from "../../common/gFunc";
 import { md5 } from "../../util/crypto";
 
 export interface ItemData {
@@ -14,7 +14,7 @@ export interface ItemData {
 	desc: string, // 简介
 }
 
-export default abstract class Item {
+export default class Item {
 	// 唯一id 
 	onlyid: string = md5(getRandomString(10) + "" + Date.now() + getRandomString(9)) ;
 	// 数据id 
@@ -41,13 +41,17 @@ export default abstract class Item {
 		this._itemData = n;
 		this.name = n.name;
 	}
-	// 位置 <10 在身上装备    >100 在背包    >1000 在仓库
-	pos: number = 0;
 
 	// 类型
 	type: ItemType = ItemType.Waste;
 	// 数量
 	num: number = 0;
+
+	fromJson(json: any) {
+		for (const key in json) {
+			this[key] = safeJson(json[key]);
+		}
+	}
 
 	consume(n: number = 1): boolean {
 		if (this.num > n) {
@@ -58,5 +62,7 @@ export default abstract class Item {
 	}
 
 
-	abstract convType(t: ItemType): Item | null;
+	convType(t: ItemType): Item | null{
+		return this;
+	};
 }

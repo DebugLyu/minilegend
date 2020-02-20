@@ -1,9 +1,32 @@
-import { safeJson } from "../common/gFunc";
+import { safeJson, lRandom } from "../common/gFunc";
 import gameMgr from "../manager/GameMgr";
 import Llog from "../common/LLog";
+import playerMgr from "../manager/PlayerMgr";
+import md5 from "../common/md5";
+
+// let md5 = new MD5();
+
+function getSecret(): string {
+    let maindata = playerMgr.mainData;
+    if (maindata.onlyid == 0) {
+        return "";
+    }
+    let list = [
+        maindata.uuid,
+        maindata.token,
+        maindata.onlyid,
+    ];
+    let random1 = lRandom(0, 2);
+    let random2 = lRandom(0, 2);
+    let m1 = md5.hex_md5(String(list[random1]));
+    let m2 = md5.hex_md5(String(list[random2]));
+    let a1 = m1.slice(0, 19);
+    let a2 = m2.slice(11, 32);
+    let s = `&uuid=${maindata.uuid}&r1=${random1}&r2=${random2}&m=${a1 + a2}`;
+    return s;
+}
 
 export var http = {
-
     /**
      * 功能：get请求
      * @param url
@@ -22,6 +45,8 @@ export var http = {
                 }
                 str += k + "=" + params[k];
             }
+            str += getSecret();
+
             if (url == null) {
                 url = gameMgr.rURL;
             }

@@ -45,7 +45,6 @@ class EquipMgr {
         equip.equipData = equipdata;
         equip.itemData = itemdata;
         equip.num = 1;
-        equip.pos = -1;
 
         attributeMgr.setAttr(equip.attr, equipdata.attr);
         for (const key in equip.attr) {

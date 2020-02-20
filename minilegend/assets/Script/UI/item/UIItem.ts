@@ -1,6 +1,6 @@
 import UIMgr from "../../manager/UIMgr";
 import Item from "../../app/item/Item";
-import { ItemType } from "../../common/G";
+import itemMgr, { ItemData } from "../../manager/ItemMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -13,10 +13,8 @@ export default class UIItem extends cc.Component {
 	@property(cc.Label)
 	numLabel: cc.Label = null;
 
-	@property(cc.SpriteAtlas)
-	icons: cc.SpriteAtlas = null;
-
 	itemid: number = 0;
+	item: Item = null;
 
 	get num(): number {
 		return Number(this.numLabel.string);
@@ -34,15 +32,19 @@ export default class UIItem extends cc.Component {
 	setInfo(item: Item){
 		this.itemid = item.itemid;
 		this.num = item.num;
+		// this.itemdata = item.itemData;
+		this.item = item;
+
 		let framename = String(item.itemData.icon);
-		this.icon.spriteFrame = this.icons.getSpriteFrame(framename);
+		let sf = itemMgr.getItemSpriteFrame(framename);
+		this.icon.spriteFrame = sf;// this.icons.getSpriteFrame(framename);
 	}
 
 	regClickLisner() {
 		this.node.on("click", this.onClick, this);
 	}
 
-	onClick(e, d) {
-		UIMgr.showItemDetail(this.itemid);
+	onClick() {
+		UIMgr.showItemDetail(this.item);
 	}
 }

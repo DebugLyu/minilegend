@@ -7,48 +7,75 @@ import UIMgr from "../manager/UIMgr";
 import Llog from "../common/LLog";
 import LEvent from "../common/EventListner";
 
+function checkRes(res){
+	if (res == null) {
+		UIMgr.notice("网络连接失败，正在重连");
+		setTimeout(Net.login, 3 * 1000);
+		return false;
+	}
+	return true;
+}
+
+interface LoginData {
+	uuid: string
+}
+
+function loginBack(res) {
+	// 登陆到主界面
+	Llog.log(res);
+	playerMgr.mainData.fromJson(res);
+	GameSceneMgr.ChangeScene("Main");
+}
+
+
+interface EquipOn {
+	onlyid: string;
+}
+function equipOnBack(res){
+	playerMgr.mainData.itemFromJson(res.items);
+	playerMgr.mainData.equipFromJson(res.equips);
+	UIMgr.hideUI();
+	LEvent.emit("ItemUpdate");
+	LEvent.emit("EquipUpdate");
+}
+
+function send(key, params, callback){
+	http.get("/" + key, params).then(res => {
+		if(!checkRes(res)){
+			return;
+		}
+		callback(res);
+	});
+}
+
 export namespace Net {
 	export function login(){
-		let uuid = storge.get("uuid");
-        if(uuid == null){
-            uuid = genUUID();
-            storge.set("uuid", uuid);
-        }
-		http.get("/login", {uuid: uuid}).then(res => {
-			if (res == null) {
-				UIMgr.notice("网络连接失败，正在重连");
-				setTimeout(login, 3 * 1000);
-				return;
+		// 未登陆过
+		let onlyid = playerMgr.mainData.onlyid;
+		if(onlyid == 0){
+			let uuid = storge.get("uuid");
+			if (uuid == null) {
+				uuid = genUUID();
+				storge.set("uuid", uuid);
 			}
-			// 登陆到主界面
-			console.log(res);
-			playerMgr.mainData = res;
-			GameSceneMgr.ChangeScene("Main");
-		});
+			send("login", { uuid: uuid }, loginBack);
+		}else{
+			// 重连不需要添加uuid
+			send("login", {}, loginBack);
+		}
 	}
 
-
+	export function equipOn(data: EquipOn){
+		send("EquipOn", data, equipOnBack);
+	}
 
 	export namespace gm {
-		export function createItem() {
+		export function createItem(itemid: number, num: number) {
 			http.get("/createItem", {
-				uuid: playerMgr.mainData.uuid,
-				token: playerMgr.mainData.token,
-				// itemid: 
+				itemid: itemid,
+				num: num,
 			}).then(res => {
-
-			});
-		}
-
-		export function createEquip() {
-			http.get("/createEquip", {
-				uuid: playerMgr.mainData.uuid,
-				token: playerMgr.mainData.token,
-				itemid: 30001,
-				num: 1,
-			}).then(res => {
-				// Llog.info(res);
-				playerMgr.mainData.items = res;
+				playerMgr.mainData.itemFromJson(res);
 				LEvent.emit("ItemUpdate");
 			});
 		}

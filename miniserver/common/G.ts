@@ -249,7 +249,7 @@ export enum ItemType {
 
 export enum EquipPos {
 	Weapon = 1, // 武器位置
-	Hat,
+	Necklace,
 	Clothes,
 	Ring1,
 	Ring2,

@@ -76,7 +76,7 @@ class AttributeMgr {
             input({ id: AttrIds.Lucky, min: atridata.Lucky1, max: atridata.Lucky2 });
             input({ id: AttrIds.Damnation, min: atridata.Damnation1, max: atridata.Damnation2 });
 
-            let n = lRandom(1, num);
+            let n = lRandom(0, num);
             for (let i = 0; i < n; i++) {
                 let t = getRandomArrayItem(list);
                 arti[t.id as AttrIds] = lRandom(t.min, t.max);

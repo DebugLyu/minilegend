@@ -112,6 +112,8 @@
         </struct>
         <key>dataFileName</key>
         <filename>ItemIcon.plist</filename>
+        <key>multiPack</key>
+        <false/>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -159,6 +161,8 @@
             <filename>img_frame_item05.png</filename>
             <filename>30002.png</filename>
             <filename>30001.png</filename>
+            <filename>img_item_better.png</filename>
+            <filename>img_item_worse.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

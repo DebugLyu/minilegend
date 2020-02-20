@@ -20,6 +20,9 @@ export interface EquipData {
 }
 
 export default class Equip extends Item {
+	equipid: number = 0;
+	equipData: EquipData;
+
 	// 主属性
 	attr: Attribute = new Attribute();
 	// 炼化属性
@@ -27,9 +30,6 @@ export default class Equip extends Item {
 	// 偏移属性
 	private attrOffset: Attribute = new Attribute();
 	private artiAttrOffset: Attribute = new Attribute();
-
-	equipData: EquipData;
-
 
 	constructor() {
 		super();
