@@ -7,10 +7,10 @@ const { ccclass } = cc._decorator;
 
 enum MainMenu {
     Role = 0,
-    Forge,
+    Task,
     Stage,
     Skill,
-    Active,
+    Shop,
 }
 
 @ccclass
@@ -31,7 +31,7 @@ export default class MainUI extends cc.Component {
 
     // 初始化界面
     init() {
-        let list = ["RoleLayer", "ForgeLayer", "StageLayer", "SkillLayer"];
+        let list = ["RoleLayer", "TaskLayer", "StageLayer", "SkillLayer","ShopLayer"];
         let mid = cc.find("Canvas/Mid");
         for (let i = 0; i < list.length; i++) {
             let layerName = list[i];
@@ -96,10 +96,10 @@ export default class MainUI extends cc.Component {
      * @param page 页码
      */
     showPage(page: number) {
-        if (page == MainMenu.Forge || page == MainMenu.Skill || page == MainMenu.Active) {
-            this.toggleList[this.curToggle].isChecked = true;
-            return;
-        }
+        // if (page == MainMenu.Shop) {
+        //     this.toggleList[this.curToggle].isChecked = true;
+        //     return;
+        // }
         for (let i = 0; i < this.layerList.length; i++) {
             let layer = this.layerList[i];
             layer.active = i == page;

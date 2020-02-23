@@ -7,11 +7,11 @@
             <key>img_bar_loading.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,214},{23,19}}</string>
+                <string>{{42,176},{23,19}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{23,19}}</string>
                 <key>sourceSize</key>
@@ -20,20 +20,46 @@
             <key>img_bar_loading1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,176},{36,14}}</string>
+                <string>{{82,2},{36,14}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{36,14}}</string>
                 <key>sourceSize</key>
                 <string>{36,14}</string>
             </dict>
+            <key>img_bg_loading.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,184},{317,24}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{317,24}}</string>
+                <key>sourceSize</key>
+                <string>{317,24}</string>
+            </dict>
+            <key>img_bg_loading1.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,2},{180,38}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{180,38}}</string>
+                <key>sourceSize</key>
+                <string>{180,38}</string>
+            </dict>
             <key>img_frame_loading.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{172,38}}</string>
+                <string>{{42,2},{172,38}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -46,7 +72,7 @@
             <key>img_frame_loading2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{42,2},{171,27}}</string>
+                <string>{{82,18},{171,27}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -64,9 +90,9 @@
             <key>realTextureFileName</key>
             <string>loading.png</string>
             <key>size</key>
-            <string>{128,256}</string>
+            <string>{128,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:aa48959d6128db1cd3a94934c90286fe$</string>
+            <string>$TexturePacker:SmartUpdate:da4e15ac3f56b821c3450b8ce4419846:1/1$</string>
             <key>textureFileName</key>
             <string>loading.png</string>
         </dict>

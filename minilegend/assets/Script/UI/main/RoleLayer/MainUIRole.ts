@@ -1,11 +1,10 @@
 import LEvent from "../../../common/EventListner";
 import playerMgr from "../../../manager/PlayerMgr";
-import Item from "../../../app/item/Item";
 import UIItem from "../../item/UIItem";
-import Llog from "../../../common/LLog";
-import { EquipPos } from "../../../common/G";
+import { EquipPos, DefaultCloth } from "../../../common/G";
 import itemMgr from "../../../manager/ItemMgr";
 import Equip from "../../../app/item/equip/Equip";
+import { getRes } from "../../../common/gFunc";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -17,12 +16,19 @@ export default class MainUIRole extends cc.Component {
 	@property(cc.Node)
 	itemBg: cc.Node = null;
 
-	curEquipNode: {[x: number]:cc.Node} = {};
+	curEquipNode: { [x: number]: cc.Node } = {};
 	itemlist: cc.Node[] = [];
 
-	start() {
-		this.regEventLisner();
+	inLook: {[x: number]:cc.Sprite} = {};
 
+	start() {
+		this.initNode();
+		this.regEventLisner();
+		this.updateItems();
+		this.updateEquips();
+	}
+
+	initNode() {
 		let list = {
 			Left: [
 				"Weapon",
@@ -42,8 +48,9 @@ export default class MainUIRole extends cc.Component {
 				this.curEquipNode[EquipPos[key2]] = node;
 			}
 		}
-		this.updateItems();
-		this.updateEquips();
+		
+		this.inLook[EquipPos.Clothes] = cc.find("RoleBg/NGCloth", this.node).getComponent(cc.Sprite);
+		this.inLook[EquipPos.Weapon] = cc.find("RoleBg/NGWeapon", this.node).getComponent(cc.Sprite);
 	}
 
 	regEventLisner() {
@@ -83,14 +90,45 @@ export default class MainUIRole extends cc.Component {
 		for (const pos of list) {
 			let node: cc.Node = this.curEquipNode[pos];
 			let icon = node.getChildByName("icon");
-			let equip:Equip = equips[pos];
-			if(equip == null){
+			let equip: Equip = equips[pos];
+			if (equip == null) {
 				icon.active = false;
-			}else{
+			} else {
 				icon.active = true;
 				let spr = icon.getComponent(cc.Sprite);
 				spr.spriteFrame = itemMgr.getItemSpriteFrame(equip.itemData.icon);
 			}
+		}
+		this.updateInLook();
+	}
+
+	updateInLook(pos?: EquipPos) {
+		let inlook = async (epos) => {
+			let equip: Equip = playerMgr.mainData.equips[epos];
+			let inlookid = 0;
+			if (equip) {
+				inlookid = equip.equipData.inlook;
+			}else{
+				if(epos == EquipPos.Clothes){
+					inlookid = DefaultCloth;
+				}
+			}
+			if(inlookid == 0){
+				return;
+			}
+
+			let list = {
+				[EquipPos.Clothes]: "cloth",
+				[EquipPos.Weapon]: "weapon",
+			}
+			let zhui = list[epos];
+			this.inLook[epos].spriteFrame = await getRes("inlook/" + zhui + inlookid, cc.SpriteFrame);
+		}
+		if(pos == null){
+			inlook(EquipPos.Clothes);
+			inlook(EquipPos.Weapon);
+		}else{
+			inlook(pos);
 		}
 	}
 }

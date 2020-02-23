@@ -1,9 +1,14 @@
-import { Attribute, ItemType, EquipPos } from "../../common/G";
+import { Attribute, ItemType, EquipPos, StartMapStage } from "../../common/G";
 import Item from "../item/Item";
 import { safeJson } from "../../common/gFunc";
 import { ErrList } from "../../common/ErrorList";
 import { redisdb } from "../../util/redisdb";
 import Equip from "../item/equip/Equip";
+import Task from "../task/Task";
+import taskMgr from "../../manager/TaskMgr";
+import LEvent from "../../common/EventListner";
+import Skill from "../skill/Skill";
+import skillMgr from "../../manager/SkillMgr";
 
 export default class Player {
 	// [x: string]: any;
@@ -28,6 +33,13 @@ export default class Player {
 	equips: { [x: number]: Equip } = {};
 	// 背包物品
 	items: Item[] = [];
+	// 任务列表
+	tasks: Task[] = [];
+	// 技能列表
+	skills:Skill[] = null;
+	// 佩戴技能列表
+	useSkills: number[] = [];
+
 	// 元宝
 	gold: number = 0;
 	// 银币
@@ -42,11 +54,45 @@ export default class Player {
 
 	constructor() {
 		this.attr.initRole();
+
 	}
 
 	init(uuid: string, token?: string) {
 		this.uuid = uuid;
 		token && (this.token = token);
+
+		this.maxMap = StartMapStage.map;
+		this.maxStage = StartMapStage.stage;
+
+		this.initTask();
+		this.initSkill();
+	}
+
+	// 设置了基础信息 之后调用
+	initTask(){
+		let taskList = taskMgr.getTaskDatasByMapId(this.maxMap);
+		for (const taskdata of taskList) {
+			let task = new Task();
+			task.init(taskdata);
+			this.tasks.push(task);
+		}
+	}
+
+	initSkill(){
+		if(this.skills == null){
+			this.skills = [];
+			let skills = skillMgr.getAllSkills();
+			for (const skillid in skills) {
+				if (skills.hasOwnProperty(skillid)) {
+					const skilldata = skills[skillid];
+					let skill = new Skill();
+					skill.level = 0;
+					skill.skillid = Number(skillid);
+					skill.skilldata = skilldata;
+					this.skills.push(skill);
+				}
+			}
+		}
 	}
 
 	getItemByOnlyId(onlyid: string): Item | null {
@@ -129,6 +175,13 @@ export default class Player {
 		this.equips[equip.equipData.wear] = null;
 	}
 
+	// 通关了一个地图 
+	onFinishMap(mapid: number){
+		// 需要更新任务
+		this.maxMap = mapid;
+		this.initTask();
+	}
+
 
 	toString() {
 		return JSON.stringify(this);
@@ -138,6 +191,18 @@ export default class Player {
 		for (const key in json) {
 			if (key == "items") {
 				this.itemFromJson(json[key]);
+				continue;
+			}
+			if(key == "equips"){
+				this.equipFromJson(json[key]);
+				continue;
+			}
+			if(key == "tasks"){
+				this.taskFromJson(json[key]);
+				continue;
+			}
+			if (key == "skills") {
+				this.skillFromJson(json[key]);
 				continue;
 			}
 			this[key] = safeJson(json[key]);
@@ -157,6 +222,39 @@ export default class Player {
 			}
 			item.fromJson(data);
 			this.items.push(item);
+		}
+	}
+
+	equipFromJson(json:any){
+		this.equips = {};
+		for (const datakey in json) {
+			const data = json[datakey];
+			let equip: Equip = new Equip();
+			
+			equip.fromJson(data);
+			this.equips[equip.equipData.wear] = equip;
+		}
+	}
+
+	taskFromJson(json:any){
+		this.tasks = [];
+		for (const datakey in json) {
+			const data = json[datakey];
+			let task: Task = new Task();
+
+			task.fromJson(data);
+			this.tasks.push(task);
+		}
+	}
+
+	skillFromJson(json:any){
+		this.skills = [];
+		for (const datakey in json) {
+			const data = json[datakey];
+			let skill: Skill = new Skill();
+
+			skill.fromJson(data);
+			this.skills.push(skill);
 		}
 	}
 

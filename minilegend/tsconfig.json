@@ -4,6 +4,7 @@
     // "lib": [ "dom", "es5", "ES2015.Promise" ],
     "target": "es6",
     "allowJs": true,
+    "jsx": "preserve",
     "experimentalDecorators": true,
     "skipLibCheck": true
   },

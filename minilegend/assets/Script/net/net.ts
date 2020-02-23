@@ -39,6 +39,20 @@ function equipOnBack(res){
 	LEvent.emit("EquipUpdate");
 }
 
+interface StartTaskData {
+	taskid: number;
+}
+function StartTaskBack(res) {
+	
+}
+
+
+
+
+
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
 function send(key, params, callback){
 	http.get("/" + key, params).then(res => {
 		if(!checkRes(res)){
@@ -67,6 +81,10 @@ export namespace Net {
 
 	export function equipOn(data: EquipOn){
 		send("EquipOn", data, equipOnBack);
+	}
+
+	export function startTask(data: StartTaskData){
+		send("StartTask", data, StartTaskBack);
 	}
 
 	export namespace gm {

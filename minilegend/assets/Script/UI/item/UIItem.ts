@@ -17,11 +17,11 @@ export default class UIItem extends cc.Component {
 	item: Item = null;
 
 	get num(): number {
-		return Number(this.numLabel.string);
+		return Number(this.numLabel.string.slice(1));
 	}
 
 	set num(n: number) {
-		this.numLabel.string = String(n);
+		this.numLabel.string = "× " + n;
 		this.numLabel.node.active = n > 1;
 	}
 
@@ -29,15 +29,18 @@ export default class UIItem extends cc.Component {
 		this.regClickLisner();
 	}
 
+	setIcon(sfname: string){
+		let sf = itemMgr.getItemSpriteFrame(sfname);
+		this.icon.spriteFrame = sf;
+	}
+
 	setInfo(item: Item){
 		this.itemid = item.itemid;
 		this.num = item.num;
-		// this.itemdata = item.itemData;
 		this.item = item;
 
 		let framename = String(item.itemData.icon);
-		let sf = itemMgr.getItemSpriteFrame(framename);
-		this.icon.spriteFrame = sf;// this.icons.getSpriteFrame(framename);
+		this.setIcon(framename);
 	}
 
 	regClickLisner() {

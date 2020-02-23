@@ -1,5 +1,6 @@
 import { ItemType } from "../../common/G";
 import { safeJson } from "../../common/gFunc";
+import itemMgr from "../../manager/ItemMgr";
 
 
 export interface ItemData {
@@ -50,6 +51,14 @@ export default class Item {
 	// 数量
 	num: number = 0;
 
+
+	init() {
+		if (this.itemid == 0) {
+			return;
+		}
+		this.itemData = itemMgr.getItemData(this.itemid);
+	}
+	
 	consume(n: number = 1): boolean {
 		if (this.num > n) {
 			this.num -= n;

@@ -112,6 +112,8 @@
         </struct>
         <key>dataFileName</key>
         <filename>common.plist</filename>
+        <key>multiPack</key>
+        <false/>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -173,7 +175,6 @@
             <filename>btn_list01.png</filename>
             <filename>img_money.png</filename>
             <filename>img_vcoin.png</filename>
-            <filename>img_map_npc.png</filename>
             <filename>img_paper_11.png</filename>
             <filename>img_paper_13.png</filename>
             <filename>img_paper_15.png</filename>
@@ -197,6 +198,35 @@
             <filename>img_bg_tex01.png</filename>
             <filename>img_bg_tex02.png</filename>
             <filename>img_bg_tex04.png</filename>
+            <filename>btn_com01_sel.png</filename>
+            <filename>btn_com02_sel.png</filename>
+            <filename>btn_com03_sel.png</filename>
+            <filename>btn_com04_sel.png</filename>
+            <filename>btn_com05_sel.png</filename>
+            <filename>btn_com06_sel.png</filename>
+            <filename>btn_com07_sel.png</filename>
+            <filename>btn_com08_sel.png</filename>
+            <filename>btn_table03.png</filename>
+            <filename>img_bg_list01.png</filename>
+            <filename>img_bg_list02.png</filename>
+            <filename>img_bg_tex05.png</filename>
+            <filename>img_bg_tex06.png</filename>
+            <filename>img_bg_tex07.png</filename>
+            <filename>img_bg_tex08.png</filename>
+            <filename>img_bg_tex09.png</filename>
+            <filename>img_bg_tex10.png</filename>
+            <filename>img_checkbox.png</filename>
+            <filename>img_frame_common01.png</filename>
+            <filename>img_frame_common02.png</filename>
+            <filename>img_frame_common03.png</filename>
+            <filename>img_frame_common04.png</filename>
+            <filename>img_frame_common05.png</filename>
+            <filename>img_frame_common06.png</filename>
+            <filename>img_frame_common07.png</filename>
+            <filename>img_frame_common08.png</filename>
+            <filename>img_frame_common09.png</filename>
+            <filename>zs_open_skill.png</filename>
+            <filename>img_guide.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

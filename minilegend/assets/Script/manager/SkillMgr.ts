@@ -1,169 +1,90 @@
-/**
- * 技能模块
- *      攻击类技能 以3种方式为主 
- *          1 近战攻击：伤害远高于其他技能，攻速由自身速度决定
- *          2 远程直接伤害：如雷电术 没有飞行轨道，直接命中的，伤害一般
- *          3 远程飞行伤害：灵魂火符，火球术之类的，有飞行轨道，伤害看碰撞的，
- *                          伤害一般，但会在场景中弹射2次，后期可加入穿透。
- *      技能类型
- *          伤害类：雷电 火球
- *          buff类：魔法盾等
- *          debuff：施毒术等
- */
-import { SkillIds, SkillName, SkillDesc, SkillType, Attribute, SkillAtkType, SkillActType, AttrIds } from "../common/G"
-import { random } from "../common/gFunc";
-
-export class SkillBase {
-    private _skillId: number = 0;
-    set skillId(skillid: number) {
-        this._skillId = skillid;
-        this.skillName = SkillName[this._skillId];
-        this.icon = skillid;
-        this.desc = SkillDesc[this._skillId];
-
-    }
-    get skillId(): number {
-        return this._skillId;
-    }
-    cando = true;
-    // 技能名字
-    skillName: string = "";
-    // 技能图标
-    icon: number = 0;
-    // 技能简介
-    desc: string = "";
-    // 冷却时间
-    cooldown: number = 1;
-    cooldownTimer: number = 0;
-
-    // 技能等级
-    level: number = 0;
-
-    // 技能类型 0 攻击技能 1 buff技能 2 debuff技能
-    type: SkillType = SkillType.ATTACK;
-    // 技能主动性 0 主动 1 被动
-    actType: SkillActType = SkillActType.Active;
-    // 攻击类型
-    atkType: SkillAtkType = SkillAtkType.Physics;
-    // 自己身上特效
-    selfEffect: number = 0;
-    // 敌人身上特效
-    enemyEffect: number = 0;
-    enemyEffOffset: cc.Vec2 = cc.Vec2.ZERO;
-    // 飞行特效 如果没有飞行特效，不存在子弹，技能是必中的
-    flyEffect: number = 0;
-    flySpeed: number = 200;
-    bounce: number = 0;// 飞行子弹 弹射次数
-    collideTimes: number = 0;
-    // 技能范围
-    range: number = 2;
-    // AI优先级
-    aiLevel: number = 0;
-
-    getatk(attacker: Attribute): number {
-        return random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
-    }
-
-    do() {
-        if (this.cooldown > 0) {
-            this.cando = false;
-            this.cooldownTimer = setTimeout(() => {
-                this.cando = true;
-            }, this.cooldown * 1000);
-        }
-    }
+export interface SkillData {
+    skillid: number,    // 技能id
+    icon: string,   // 图标
+    name: string,   // 名字
+    atkmode: number,    // 攻击类型1物理攻击2魔法3道术
+    selfeffect: number, // 自身特效
+    enemyeffect: number,    // 敌人特效
+    enemyeffectoffset: number[],    // 敌人特效偏移
+    flyeffect: number,  // 飞行特效
+    flyspeed: number,   // 飞行速度
+    bounce: number, // 弹射次数
+    cooldown: number,   // 冷却时间（秒）
+    ailevel: number,    // ai优先级
+    aitype: number, // ai类型1无限释放2目标无buff释放3血量低于50%释放
+    range: number,  // 释放距离
+    atktype: number,    // 攻击类型1单目标指向2单目标无指向3周围1格4目标及附近1格敌人
+    levelinfo: number,  // 等级数值
+    desc: string,   // 简介
+    type : number,  // 技能类型1加法攻击2乘法攻击
+    subtype: number,    // 数值影响1攻击力2敌人防御力3自身受到伤害4定时掉血5自身血量6神兽伤害
 }
 
-interface AtkInfo {
-    SkillId: number,
-    AtkType: number,
-    AtkNum: number,
+export interface SkillLevelData {
+    level: number, // 等级
+    cisha: number, // 刺杀剑法
+    gongsha: number, // 攻杀剑法
+    banyue: number, // 半月剑法
+    liehuo: number, // 烈火剑法
+    huoqiu: number, // 火球术
+    leidian: number, // 雷电术
+    mofadun: number, // 魔法盾
+    bingpaoxiao: number, // 冰咆哮
+    huofu: number, // 灵魂火符
+    shidu: number, // 施毒术
+    zhiyu: number, // 治愈术
+    shenshou: number, // 召唤神兽
 }
 
-export class NormalAttack extends SkillBase {
-    constructor() {
-        super();
-        this.skillId = SkillIds.NormalAttack;
-        this.range = 2;
+class __skillMgr {
+    private skillList: { [x: number]: SkillData } = {};
+    private skillLevelList: {[x: number]: SkillLevelData} = {};
+    private skillIconAtlas: cc.SpriteAtlas = null;
+
+    async init() {
+        let getRes = (await import("../common/gFunc")).getRes;
+        let data = await getRes("/prop_data/prop_skill", cc.JsonAsset);
+        let json = data.json;
+        this.skillList = json;
+
+        let skillleveldata = await getRes("/prop_data/prop_skilllevel", cc.JsonAsset);
+        let skilllevel = skillleveldata.json;
+        this.skillLevelList = skilllevel;
+
+        let iconAtlas = await getRes("skillicon/skill", cc.SpriteAtlas);
+        this.skillIconAtlas = iconAtlas;
     }
 
-    getatk(attacker: Attribute): number {
-        return random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
-    }
-}
-
-export class GongShaJianFa extends SkillBase {
-    constructor() {
-        super();
-        this.skillId = SkillIds.GongShaJianFa;
-        this.actType = SkillActType.Passive;
-        this.aiLevel = 1;
-        this.range = 3;
-    }
-
-    getatk(attacker: Attribute): number {
-        let atknum = random(attacker[AttrIds.AtkMin], attacker[AttrIds.AtkMax]);
-        atknum = Math.floor(atknum * 110 / 100);
-        return atknum;
-    }
-}
-
-export class LeiDianShu extends SkillBase {
-    constructor() {
-        super();
-        this.skillId = SkillIds.LeiDianShu;
-        this.actType = SkillActType.Active;
-        this.aiLevel = 1;
-        this.range = 10;
-        this.selfEffect = 200011;
-        this.enemyEffect = 20001;
-        this.enemyEffOffset = cc.v2(0, 110);
-    }
-
-    getatk(attacker: Attribute): number {
-        return 96 + random(attacker[AttrIds.MatkMin], attacker[AttrIds.MatkMax]);
-    }
-}
-
-export class LingHunHuoFu extends SkillBase {
-    constructor() {
-        super();
-        this.skillId = SkillIds.LingHunHuoFu;
-        this.actType = SkillActType.Active;
-        this.aiLevel = 1;
-        this.range = 15;
-        this.selfEffect = 5100;
-        this.flyEffect = 5111;
-        this.enemyEffect = 5112;
-        this.flySpeed = 500;
-        this.cooldownTimer = 0;
-        this.bounce = 0;
-    }
-
-    getatk(attacker: Attribute): number {
-        return 80 + random(attacker[AttrIds.DatkMin], attacker[AttrIds.DatkMax]);
-    }
-}
-
-
-class SkillMgr {
+    // async init() {
+	// 	let RootDir = (await import("../common/gFunc")).RootDir;
+	// 	let data = require(RootDir("../app/prop_data/prop_item"));
+	// 	this.itemList = data;
+    // }
     
-
-    skillList = {
-        [SkillIds.NormalAttack]: NormalAttack,
-        [SkillIds.GongShaJianFa]: GongShaJianFa,
-        [SkillIds.LeiDianShu]: LeiDianShu,
-        [SkillIds.LingHunHuoFu]: LingHunHuoFu,
-    }
-
-    init() {
-
-    }
-
-    getSkill(skillid: number) {
+    getSkillData(skillid: number): SkillData | null{
         return this.skillList[skillid];
     }
+
+    getAllSkills(){
+        return this.skillList;
+    }
+
+    getSkillLevelData(skillid: number, level: number){
+        let skilldata = this.getSkillData(skillid);
+        if(skilldata == null){
+            return null;
+        }
+        let levelData = this.skillLevelList[level];
+        if(!levelData){
+            return null;
+        }
+        return levelData[skilldata.levelinfo];
+    }
+
+    getSkillIconSpriteFrame(sf: string){
+        return this.skillIconAtlas.getSpriteFrame(sf);
+    }
 }
 
-let skillMgr = new SkillMgr();
+let skillMgr = new __skillMgr();
 export default skillMgr;

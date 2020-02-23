@@ -112,6 +112,8 @@
         </struct>
         <key>dataFileName</key>
         <filename>loading.plist</filename>
+        <key>multiPack</key>
+        <false/>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -150,6 +152,8 @@
             <filename>img_bar_loading.png</filename>
             <filename>img_bar_loading1.png</filename>
             <filename>img_frame_loading.png</filename>
+            <filename>img_bg_loading.png</filename>
+            <filename>img_bg_loading1.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

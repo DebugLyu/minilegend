@@ -2,7 +2,7 @@ import { getAnimation } from "../../common/gFunc";
 import EffectLayer from "../map/EffectLayer";
 import Role from "../../role/Role";
 import { LivingType } from "../../common/G";
-import { SkillBase } from "../../manager/SkillMgr";
+import { SkillBase } from "../../manager/SkillMgrNN";
 
 const { ccclass, property } = cc._decorator;
 

@@ -3,6 +3,8 @@ import Equip from "../item/equip/Equip";
 import Item from "../item/Item";
 import LEvent from "../../common/EventListner";
 import { random, safeJson } from "../../common/gFunc";
+import Task from "../task/Task";
+import Skill from "../skill/Skill";
 
 export default class PlayerData {
 	// 绝对id 服务器专有 与 客户端 绝对id 不同。
@@ -50,6 +52,11 @@ export default class PlayerData {
 	equips: { [x: number]: Equip } = {};
 	// 背包物品
 	items: Item[] = [];
+	// 任务
+	tasks: Task[] = [];
+
+	// 技能列表
+	skills: Skill[] = [];
 	// 元宝
 	private _gold: number = 0;
 	get gold() {
@@ -86,6 +93,10 @@ export default class PlayerData {
 				this.equipFromJson(json[key]);
 				continue;
 			}
+			if (key == "tasks") {
+				this.taskFromJson(json[key]);
+				continue;
+			}
 			this[key] = safeJson(json[key]);
 		}
 	}
@@ -113,6 +124,28 @@ export default class PlayerData {
 			}
 			item.fromJson(data);
 			this.items.push(item);
+		}
+	}
+
+	taskFromJson(json: any) {
+		this.tasks = [];
+		for (const datakey in json) {
+			const data = json[datakey];
+			let task: Task = new Task();
+
+			task.fromJson(data);
+			this.tasks.push(task);
+		}
+	}
+
+	skillFromJson(json: any) {
+		this.skills = [];
+		for (const datakey in json) {
+			const data = json[datakey];
+			let skill: Skill = new Skill();
+
+			skill.fromJson(data);
+			this.skills.push(skill);
 		}
 	}
 }

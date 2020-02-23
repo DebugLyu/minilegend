@@ -12,7 +12,7 @@ export interface ItemData {
 
 class ItemMgr {
 	private itemList: { [key: number]: ItemData } = {};
-	itemAtlas: cc.SpriteAtlas = null;
+	private itemAtlas: cc.SpriteAtlas = null;
 
 	async init() {
 	    let getRes = (await import("../common/gFunc")).getRes;

@@ -52,7 +52,6 @@ export var http = {
             }
             let requestURL = url + path + encodeURI(str);
 
-            Llog.log("RequestURL:" + requestURL);
             xhr.open("GET", requestURL, true);
             xhr.setRequestHeader("Content-type", "application/json;charset=UTF-8")
 

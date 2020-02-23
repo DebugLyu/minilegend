@@ -1,6 +1,7 @@
 import { ItemType } from "../../common/G";
 import { getRandomString, safeJson } from "../../common/gFunc";
 import { md5 } from "../../util/crypto";
+import itemMgr from "../../manager/ItemMgr";
 
 export interface ItemData {
 	id: number, // id	
@@ -46,6 +47,13 @@ export default class Item {
 	type: ItemType = ItemType.Waste;
 	// 数量
 	num: number = 0;
+
+	init(){
+		if(this.itemid == 0){
+			return;
+		}
+		this.itemData = itemMgr.getItemData(this.itemid);
+	}
 
 	fromJson(json: any) {
 		for (const key in json) {

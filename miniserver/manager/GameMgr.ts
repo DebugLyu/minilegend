@@ -8,6 +8,7 @@ import { redisdb } from "../util/redisdb";
 import attributeMgr from "./AttributeMgr";
 import expMgr from "./ExpMgr";
 import { RootDir } from "../common/gFunc";
+import taskMgr from "./TaskMgr";
 
 class GameMgr {
     config: any = null;
@@ -29,6 +30,8 @@ class GameMgr {
         await skillMgr.init();
         // 装备管理器
         await equipMgr.init();
+        // 任务管理器
+        await taskMgr.init();
 
         let config = require(RootDir("../etc/config"));
         if (config == null) {

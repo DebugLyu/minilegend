@@ -7,6 +7,9 @@ import attributeMgr from "./AttributeMgr";
 import equipMgr from "./EquipMgr";
 import expMgr from "./ExpMgr";
 import UIMgr from "./UIMgr";
+import taskMgr from "./TaskMgr";
+
+import * as io from "socket.io-client";
 
 class GameMgr {
     config: any = null;
@@ -29,6 +32,8 @@ class GameMgr {
         await skillMgr.init();
         // 装备管理器
         await equipMgr.init();
+        // 任务管理器
+        await taskMgr.init();
 
         // 通用UI
         await UIMgr.init();
@@ -45,6 +50,10 @@ class GameMgr {
         }
         this.rURL = "http://" + this.config.host + ":" + this.config.port;
         
+        // let io = new SocketIO();
+        // SocketIO
+        
+        let socket = io(this.rURL);
         // 初始化完毕 回调
         for (let i = 0; i < this.eventList.length; i++) {
             const func = this.eventList[i];
