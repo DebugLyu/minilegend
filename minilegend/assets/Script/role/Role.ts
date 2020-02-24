@@ -143,15 +143,15 @@ export default class Role extends cc.Component {
             return;
         }
         this.warrior.move(getDir(this.x, this.y, this.target.x, this.target.y));
-        this.node.runAction(cc.sequence(
-            cc.delayTime(.9),
-            cc.callFunc(() => {
+        
+        cc.tween(this.node).delay(.9)
+            .call(() => {
                 this.warrior.idle();
-            }),
-        ));
+            })
+            .start()
     }
 
-    checkPos(dt) {
+    async checkPos(dt) {
         if (this.warrior.state != ActState.RUN) {
             return;
         }
@@ -182,7 +182,7 @@ export default class Role extends cc.Component {
         let grid = 0;
 
         while (true) {
-            let platdata = MapMgr.getPlatData(this.model.platid);
+            let platdata = await MapMgr.getPlatData(this.model.platid);
             if (!platdata) {
                 break;
             }
@@ -287,21 +287,21 @@ export default class Role extends cc.Component {
             return;
         }
         this.warrior.doSkill(skill, getDir(this.x, this.y, this.target.x, this.target.y));
-        skill.do();
-        let atknum = skill.getatk(this.model.attr);
+        // skill.do();
+        let atknum = skill.atk(this.model.attr);
         // 如果技能是 带飞行的 须等技能碰撞
-        if (skill.flyEffect == 0) {
+        if (skill.skilldata.flyeffect == 0) {
             let num = this.target.model.beHit(atknum, skill);
             // this.target.warrior.beHit(skill);
-            let epos = MapMgr.girdPos2pixPos(cc.v2(this.target.x, this.target.y)).add(skill.enemyEffOffset);
-            this.stage.playEffect(skill.enemyEffect, epos.x, epos.y);
+            let epos = MapMgr.girdPos2pixPos(cc.v2(this.target.x, this.target.y)).add(cc.v2(0, skill.skilldata.enemyeffectoffset));
+            this.stage.playEffect(skill.skilldata.enemyeffect, epos.x, epos.y);
             if (num > 0) {
                 this.stage.effectLayer.showHitNum(num, this.target.node.position, null, PlayerMgr.isMainRole(this.model.onlyid));
             }
         } else {
             // 带飞行特效 要创建碰撞体
             let angle = getAngle(this.pixx, this.pixy, this.target.pixx, this.target.pixy);
-            let flyeffect = this.stage.effectLayer.addFlyEffect(skill.flyEffect, this.pixx, this.pixy, skill.flySpeed, angle);
+            let flyeffect = this.stage.effectLayer.addFlyEffect(skill.skilldata.flyeffect, this.pixx, this.pixy, skill.skilldata.flyspeed, angle);
             flyeffect.owner = this.model.onlyid;
             flyeffect.skill = skill;
             flyeffect.attack = atknum;

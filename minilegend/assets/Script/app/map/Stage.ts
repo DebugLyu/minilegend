@@ -276,22 +276,20 @@ export default class Stage extends cc.Component {
             motionstreak.scheduleOnce(() => {
                 motionstreak.fadeTime = 0.3;
             });
-            let act = [], act2 = [];
-            act[act.length] = cc.moveBy(0.2, 0, 20);
             let p1 = cc.v2(itemnode.x, itemnode.y);
             let p2 = cc.v2(itemnode.x + random(600) - 300, itemnode.y + random(500) - 300);
             let p3 = cc.v2(this.role.pixx, this.role.pixy);
-
-            act[act.length] = cc.bezierTo(0.8, [p1, p2, p3]).easing(cc.easeOut(3));
-            act2[act2.length] = cc.delayTime(0.6);
-            act2[act2.length] = cc.callFunc(() => {
-                itemnode.stopAllActions();
-                if (i == this.dropList.length - 1) {
-                    this.isFinish = true;
-                }
-            });
-            itemnode.runAction(cc.sequence(act));
-            itemnode.runAction(cc.sequence(act2));
+            cc.tween(itemnode)
+                .by(0.2, {position: cc.v2(0, 20)})
+                .to(0.8, { bezier: [p1, p2, p3] }, { easing: "sineOut"})
+                .parallel(cc.tween(itemnode).delay(0.6)
+                    .call(() => {
+                        itemnode.stopAllActions();
+                        if (i == this.dropList.length - 1) {
+                            this.isFinish = true;
+                        }
+                    }))
+                .start();
         }
     }
 

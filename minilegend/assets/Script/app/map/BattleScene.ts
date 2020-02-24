@@ -68,12 +68,12 @@ export default class BattleScene extends cc.Component {
 	loadStage(stageid: number): void {
 		this.stageId = stageid;
 		let stagedata = MapMgr.getStageData(stageid);
-		this.loadPlat(stagedata.startplat);
+		this.loadPlat(stagedata.plat);
 	}
 
-	private loadPlat(platid: number) {
+	private async loadPlat(platid: number) {
 		this.platId = platid;
-		this.platData = mapMgr.getPlatData(platid);
+		this.platData = await mapMgr.getPlatData(platid);
 		this.stage.changePlat(this.platData);
 		this.wave = 0;
 		this.checkWave();
@@ -90,18 +90,29 @@ export default class BattleScene extends cc.Component {
 		let labelnode = this.waveNode.getChildByName("label");
 		labelnode.scaleY = 0;
 		this.waveNode.scaleY = 0;
-		this.waveNode.runAction(cc.scaleTo(0.2, 1, 1));
+		cc.tween(this.waveNode)
+			.to(0.2, {scale: 1})
+			.start();
 		let label = labelnode.getComponent(cc.Label);
 		label.string = "第" + toChineseNum(this.wave + 1) + "波";
-		labelnode.runAction(cc.sequence(
-			cc.delayTime(0.3),
-			cc.scaleTo(0.2, 1),
-			cc.delayTime(1),
-			cc.scaleTo(0.2, 1, 0.2),
-			cc.callFunc(() => {
-				this.waveNode.runAction(cc.scaleTo(0.2, 1, 0));
+		// labelnode.runAction(cc.sequence(
+		// 	cc.delayTime(0.3),
+		// 	cc.scaleTo(0.2, 1),
+		// 	cc.delayTime(1),
+		// 	cc.scaleTo(0.2, 1, 0.2),
+		// 	cc.callFunc(() => {
+		// 		this.waveNode.runAction(cc.scaleTo(0.2, 1, 0));
+		// 	})
+		// ));
+		cc.tween(labelnode).delay(0.3)
+			.to(0.2, {scale: 1})
+			.delay(1)
+			.to(0.2, {scale: cc.v2(1, 0.2)})
+			.call(() => {
+				cc.tween(this.waveNode).to(0.2, {scale: cc.v2(1, 0)}).start();
+				// this.waveNode.runAction(cc.scaleTo(0.2, 1, 0));
 			})
-		));
+			.start();
 	}
 
 	getMonsterNum(): number {

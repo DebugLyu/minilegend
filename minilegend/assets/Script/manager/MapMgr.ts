@@ -14,17 +14,17 @@ export interface PlatData {
 	name: string;
 	startPos: { x: number, y: number };
 	trancePos: { tomap: number, x: number, y: number }[];
-	monster:[{monid:number, x:number, y: number}][];
+	monster: [{ monid: number, x: number, y: number }][];
 	mapInfo: number[][];
 }
 
 export interface StageData {
 	id: number;
-	name:string;
-	bg:string;
-	startplat:number;
-	platnum:number;
-	droplist:number[];
+	name: string;
+	bg: string;
+	plat: number;
+	platnum: number;
+	droplist: number[];
 }
 
 export interface MapData {
@@ -35,11 +35,12 @@ export interface MapData {
 
 class MapMgr {
 	private mapDatas: { [index: number]: MapData } = {};
-	private stageDatas: {[index: number]: StageData} = {};
+	private stageDatas: { [index: number]: StageData } = {};
+	private platDatas: { [index: number]: PlatData } = {};
 
 
 	async init() {
-	    let data = await getRes("/prop_data/prop_map", cc.JsonAsset);
+		let data = await getRes("/prop_data/prop_map", cc.JsonAsset);
 		let json = data.json;
 		for (const mapid in json) {
 			if (json.hasOwnProperty(mapid)) {
@@ -60,7 +61,7 @@ class MapMgr {
 	// 	this.mapDatas = data;
 	// }
 
-	getAllMapData(){
+	getAllMapData() {
 		return this.mapDatas;
 	}
 
@@ -68,25 +69,21 @@ class MapMgr {
 		return this.mapDatas[mapid];
 	}
 
-	getStageData(stageid: number): StageData{
+	getStageData(stageid: number): StageData {
 		return this.stageDatas[stageid];
 	}
 
-	getPlatData(platid: number): PlatData {
-		let data = (async ()=>{
-			let platdata = await getRes("/prop_data/plats/plat_"+ platid, cc.JsonAsset);
-			return platdata.json;
-		})();
-		
-		if(data){
-			return data as unknown as PlatData;
+	async getPlatData(platid: number): Promise<PlatData> {
+		if (this.platDatas[platid]) {
+			return this.platDatas[platid];
 		}
-		// let mapdata = this.getMapData(mapid);
 
-		// if (mapdata) {
-		// 	return mapdata.stageList[stageid];
-		// }
-		return null;
+		let platdata = await getRes("/prop_data/plats/plat_" + platid, cc.JsonAsset);
+		if (platdata) {
+			return platdata.json;
+		}
+
+		return null;;
 	}
 
 	pixPos2GirdPos(pixpos: cc.Vec2): cc.Vec2 {

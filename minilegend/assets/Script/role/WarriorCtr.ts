@@ -1,15 +1,25 @@
 import LivingCtr from "./LivingCtr";
 import WarriorMod from "./WarriorMod";
-import { ActState, SkillType, SkillActType, SkillAtkType, LivingType } from "../common/G";
-import { SkillBase } from "../manager/SkillMgrNN";
-import { getAnimation } from "../common/gFunc";
+import { ActState, SkillMode, SkillIds } from "../common/G";
+import Skill from "../app/skill/Skill";
+import skillMgr from "../manager/SkillMgr";
 
-const { ccclass, property, menu } = cc._decorator;
+const { ccclass, menu } = cc._decorator;
 
 @ccclass
 @menu("role/WarriorCtr")
 export default class WarriorCtr extends LivingCtr {
     model:WarriorMod = new WarriorMod(this);
+
+    start(){
+        super.start();
+        
+        let skill = new Skill();
+        let skilldata = skillMgr.getSkillData(SkillIds.NormalAttack);
+        skill.setData(skilldata);
+        // this.skillList.push(skill);
+        this.model.skillList.push(skill);
+    }
 
     idle(dir: number = null) {
         if(this.model.isDead){
@@ -45,23 +55,23 @@ export default class WarriorCtr extends LivingCtr {
     }
 
 
-    doSkill(skill:SkillBase, dir?: number){
+    doSkill(skill:Skill, dir?: number){
         if (this.model.isDead) {
             return;
         }
         
-        if(skill.atkType == SkillAtkType.Physics){
+        if(skill.skilldata.atktype == SkillMode.Physics){
             this.attack(dir);
         } else{
             this.magic(dir);   
         }
         // 下面播放 技能在 自身身上的特效
-        if(skill.selfEffect == 0){
+        if (skill.skilldata.selfeffect == 0){
             return;
         }
-        this.playEffect(skill.selfEffect);
+        this.playEffect(skill.skilldata.selfeffect);
     }
     
-    beHit(skill: SkillBase){
+    beHit(skill: Skill){
     }
 }

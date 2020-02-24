@@ -33,16 +33,34 @@ export interface AtkInfo {
 	AtkNum: number
 }
 
-// 技能类型
-export enum SkillType {
-	ATTACK = 0,
-	BUFF,
-	DEBUFF,
-}
 // 技能主动性
 export enum SkillActType {
 	Active = 0,
 	Passive,
+}
+
+// 技能攻击类型
+export enum SkillMode {
+	Physics = 0, // 物理攻击
+	Magic,// 魔法攻击
+	Taoist,// 道术攻击
+	MagicBuff,
+	TaoistBuff,
+	Debuff,
+}
+
+export enum SkillType {
+	Attack = 1,// 1 攻击力
+	EnemyDef,// 2 敌人防御力
+	SelfHurt,// 3 自身受到伤害
+	TimeHurt,// 4 定时掉血
+	AddHp,// 5 自身血量
+	BeastAtk,// 6 神兽伤害
+}
+
+export enum SkillSubType {
+	Plus = 1, // 加法
+	Multi, // 乘法 百分比
 }
 // 技能ID
 export const SkillIds = {
@@ -64,12 +82,6 @@ export const SkillDesc = {
 	[SkillIds.GongShaJianFa]: "攻杀剑法",
 	[SkillIds.LeiDianShu]: "雷电术",
 	[SkillIds.LingHunHuoFu]: "灵魂火符",
-}
-// 技能攻击类型
-export enum SkillAtkType {
-	Physics = 0, // 物理攻击
-	Magic,// 魔法攻击
-	Taoist,// 道术攻击
 }
 
 export interface dropInfo {

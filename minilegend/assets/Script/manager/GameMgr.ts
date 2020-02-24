@@ -50,10 +50,14 @@ class GameMgr {
         }
         this.rURL = "http://" + this.config.host + ":" + this.config.port;
         
-        // let io = new SocketIO();
-        // SocketIO
+        // // let io = new SocketIO();
+        // // SocketIO
         
-        let socket = io(this.rURL);
+        // let socket = io(this.rURL);
+        // socket.on("error", (a)=> {
+        //     console.log(a);
+            
+        // })
         // 初始化完毕 回调
         for (let i = 0; i < this.eventList.length; i++) {
             const func = this.eventList[i];

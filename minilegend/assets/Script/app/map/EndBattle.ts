@@ -39,10 +39,14 @@ export default class EndBattle extends cc.Component {
                 label.string = iteminfo.name + "✖" + num;
                 node.parent = basenode.parent;
                 node.scale = 0;
-                node.runAction(cc.sequence(
-                    cc.delayTime( (n+1) * 0.2),
-                    cc.scaleTo(0.2, 1),
-                ));
+                cc.tween(node)
+                    .delay((n + 1) * 0.2)
+                    .to(0.2, {scale: 1})
+                    .start();
+                // node.runAction(cc.sequence(
+                //     cc.delayTime( (n+1) * 0.2),
+                //     cc.scaleTo(0.2, 1),
+                // ));
                 n++;
             }
         }

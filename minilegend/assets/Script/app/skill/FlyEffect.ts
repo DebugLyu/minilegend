@@ -2,7 +2,7 @@ import { getAnimation } from "../../common/gFunc";
 import EffectLayer from "../map/EffectLayer";
 import Role from "../../role/Role";
 import { LivingType } from "../../common/G";
-import { SkillBase } from "../../manager/SkillMgrNN";
+import Skill from "./Skill";
 
 const { ccclass, property } = cc._decorator;
 
@@ -16,21 +16,21 @@ export default class FlyEffect extends cc.Component {
     angle: number = 0;// 角度
     
     
-    private _skill : SkillBase;
-    public get skill() : SkillBase {
+    private _skill : Skill;
+    public get skill(): Skill {
         return this._skill;
     }
-    public set skill(v : SkillBase) {
+    public set skill(v: Skill) {
         this._skill = v;
-        this.collideTimes = v.collideTimes;
-        this.bounce = v.bounce;
-        this.flyEffect = v.flyEffect;
-        this.speed = v.flySpeed;
-        this.boomEffect = v.enemyEffect;
+        this.pierceTimes = v.skilldata.pierce;
+        this.bounce = v.skilldata.bounce;
+        this.flyEffect = v.skilldata.flyeffect;
+        this.speed = v.skilldata.flyspeed;
+        this.boomEffect = v.skilldata.enemyeffect;
     }
     
     
-    collideTimes: number = 0;// 碰撞次数
+    pierceTimes: number = 0;// 碰撞次数
     bounce: number = 0;// 弹射次数
     flyEffect: number = 0;
     boomEffect: number = 0;
@@ -97,10 +97,10 @@ export default class FlyEffect extends cc.Component {
             return;
         }
         this.addBoomEffect(this.boomEffect);
-        if (this.collideTimes <= 0) {
+        if (this.pierceTimes <= 0) {
             this.effectLayer.delFlyEffect(this.effectOnlyId);
             return;
         }
-        this.collideTimes--;
+        this.pierceTimes--;
     }
 }

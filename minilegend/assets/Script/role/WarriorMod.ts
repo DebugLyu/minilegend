@@ -1,7 +1,8 @@
 import LivingMod from "./LivingMod";
-import { Attribute, AttrIds, AtkInfo, SkillAtkType } from "../common/G";
+import { Attribute, AttrIds, SkillIds } from "../common/G";
 import WarriorCtr from "./WarriorCtr";
-import skillMgr, { SkillBase, NormalAttack } from "../manager/SkillMgrNN";
+import Skill from "../app/skill/Skill";
+import skillMgr from "../manager/SkillMgr";
 
 export default class WarriorMod extends LivingMod {
     // 属性值
@@ -9,7 +10,7 @@ export default class WarriorMod extends LivingMod {
     // 是否死亡
     isDead: boolean = false;
     // 技能列表
-    skillList: SkillBase[] = [];
+    skillList: Skill[] = [];
 
     get control(): WarriorCtr {
         return this._control as WarriorCtr;
@@ -25,7 +26,6 @@ export default class WarriorMod extends LivingMod {
 
     constructor(control?: WarriorCtr) {
         super(control);
-        this.skillList.push(new NormalAttack());
     }
 
     init() {
@@ -52,19 +52,12 @@ export default class WarriorMod extends LivingMod {
         }
     }
 
-    beHit(atknum: number, skill: SkillBase) {
+    beHit(atknum: number, skill: Skill) {
         if (atknum == 0) {
             return;
         }
 
-        let def = 0;
-        if (skill.atkType == SkillAtkType.Physics) {
-            def = this.attr[AttrIds.Defense];
-        } else if (skill.atkType == SkillAtkType.Magic) {
-            def = this.attr[AttrIds.Mdefense];
-        } else if (skill.atkType == SkillAtkType.Taoist) {
-            def = this.attr[AttrIds.Ddefense];
-        }
+        let def = skill.def(this.attr);
         atknum -= def;
         this.hp -= atknum;
         return atknum;
@@ -78,31 +71,32 @@ export default class WarriorMod extends LivingMod {
         this.attr[attrid] = num;
     }
 
-    initSkill(skills: number[]) {
-        for (let i = 0; i < skills.length; i++) {
-            const skillid = skills[i];
-            let skillclass = skillMgr.getSkill(skillid);
-            this.skillList.push(new skillclass());
-        }
+    initSkill(skills: Skill[]) {
+        // for (let i = 0; i < skills.length; i++) {
+        //     const skillid = skills[i];
+        //     let skillclass = skillMgr.getSkill(skillid);
+        //     this.skillList.push(new skillclass());
+        // }
+        this.skillList = skills;
     }
 
     getSkill(skillid: number) {
         for (let i = 0; i < this.skillList.length; i++) {
             const skill = this.skillList[i];
-            if (skill.skillId == skillid) {
+            if (skill.skillid == skillid) {
                 return skill;
             }
         }
         return null;
     }
 
-    aiSkill(targetPos: cc.Vec2): SkillBase {
+    aiSkill(targetPos: cc.Vec2): Skill {
         let len = cc.v2(this, this.y).sub(targetPos).mag();
         let list = [];
         // 优先选择 在范围内的
         for (let i = 0; i < this.skillList.length; i++) {
             const skill = this.skillList[i];
-            if (skill.range >= len && skill.cando) {
+            if (skill.skilldata.range >= len && skill.cando) {
                 list.push(skill);
             }
         }

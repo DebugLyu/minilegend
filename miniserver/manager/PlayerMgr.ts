@@ -6,7 +6,7 @@ import Token from "../util/token";
 let player_seed = 10000;
 
 class PlayerMgr {
-	async getPlayer(uuid: string): Promise<Player> {
+	async getPlayer(uuid: string, update:boolean = false): Promise<Player> {
 		let pstr = await redisdb.getHash("players", uuid);
 		let p: Player | null = null;
 		if (pstr == null) {
@@ -19,13 +19,16 @@ class PlayerMgr {
 				// mysql中存在
 				p = Player.toObj(t.pinfo);
 			}
+			update = true;
+		} else {
+			//redis 中存在
+			p = Player.toObj(pstr);
+		}
+		if(update){
 			p.onlyid = player_seed++;
 			let token = Token.getToken(uuid);
 			p.token = token;
 			redisdb.setHash("players", uuid, p.toString());
-		} else {
-			//redis 中存在
-			p = Player.toObj(pstr);
 		}
 		return p;
 	}

@@ -21,7 +21,7 @@ app.all('*', function (req, res, next) {
     else next();
 });
 
-function checkSecret(req: any, player: Player){
+function checkSecret(req: any, player: Player) {
     let list = [
         player.uuid,
         player.token,
@@ -34,14 +34,14 @@ function checkSecret(req: any, player: Player){
     let m2 = md5(String(list[random2]));
     let a1 = m1.slice(0, 19);
     let a2 = m2.slice(11, 32);
-    let s = a1+ a2;
+    let s = a1 + a2;
     return s == m;
 }
 
-async function checkPlayer(req:any, res){
+async function checkPlayer(req: any, res) {
     let uuid = req.query.uuid;
     let player = await playerMgr.getPlayer(uuid);
-    if( !checkSecret(req, player)){
+    if (!checkSecret(req, player)) {
         http.reply(res, { ecode: ErrList.Need_ReLogin });
         return null;
     }
@@ -50,21 +50,21 @@ async function checkPlayer(req:any, res){
 
 app.get("/login", async (req, res: ResInterface) => {
     let uuid = req.query.uuid;
-    let player = await playerMgr.getPlayer(uuid);
+    let player = await playerMgr.getPlayer(uuid, true);
     http.reply(res, player);
 });
 
 app.get("/createItem", async (req, res: ResInterface) => {
     let player = await checkPlayer(req, res);
-    if(player == null){
+    if (player == null) {
         return;
     }
 
     let itemid = req.query.itemid;
     let num = req.query.num;
     let item = itemMgr.genItem(itemid, num);
-    if(typeof item == "number"){
-        http.reply(res, {ecode: item});
+    if (typeof item == "number") {
+        http.reply(res, { ecode: item });
         return;
     }
     player.addItem(item);
@@ -81,7 +81,7 @@ app.get("/EquipOn", async (req, res: ResInterface) => {
     let onlyid = req.query.onlyid;
     player.equipOn(onlyid);
     player.update();
-    http.reply(res, {items: player.items, equips: player.equips});
+    http.reply(res, { items: player.items, equips: player.equips });
 });
 
 app.get("/genEquip", (req, res: ResInterface) => {

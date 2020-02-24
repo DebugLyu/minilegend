@@ -4,7 +4,6 @@ import playerMgr from "../../manager/PlayerMgr";
 import { AttrIds } from "../../common/G";
 import BattleScene from "../../app/map/BattleScene";
 import { getRes } from "../../common/gFunc";
-import gameMgr from "../../manager/GameMgr";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -29,7 +28,7 @@ export default class TestBattle extends cc.Component {
 		// manager.enabledDebugDraw = true;
 		// manager.enabledDrawBoundingBox = true;
 		setTimeout(() => {
-			this.battleScene.loadStage(1001);
+			this.battleScene.loadStage(10001);
 		}, 2000);
 
 		setTimeout(async () => {
