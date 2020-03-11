@@ -1,11 +1,14 @@
 import { getRes } from "../../../common/gFunc";
-import GameSceneMgr from "../../../manager/GameSceneMgr";
+import playerMgr from "../../../manager/PlayerMgr";
+import { Net } from "../../../net/net";
 
 const { ccclass, property, menu } = cc._decorator;
 
 @ccclass
-@menu("ui/main/stagenode")
-export default class UIStageNode extends cc.Component {
+@menu("ui/main/stageitem")
+export default class UIStageItem extends cc.Component {
+    stageid: number = 0;
+
     @property(cc.Label)
     nameLabel:cc.Label = null;
 
@@ -24,7 +27,8 @@ export default class UIStageNode extends cc.Component {
         this.bgsprite.spriteFrame = t;
     }
 
-    onClick(e, d){
-        GameSceneMgr.ChangeScene("Battle");
+    onClick(){
+        playerMgr.mainData.lastStage = this.stageid;
+        Net.enterStage({stageid: this.stageid});
     }
 }

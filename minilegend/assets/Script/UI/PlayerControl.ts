@@ -3,6 +3,7 @@ import PlayerCtr from "../role/playerCtr";
 import Role from "../role/Role";
 import PlayerMgr from "../manager/PlayerMgr";
 import { ActState } from "../common/G";
+import LEvent from "../common/EventListner";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -28,7 +29,7 @@ export default class PlayerControl extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchEnd, this);
 
         this.controlSpr = cc.find('spr', this.controlNode);
-        cc.game.on("MainRole", this.setMainRole, this);
+        LEvent.on("MainRole", this.setMainRole, this);
     }
 
     setMainRole(role:Role){

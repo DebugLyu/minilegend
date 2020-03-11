@@ -22,6 +22,9 @@ export default class LivingCtr extends cc.Component {
     // 资源id
     private _resid: number = 0;
     set resId(resid: number) {
+        if(resid == 0){
+            resid = 100;
+        }
         this._resid = resid;
         this.pixHight = 0;
         this.updateAvatar();

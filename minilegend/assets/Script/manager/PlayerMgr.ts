@@ -16,7 +16,6 @@ class PlayerMgr {
 
 	public set mainRole(v : Role) {
 		this._mainRole = v;
-		cc.game.emit("MainRole", v);
 	}
 
 	private _mainData: PlayerData = new PlayerData();

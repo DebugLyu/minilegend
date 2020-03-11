@@ -4,6 +4,8 @@ import { LivingType, AttrIds, dropInfo } from "../common/G";
 import { MonsterData } from "../manager/MonsterMgr";
 import { random } from "../common/gFunc";
 import attributeMgr from "../manager/AttributeMgr";
+import Skill from "../app/skill/Skill";
+import skillMgr from "../manager/SkillMgr";
 
 
 export default class MonsterMod extends WarriorMod {
@@ -31,7 +33,19 @@ export default class MonsterMod extends WarriorMod {
         this.name = mondata.name;
         // 设置属性
         attributeMgr.setAttr(this.attr, mondata.attr);
-        this.initSkill(mondata.skill);
+        this.attr[AttrIds.Hp] = this.attr[AttrIds.MaxHp];
+        
+        let skills = [];
+        for (const skillid of mondata.skill) {
+            let skill = new Skill();
+            let skilldata = skillMgr.getSkillData(skillid);
+            if(skilldata == null){
+                continue;
+            }
+            skill.setData(skilldata);
+            skills.push(skill);
+        }
+        this.initSkill(skills);
 
         this.initDropItem();
     }

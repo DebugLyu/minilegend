@@ -5,12 +5,13 @@
  */
 
 import { random, lRandom } from "../common/gFunc";
-import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas } from "../common/G";
+import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas, RoleAttrDatas } from "../common/G";
 
 class AttributeMgr {
-    attributeList: { [x: number]: AttrDatas } = {};
-    artiattrList: { [x: number]: ArtiAttrDatas } = {};
-
+    private attributeList: { [x: number]: AttrDatas } = {};
+    private artiattrList: { [x: number]: ArtiAttrDatas } = {};
+    private roleAttrList: {[level: number]: RoleAttrDatas} = {};
+    
     async init() {
         let getRes = (await import("../common/gFunc")).getRes;
         let data = await getRes("/prop_data/prop_attribute", cc.JsonAsset);
@@ -19,6 +20,10 @@ class AttributeMgr {
         let artidata = await getRes("prop_data/prop_artiattr", cc.JsonAsset);
         let artijson = artidata.json;
         this.artiattrList = artijson;
+
+        let roleattrdata = await getRes("prop_data/prop_roleattr", cc.JsonAsset);
+        let roleartijson = roleattrdata.json;
+        this.roleAttrList = roleartijson;
     }
 
     // async init(){
@@ -27,9 +32,14 @@ class AttributeMgr {
     //     this.attributeList = data;
     // }
 
-    public getAttrData(id: number) {
+    public getAttrData(id: number): AttrDatas | null {
         return this.attributeList[id];
     }
+
+    public getRoleAttr(level: number): RoleAttrDatas | null{
+        return this.roleAttrList[level];
+    }
+
 
     setAttr(attr: Attribute, attrid: number, artiid?: number): Attribute {
         let data: AttrDatas = this.getAttrData(attrid);

@@ -11,10 +11,11 @@ export default class PlayerCtr extends WarriorCtr {
     start() {
         super.start();
         // TODO:test 测试用 资源id 设置了 资源id 就可以形成动画了
+        this.init();
     }
 
     init() {
-
+        this.model.init();
     }
 
     ptest() {

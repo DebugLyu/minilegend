@@ -9,6 +9,7 @@ import taskMgr from "../../manager/TaskMgr";
 import LEvent from "../../common/EventListner";
 import Skill from "../skill/Skill";
 import skillMgr from "../../manager/SkillMgr";
+import attributeMgr from "../../manager/AttributeMgr";
 
 export default class Player {
 	// [x: string]: any;
@@ -22,6 +23,8 @@ export default class Player {
 	token: string = "";
 	// uuid
 	uuid: string = "";
+	// 名字
+	name: string = "";
 	// 等级
 	level: number = 1;
 	// 经验
@@ -53,8 +56,7 @@ export default class Player {
 	attr: Attribute = new Attribute();
 
 	constructor() {
-		this.attr.initRole();
-
+		
 	}
 
 	init(uuid: string, token?: string) {
@@ -66,6 +68,8 @@ export default class Player {
 
 		this.initTask();
 		this.initSkill();
+
+		this.calAttr();
 	}
 
 	// 设置了基础信息 之后调用
@@ -181,6 +185,47 @@ export default class Player {
 		this.maxMap = mapid;
 		this.initTask();
 	}
+
+	calAttr(){
+		let baseattr = attributeMgr.getRoleAttr(this.level);
+		this.attr.setAttr(baseattr);
+	}
+
+	getAllAttr(){
+		let attr = new Attribute();
+		attr.add(this.attr);
+		for (const key in this.equips) {
+			const equip = this.equips[key];
+			attr.add(equip.attr);
+		}
+		return attr;
+	}
+
+	enterStage(stageid: number): number| Attribute{
+		if(stageid > this.maxStage) {
+			return ErrList.Cannot_Enter_Stage;
+		}
+
+		return this.getAllAttr();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	toString() {

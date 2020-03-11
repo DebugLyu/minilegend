@@ -41,7 +41,7 @@ export enum SkillActType {
 
 // 技能攻击类型
 export enum SkillMode {
-	Physics = 0, // 物理攻击
+	Physics = 1, // 物理攻击
 	Magic,// 魔法攻击
 	Taoist,// 道术攻击
 	MagicBuff,
@@ -106,6 +106,21 @@ export const StartMapStage = { map: 10001, stage: 10001}; // 起始场景
 export const ItemBagHolder = 100;
 
 
+export interface RoleAttrDatas {
+	level: number;
+	MaxHp: number;
+	Speed: number;
+	AtkSpe: number;
+	AtkMin: number;
+	AtkMax: number;
+	Defense: number;
+	MatkMin: number;
+	MatkMax: number;
+	Mdefense: number;
+	DatkMin: number;
+	DatkMax: number;
+	Ddefense: number;
+}
 export interface AttrDatas {
 	ID: number;
 	Hp1: number;
@@ -294,6 +309,19 @@ export class Attribute {
 	[AttrIds.Lucky]: number = 0;
 	[AttrIds.Damnation]: number = 0;
 
+	fromJson(json: any){
+		for (const key in json) {
+			if (json.hasOwnProperty(key)) {
+				this[key] = json[key];
+			}
+		}
+	}
+
+	initRole(){
+		this[AttrIds.Speed] = 240;
+		this[AttrIds.AtkSpe] = 1500;
+	}
+
 	add(attr: Attribute): Attribute {
 		for (const key of AttrArray) {
 			this[key] += attr[key];
@@ -304,7 +332,15 @@ export class Attribute {
 	addCopy(attr: Attribute): Attribute {
 		let attrn = new Attribute();
 		for (const key of AttrArray) {
-			attrn[key] += attr[key];
+			attrn[key] = this[key] + attr[key];
+		}
+		return attrn;
+	}
+
+	clone(): Attribute {
+		let attrn = new Attribute();
+		for (const key of AttrArray) {
+			attrn[key] = this[key];
 		}
 		return attrn;
 	}

@@ -21,13 +21,13 @@ const list: { [x: number]: string } = {
     [ErrList.Create_Equip_Error_EquipID]: "创建装备[??][??]出错，装备信息不存在，装备id[??]",
     [ErrList.Create_Equip_Error_AttrID]: "创建装备[??][??]错误，属性不存在，属性id[??]",
     [ErrList.Cannot_Enter_Stage]: "无法进入当前关卡",
-    
+
 }
 
 export function loge(id: number, ...args: any[]) {
     if (!gameMgr.config.dev) {
         llog.error(id, args);
-    }else{
+    } else {
         let i = 0;
         let message = list[id];
         while (true) {
@@ -45,5 +45,5 @@ export function loge(id: number, ...args: any[]) {
         }
         llog.error(message, args);
     }
-    
+
 }

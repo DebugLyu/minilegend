@@ -30,6 +30,12 @@ export default class WarriorMod extends LivingMod {
 
     init() {
         super.init();
+
+        let skill = new Skill();
+        let skilldata = skillMgr.getSkillData(SkillIds.NormalAttack);
+        skill.setData(skilldata);
+        // this.skillList.push(skill);
+        this.skillList.push(skill);
     }
 
     dead() {

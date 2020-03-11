@@ -84,9 +84,19 @@ app.get("/EquipOn", async (req, res: ResInterface) => {
     http.reply(res, { items: player.items, equips: player.equips });
 });
 
-app.get("/genEquip", (req, res: ResInterface) => {
-    let equip = equipMgr.genEquip(30001);
-    http.reply(res, equip);
+app.get("/enterStage", async (req, res: ResInterface) => {
+    let player = await checkPlayer(req, res);
+    if (player == null) {
+        return;
+    }
+    let stageid = req.query.id;
+    let result = player.enterStage(stageid);
+    if (typeof result == "number") {
+        http.reply(res, { ecode: result });
+        return;
+    }
+
+    http.reply(res, { attr: result });
 });
 
 app.post("/test", (req) => {

@@ -6,6 +6,7 @@ import GameSceneMgr from "../manager/GameSceneMgr";
 import UIMgr from "../manager/UIMgr";
 import Llog from "../common/LLog";
 import LEvent from "../common/EventListner";
+import { ErrList } from "../common/ErrorList";
 
 function checkRes(res){
 	if (res == null) {
@@ -46,7 +47,16 @@ function StartTaskBack(res) {
 	
 }
 
-
+interface enterStageData {
+	stageid: number;
+}
+function enterStageBack(res){
+	if(res.ecode != null){
+		Llog.log(ErrList.Cannot_Enter_Stage);
+		return;
+	}
+	GameSceneMgr.ChangeScene("Battle");
+}
 
 
 
@@ -86,6 +96,11 @@ export namespace Net {
 	export function startTask(data: StartTaskData){
 		send("StartTask", data, StartTaskBack);
 	}
+
+	export function enterStage(data: enterStageData){
+		send("enterStage", data, enterStageBack);
+	}
+
 
 	export namespace gm {
 		export function createItem(itemid: number, num: number) {

@@ -14,7 +14,7 @@ export default class LivingMod extends Thing {
     constructor(control?: LivingCtr){
         super();
         this._control = control;
-        this.init();
+        // this.init();
     }
     
     init() {

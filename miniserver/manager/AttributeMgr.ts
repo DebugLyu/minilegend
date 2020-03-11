@@ -5,11 +5,12 @@
  */
 
 import { getRandomArrayItem, lRandom } from "../common/gFunc";
-import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas, AttrArray } from "../common/G";
+import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas, AttrArray, RoleAttrDatas } from "../common/G";
 
 class AttributeMgr {
-    attributeList: { [x: number]: AttrDatas } = {};
-    artiattrList: { [x: number]: ArtiAttrDatas } = {};
+    private attributeList: { [x: number]: AttrDatas } = {};
+    private artiAttrList: { [x: number]: ArtiAttrDatas } = {};
+    private roleAttrList: {[level: number]: RoleAttrDatas} = {};
 
     // async init() {
     //     let getRes = (await import("../common/gFunc")).getRes;
@@ -26,14 +27,20 @@ class AttributeMgr {
         let data = require(RootDir("../app/prop_data/prop_attribute"));
         this.attributeList = data;
         let artidata = require(RootDir("../app/prop_data/prop_artiattr"));
-        this.artiattrList = artidata;
+        this.artiAttrList = artidata;
+        let roleartidata = require(RootDir("../app/prop_data/prop_roleattr"));
+        this.roleAttrList = roleartidata;
     }
 
-    public getAttrData(id: number) {
+    public getAttrData(id: number): AttrDatas | null {
         return this.attributeList[id];
     }
 
-    setAttr(attr: Attribute, attrid: number): Attribute {
+    public getRoleAttr(level: number): RoleAttrDatas | null{
+        return this.roleAttrList[level];
+    }
+
+    public setAttr(attr: Attribute, attrid: number): Attribute {
         let data: AttrDatas = this.getAttrData(attrid);
         // let attr = new Attribute();
         // attr.Hp = random(data.Hp1, data.Hp2);
@@ -52,8 +59,9 @@ class AttributeMgr {
 
         return attr;
     }
-    setArtiAttr(arti: Attribute, artiid: number, num: number) {
-        let atridata = this.artiattrList[artiid];
+    
+    public setArtiAttr(arti: Attribute, artiid: number, num: number) {
+        let atridata = this.artiAttrList[artiid];
         if (atridata) {
             let list: { id: number, min: number, max: number }[] = [];
             let input = (info: { id: number, min: number, max: number }) => {

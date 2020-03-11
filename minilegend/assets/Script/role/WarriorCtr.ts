@@ -11,16 +11,6 @@ const { ccclass, menu } = cc._decorator;
 export default class WarriorCtr extends LivingCtr {
     model:WarriorMod = new WarriorMod(this);
 
-    start(){
-        super.start();
-        
-        let skill = new Skill();
-        let skilldata = skillMgr.getSkillData(SkillIds.NormalAttack);
-        skill.setData(skilldata);
-        // this.skillList.push(skill);
-        this.model.skillList.push(skill);
-    }
-
     idle(dir: number = null) {
         if(this.model.isDead){
             return;

@@ -6,6 +6,7 @@ import PlayerMgr from "../../manager/PlayerMgr";
 const { ccclass, property } = cc._decorator;
 
 let EffectSeedID = 10000;
+let cctween = cc.tween;
 
 @ccclass
 export default class EffectLayer extends cc.Component {
@@ -83,17 +84,12 @@ export default class EffectLayer extends cc.Component {
         }
 
         // labelnode.scale = 2;
-        cc.tween(labelnode).delay(.2)
-            .by(0.8, { position: cc.v2(0, 120)})
+        cctween(labelnode)
+            .parallel(
+                cctween(labelnode).to(0.2, { scale: 2 }).to(0.2, { scale: 1 }).delay(.2).to(0.4, { opacity: 0}),
+                cctween(labelnode).delay(.2).by(0.8, { position: cc.v2(0, 120)}))
             .removeSelf()
-            .parallel(cc.tween(labelnode)
-                .to(0.2, { scale: 2 })
-                .to(0.2, { scale: 1 })
-                .delay(.2)
-                .to(0.4, { opacity: 0}))
             .start();
-        // cc.tween(labelnode)
-        // labelnode.runAction(cc.sequence(cc.scaleTo(.2, 2), cc.scaleTo(0.2, 1), cc.delayTime(0.2), cc.fadeOut(0.4)));
     }
 
     addFlyEffect(effectid: number, pixx: number, pixy: number, speed: number, angle: number): FlyEffect {

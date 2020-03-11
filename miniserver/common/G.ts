@@ -24,6 +24,21 @@ export const StartMapStage = { map: 10001, stage: 10001}; // 起始场景
 
 export const ItemBagHolder = 100;
 
+export interface RoleAttrDatas {
+	level: number;
+	MaxHp: number;
+	Speed: number;
+	AtkSpe: number;
+	AtkMin: number;
+	AtkMax: number;
+	Defense: number;
+	MatkMin: number;
+	MatkMax: number;
+	Mdefense: number;
+	DatkMin: number;
+	DatkMax: number;
+	Ddefense: number;
+}
 
 export interface AttrDatas {
 	ID: number;
@@ -54,6 +69,7 @@ export interface AttrDatas {
 	Ddefense1: number;
 	Ddefense2: number;
 }
+
 export interface ArtiAttrDatas {
 	Hit1: number;
 	Hit2: number;
@@ -190,8 +206,8 @@ export const AttrStrCn = {
 export class Attribute {
 	[AttrIds.Hp]: number = 0;
 	[AttrIds.MaxHp]: number = 0;
-	[AttrIds.Speed]: number = 0;
-	[AttrIds.AtkSpe]: number = 0;
+	[AttrIds.Speed]: number = 240;
+	[AttrIds.AtkSpe]: number = 1500;
 	[AttrIds.AtkMin]: number = 0;
 	[AttrIds.AtkMax]: number = 0;
 	[AttrIds.Defense]: number = 0;
@@ -213,9 +229,21 @@ export class Attribute {
 	[AttrIds.Lucky]: number = 0;
 	[AttrIds.Damnation]: number = 0;
 
-	initRole(){
-		this[AttrIds.Speed] = 240;
-		this[AttrIds.AtkSpe] = 1500;
+	setAttr(attrn: any){
+		for (const key of AttrArray) {
+			let value = attrn[key];
+			if(value){
+				this[key] = value;
+			}
+		}
+	}
+
+	fromJson(json: any){
+		for (const key in json) {
+			if (json.hasOwnProperty(key)) {
+				this[key] = json[key];
+			}
+		}
 	}
 
 	add(attr: Attribute): Attribute {
@@ -228,7 +256,15 @@ export class Attribute {
 	addCopy(attr: Attribute): Attribute {
 		let attrn = new Attribute();
 		for (const key of AttrArray) {
-			attrn[key] += attr[key];
+			attrn[key] = this[key] + attr[key];
+		}
+		return attrn;
+	}
+
+	clone(): Attribute {
+		let attrn = new Attribute();
+		for (const key of AttrArray) {
+			attrn[key] = this[key];
 		}
 		return attrn;
 	}

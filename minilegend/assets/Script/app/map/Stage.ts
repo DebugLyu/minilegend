@@ -13,6 +13,7 @@ import EffectLayer from "./EffectLayer";
 import BattleScene from "./BattleScene";
 import itemMgr from "../../manager/ItemMgr";
 import Llog from "../../common/LLog";
+import LEvent from "../../common/EventListner";
 
 const { ccclass, menu } = cc._decorator;
 let RootPos: cc.Vec2 = cc.Vec2.ZERO;
@@ -45,7 +46,7 @@ export default class Stage extends cc.Component {
 
         RootPos = cc.v2(-cc.winSize.width / 2, -cc.winSize.height / 2);
 
-        cc.game.on("MainRole", this.setMainRole, this);
+        LEvent.on("MainRole", this.setMainRole, this);
         this.init();
     }
 
@@ -280,15 +281,14 @@ export default class Stage extends cc.Component {
             let p2 = cc.v2(itemnode.x + random(600) - 300, itemnode.y + random(500) - 300);
             let p3 = cc.v2(this.role.pixx, this.role.pixy);
             cc.tween(itemnode)
-                .by(0.2, {position: cc.v2(0, 20)})
-                .to(0.8, { bezier: [p1, p2, p3] }, { easing: "sineOut"})
-                .parallel(cc.tween(itemnode).delay(0.6)
-                    .call(() => {
-                        itemnode.stopAllActions();
-                        if (i == this.dropList.length - 1) {
-                            this.isFinish = true;
-                        }
-                    }))
+                .parallel(cc.tween().delay(0.6).call(() => {
+                            itemnode.stopAllActions();
+                            if (i == this.dropList.length - 1) {
+                                this.isFinish = true;
+                            }
+                        }),
+                    cc.tween().by(0.2, {position: cc.v2(0, 20)})
+                        .to(0.8, { bezier: [p1, p2, p3] }, { easing: "sineOut"}))
                 .start();
         }
     }

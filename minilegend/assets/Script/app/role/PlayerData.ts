@@ -1,8 +1,8 @@
-import { Attribute, ItemType } from "../../common/G";
+import { Attribute, ItemType, EquipPos } from "../../common/G";
 import Equip from "../item/equip/Equip";
 import Item from "../item/Item";
 import LEvent from "../../common/EventListner";
-import { random, safeJson } from "../../common/gFunc";
+import { safeJson } from "../../common/gFunc";
 import Task from "../task/Task";
 import Skill from "../skill/Skill";
 
@@ -17,6 +17,9 @@ export default class PlayerData {
 	token: string = "";
 	// uuid
 	uuid: string = "";
+	// 名字 
+	name: string = "";
+
 	// 等级
 	private _level: number = 0;
 	get level() {
@@ -83,6 +86,26 @@ export default class PlayerData {
 	// 属性
 	attr: Attribute = new Attribute();
 
+
+	// 最后进入的关卡
+	lastStage: number = 0;
+
+	getWeaponResid(){
+		let weapon = this.equips[EquipPos.Weapon];
+		if(weapon){
+			return weapon.equipData.outlook;
+		}
+		return 0;
+	}
+
+	getClothResid(){
+		let clothes = this.equips[EquipPos.Clothes];
+		if(clothes){
+			return clothes.equipData.outlook;
+		}
+		return 0;
+	}
+
 	fromJson(json: any) {
 		for (const key in json) {
 			if (key == "items"){
@@ -95,6 +118,14 @@ export default class PlayerData {
 			}
 			if (key == "tasks") {
 				this.taskFromJson(json[key]);
+				continue;
+			}
+			if (key == "skills") {
+				this.skillFromJson(json[key]);
+				continue;
+			}
+			if (key == "attr") {
+				this.attrFromJson(json[key]);
 				continue;
 			}
 			this[key] = safeJson(json[key]);
@@ -147,5 +178,9 @@ export default class PlayerData {
 			skill.fromJson(data);
 			this.skills.push(skill);
 		}
+	}
+
+	attrFromJson(json:any){
+		this.attr.fromJson(json);
 	}
 }

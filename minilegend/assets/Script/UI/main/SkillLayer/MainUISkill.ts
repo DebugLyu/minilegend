@@ -1,6 +1,7 @@
 import skillMgr from "../../../manager/SkillMgr";
 import MainUISkillItem from "./MainUISkillItem";
 import playerMgr from "../../../manager/PlayerMgr";
+import { SkillIds } from "../../../common/G";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -30,6 +31,9 @@ export default class MainUISkill extends cc.Component {
         let padding = (bg_width - wn * (node_width + spacing)) / 2 + 10;
         layout.paddingLeft = padding;
         for (const key in skills) {
+            if(Number(key) == SkillIds.NormalAttack){
+                continue;
+            }
             const skilldata = skills[key];
             let node = cc.instantiate(this.skillItemPrefab);
             node.parent = this.skillNodeBg;

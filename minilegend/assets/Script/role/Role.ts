@@ -13,6 +13,8 @@ import PlayerMgr from "../manager/PlayerMgr";
 import FlyEffect from "../app/skill/FlyEffect";
 import BattleScene from "../app/map/BattleScene";
 import MonsterMod from "./MonsterMod";
+import PlayerData from "../app/role/PlayerData";
+import LEvent from "../common/EventListner";
 
 const { ccclass, property, menu } = cc._decorator;
 
@@ -86,6 +88,12 @@ export default class Role extends cc.Component {
         this.model = this.warrior.model;
         let node = this.node.getChildByName("weapon");
         this.weapon = node.getComponent(WeaponCtr);
+
+        // this.weapon.resId = data.getWeaponResid();
+        // this.warrior.resId = data.getClothResid();
+        
+        // this.model.name = data.name;
+        // this.model.attr = data.attr.clone();
     }
 
     setRoleSize(size: cc.Size) {
@@ -356,7 +364,7 @@ export default class Role extends cc.Component {
                 this.clean();
             }, 2)
         }
-        cc.game.emit("RoleDie", this);
+        LEvent.emit("RoleDie", this);
     }
     /**     
      * @param destroy 是否清除节点

@@ -1,6 +1,7 @@
 import WarriorMod from "./WarriorMod";
-import { LivingType } from "../common/G";
+import { LivingType, EquipPos } from "../common/G";
 import PlayerCtr from "./playerCtr";
+import PlayerData from "../app/role/PlayerData";
 
 export default class PlayerMod extends WarriorMod {
     playerid: number = 0;// 玩家id
@@ -19,11 +20,13 @@ export default class PlayerMod extends WarriorMod {
         this.control.dead();
     }
 
-    setData(pinfo: any){
+    setData(pinfo: PlayerData){
         this.onlyid = pinfo.onlyid;
         this.playerid = pinfo.playerid;
-        this.attr = pinfo.attr;
+        // 这里是测试用的 资源id
+        this.control.resId = 3800;// pinfo.equips[EquipPos.Clothes].equipData.outlook;
+        this.attr = pinfo.attr.clone();
         this.name = pinfo.name;
-        this.skillList = pinfo.skillList;
+        this.initSkill(pinfo.skills);
     }
 }

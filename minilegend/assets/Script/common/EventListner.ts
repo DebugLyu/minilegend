@@ -39,7 +39,7 @@ class EventListener {
         }
     }
 
-    emit(key: string, ...params: any[]) {
+    emit(key: string, ...params:any[]) {
         let funclist = this.eventlist[key];
         if (funclist == null) {
             return;
@@ -53,9 +53,9 @@ class EventListener {
             let f = fobj.f;
             let t = fobj.t;
             if(t != null){
-                f.call(t, params);
+                f.call(t, ...params);
             }else{
-                f(params);
+                f(...params);
             }
         }
     }

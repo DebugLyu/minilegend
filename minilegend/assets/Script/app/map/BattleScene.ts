@@ -13,6 +13,8 @@ import MonsterMgr from "../../manager/MonsterMgr";
 import playerMgr from "../../manager/PlayerMgr";
 import EndBattle from "./EndBattle";
 import mapMgr from "../../manager/MapMgr";
+import LEvent from "../../common/EventListner";
+import PlayerCtr from "../../role/playerCtr";
 
 const { ccclass, property, menu } = cc._decorator;
 @ccclass
@@ -49,21 +51,50 @@ export default class BattleScene extends cc.Component {
 	}
 
 	start() {
+		var manager = cc.director.getCollisionManager();
+		manager.enabled = true;
+
 		this.stage = cc.find("Canvas/StageLayer").getComponent(Stage);
 		this.roleLayer = this.stage.node.getChildByName("RoleLayer");
 		this.waveNode = this.node.getChildByName("wave");
-		cc.game.on("RoleDie", this.onRoleDie, this);
-		this.init();
-		cc.game.on("MainRole", this.setMainRole, this);
+
+		this.scheduleOnce(this.loadGameRes, 1);
 	}
 
-	setMainRole(role: Role) {
-		this.role = role;
-	}
-
-	async init() {
+	async loadGameRes(){
 		this.endBattle = await getRes("/prefab/battle/EndBattle", cc.Prefab);
+
+		let playerprefab = await getRes("prefab/role/PlayerRole", cc.Prefab);
+		let rolenode = cc.instantiate(playerprefab);
+		this.role = rolenode.getComponent(Role);
+		this.role.init();
+		let playerctr = rolenode.getChildByName("rolectr").getComponent(PlayerCtr);
+		playerctr.model.setData(playerMgr.mainData);
+		
+		playerMgr.mainRole = this.role;
+		
+
+		LEvent.on("RoleDie", this.onRoleDie, this);
+		this.loadStage(playerMgr.mainData.lastStage);
+
+		setTimeout(() => {
+			this.allLoaded();
+		}, 3 * 1000);
 	}
+
+	destroyGameRes(){
+
+	}
+
+	allLoaded(){
+		this.battleStart();
+	}
+
+	battleStart() {
+		this.roleEnter(this.role);
+		LEvent.emit("MainRole", this.role);
+	}
+
 
 	loadStage(stageid: number): void {
 		this.stageId = stageid;
@@ -95,21 +126,12 @@ export default class BattleScene extends cc.Component {
 			.start();
 		let label = labelnode.getComponent(cc.Label);
 		label.string = "第" + toChineseNum(this.wave + 1) + "波";
-		// labelnode.runAction(cc.sequence(
-		// 	cc.delayTime(0.3),
-		// 	cc.scaleTo(0.2, 1),
-		// 	cc.delayTime(1),
-		// 	cc.scaleTo(0.2, 1, 0.2),
-		// 	cc.callFunc(() => {
-		// 		this.waveNode.runAction(cc.scaleTo(0.2, 1, 0));
-		// 	})
-		// ));
 		cc.tween(labelnode).delay(0.3)
 			.to(0.2, {scale: 1})
 			.delay(1)
-			.to(0.2, {scale: cc.v2(1, 0.2)})
+			.to(0.2, {scaleY: 0.2})
 			.call(() => {
-				cc.tween(this.waveNode).to(0.2, {scale: cc.v2(1, 0)}).start();
+				cc.tween(this.waveNode).to(0.2, {scaleY: 0}).start();
 				// this.waveNode.runAction(cc.scaleTo(0.2, 1, 0));
 			})
 			.start();

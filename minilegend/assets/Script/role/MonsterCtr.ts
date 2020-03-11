@@ -10,6 +10,11 @@ export default class MonsterCtr extends WarriorCtr {
 
     start() {
         super.start();
+        this.init();
+    }
+
+    init() {
+        this.model.init();
     }
 
 

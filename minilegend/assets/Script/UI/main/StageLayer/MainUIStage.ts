@@ -1,7 +1,7 @@
 import mapMgr from "../../../manager/MapMgr";
 import playerMgr from "../../../manager/PlayerMgr";
 import { StartMapStage } from "../../../common/G";
-import UIStageNode from "./UIStageNode";
+import UIStageItem from "./UIStageNode";
 import MainUIMapNode from "./MainUIMapNode";
 
 const { ccclass, property, menu } = cc._decorator;
@@ -70,7 +70,8 @@ export default class MainUIStage extends cc.Component {
         for(let stageid of mapdata.stage){
             let stagedata = mapMgr.getStageData(stageid);
             let stagenode = cc.instantiate(this.stagePrefab);
-            let uisn = stagenode.getComponent(UIStageNode);
+            let uisn = stagenode.getComponent(UIStageItem);
+            uisn.stageid = stageid;
             uisn.stageName = stagedata.name;
             uisn.setBackgroud(stagedata.bg);
             stagenode.parent = this.stageNodeView;
