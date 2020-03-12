@@ -1,10 +1,11 @@
-import { Attribute, ItemType, EquipPos } from "../../common/G";
+import { ItemType, EquipPos } from "../../common/G";
 import Equip from "../item/equip/Equip";
 import Item from "../item/Item";
 import LEvent from "../../common/EventListner";
 import { safeJson } from "../../common/gFunc";
 import Task from "../task/Task";
 import Skill from "../skill/Skill";
+import { Attribute } from "../attribute/attribute";
 
 export default class PlayerData {
 	// 绝对id 服务器专有 与 客户端 绝对id 不同。

@@ -43,6 +43,8 @@ export default class MonsterMod extends WarriorMod {
                 continue;
             }
             skill.setData(skilldata);
+            // TODO: 这里怪物的技能默认为1级。以后可以修改为配置
+            skill.level = 1;
             skills.push(skill);
         }
         this.initSkill(skills);

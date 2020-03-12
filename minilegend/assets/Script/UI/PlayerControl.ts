@@ -75,6 +75,9 @@ export default class PlayerControl extends cc.Component {
     }
 
     touchEnd(event) {
+        if (!this.touchEnable) {
+            return;
+        }
         this.touchEnable = false;
         this.controlNode.setPosition(0, 0);
         this.controlSpr.setPosition(0, 0);

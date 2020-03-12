@@ -1,8 +1,9 @@
 import Role from "../role/Role";
 import MonsterCtr from "../role/MonsterCtr";
-import Stage from "../app/map/Stage";
 import BattleScene from "../app/map/BattleScene";
 import { getRes, safeJson } from "../common/gFunc";
+
+let monster_seed_id = 10000000;
 
 export class MonsterData {
     id = 0;
@@ -58,6 +59,7 @@ class MonsterMgr {
         let node = cc.instantiate(this.monPrefab);
         let monsterctr = node.getChildByName("rolectr").getComponent(MonsterCtr);
         monsterctr.model.setMonData(mondata);
+        monsterctr.model.onlyid = monster_seed_id++;
         let role = node.getComponent(Role);
         role.init();
         if (btlScene) {

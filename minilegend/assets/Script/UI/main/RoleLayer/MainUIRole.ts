@@ -1,7 +1,7 @@
 import LEvent from "../../../common/EventListner";
 import playerMgr from "../../../manager/PlayerMgr";
 import UIItem from "../../item/UIItem";
-import { EquipPos, DefaultCloth } from "../../../common/G";
+import { EquipPos, DefaultInLookCloth } from "../../../common/G";
 import itemMgr from "../../../manager/ItemMgr";
 import Equip from "../../../app/item/equip/Equip";
 import { getRes } from "../../../common/gFunc";
@@ -21,11 +21,16 @@ export default class MainUIRole extends cc.Component {
 
 	inLook: {[x: number]:cc.Sprite} = {};
 
+	private events:number[] = [];
 	start() {
 		this.initNode();
 		this.regEventLisner();
 		this.updateItems();
 		this.updateEquips();
+	}
+
+	onDestroy(){
+		this.removeEventLisner();
 	}
 
 	initNode() {
@@ -54,8 +59,14 @@ export default class MainUIRole extends cc.Component {
 	}
 
 	regEventLisner() {
-		LEvent.on("ItemUpdate", this.updateItems, this);
-		LEvent.on("EquipUpdate", this.updateEquips, this);
+		this.events.push(LEvent.on("ItemUpdate", this.updateItems, this));
+		this.events.push(LEvent.on("EquipUpdate", this.updateEquips, this));
+	}
+
+	removeEventLisner() {
+		for (const eventid of this.events) {
+			LEvent.off("ItemUpdate", eventid);
+		}
 	}
 
 	updateItems() {
@@ -110,7 +121,7 @@ export default class MainUIRole extends cc.Component {
 				inlookid = equip.equipData.inlook;
 			}else{
 				if(epos == EquipPos.Clothes){
-					inlookid = DefaultCloth;
+					inlookid = DefaultInLookCloth;
 				}
 			}
 			if(inlookid == 0){

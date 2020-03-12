@@ -1,3 +1,4 @@
+import skillMgr from "../manager/SkillMgr";
 
 export enum AgentKind {
 	Server = 1,
@@ -18,12 +19,18 @@ export interface ResInterface {
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
+// 最大体力值
+export const MaxPower = 20; 
 
-export const MaxPower = 20; // 最大体力值
-export const StartMapStage = { map: 10001, stage: 10001}; // 起始场景
+// 起始场景
+export const StartMapStage = { map: 10001, stage: 10001}; 
+
+// 初始技能
+export const DefSkill = [10000, 10006, 10009];
 
 export const ItemBagHolder = 100;
 
+// 玩家属性 配置信息
 export interface RoleAttrDatas {
 	level: number;
 	MaxHp: number;
@@ -40,6 +47,7 @@ export interface RoleAttrDatas {
 	Ddefense: number;
 }
 
+// 属性配置信息
 export interface AttrDatas {
 	ID: number;
 	Hp1: number;
@@ -70,6 +78,7 @@ export interface AttrDatas {
 	Ddefense2: number;
 }
 
+// 附加属性配置信息
 export interface ArtiAttrDatas {
 	Hit1: number;
 	Hit2: number;
@@ -95,6 +104,7 @@ export interface ArtiAttrDatas {
 	Damnation2: number;
 }
 
+// 属性id
 export enum AttrIds {
 	Hp = 101,
 	MaxHp,
@@ -122,6 +132,7 @@ export enum AttrIds {
 	Damnation,
 }
 
+// 属性列表
 export let AttrArray = [
 	AttrIds.Hp,
 	AttrIds.MaxHp,
@@ -149,6 +160,7 @@ export let AttrArray = [
 	AttrIds.Damnation,
 ]
 
+// 属性列表对应字符串
 export const AttrStr = {
 	[AttrIds.Hp]: "Hp",
 	[AttrIds.MaxHp]: "MaxHp",
@@ -201,73 +213,6 @@ export const AttrStrCn = {
 	[AttrIds.Toughness]: "韧性",
 	[AttrIds.Lucky]: "幸运",
 	[AttrIds.Damnation]: "诅咒",
-}
-
-export class Attribute {
-	[AttrIds.Hp]: number = 0;
-	[AttrIds.MaxHp]: number = 0;
-	[AttrIds.Speed]: number = 240;
-	[AttrIds.AtkSpe]: number = 1500;
-	[AttrIds.AtkMin]: number = 0;
-	[AttrIds.AtkMax]: number = 0;
-	[AttrIds.Defense]: number = 0;
-	[AttrIds.MatkMin]: number = 0;
-	[AttrIds.MatkMax]: number = 0;
-	[AttrIds.Mdefense]: number = 0;
-	[AttrIds.DatkMin]: number = 0;
-	[AttrIds.DatkMax]: number = 0;
-	[AttrIds.Ddefense]: number = 0;
-	[AttrIds.Hit]: number = 0;
-	[AttrIds.Crit]: number = 0;
-	[AttrIds.CritAdd]: number = 0;
-	[AttrIds.Dodge]: number = 0;
-	[AttrIds.Cut]: number = 0;
-	[AttrIds.CutPre]: number = 0;
-	[AttrIds.Poison]: number = 0;
-	[AttrIds.Paralysis]: number = 0;
-	[AttrIds.Toughness]: number = 0;
-	[AttrIds.Lucky]: number = 0;
-	[AttrIds.Damnation]: number = 0;
-
-	setAttr(attrn: any){
-		for (const key of AttrArray) {
-			let value = attrn[key];
-			if(value){
-				this[key] = value;
-			}
-		}
-	}
-
-	fromJson(json: any){
-		for (const key in json) {
-			if (json.hasOwnProperty(key)) {
-				this[key] = json[key];
-			}
-		}
-	}
-
-	add(attr: Attribute): Attribute {
-		for (const key of AttrArray) {
-			this[key] += attr[key];
-		}
-		return this;
-	}
-
-	addCopy(attr: Attribute): Attribute {
-		let attrn = new Attribute();
-		for (const key of AttrArray) {
-			attrn[key] = this[key] + attr[key];
-		}
-		return attrn;
-	}
-
-	clone(): Attribute {
-		let attrn = new Attribute();
-		for (const key of AttrArray) {
-			attrn[key] = this[key];
-		}
-		return attrn;
-	}
 }
 
 export enum ItemType {

@@ -23,6 +23,6 @@ export default class UIRoleGMLayer extends cc.Component {
     }
 
     createequip2() {
-        Net.gm.createItem(30002, 1);
+        Net.gm.createItem(30003, 1);
     }
 }

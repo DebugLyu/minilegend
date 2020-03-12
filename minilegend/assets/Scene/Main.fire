@@ -183,7 +183,7 @@
       "array": [
         0,
         0,
-        760.3703045227372,
+        774.2267109832882,
         0,
         0,
         0,
@@ -341,7 +341,7 @@
         "__id__": 76
       }
     ],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 100
@@ -4596,8 +4596,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "添加裁决",
-    "_N$string": "添加裁决",
+    "_string": "添加屠龙刀",
+    "_N$string": "添加屠龙刀",
     "_fontSize": 20,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -5840,7 +5840,7 @@
         "__id__": 139
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 154

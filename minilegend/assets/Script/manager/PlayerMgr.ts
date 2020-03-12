@@ -2,6 +2,7 @@ import PlayerMod from "../role/PlayerMod";
 import Role from "../role/Role";
 import PlayerData from "../app/role/PlayerData";
 
+
 class PlayerMgr {
 	// 玩家数据列表
 	private playerList:{[key:number]: PlayerMod} = {};

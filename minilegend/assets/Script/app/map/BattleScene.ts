@@ -6,7 +6,7 @@
 
 import { toChineseNum, getRes } from "../../common/gFunc";
 import Stage from "./Stage";
-import MapMgr, { MapData, StageData, PlatData } from "../../manager/MapMgr";
+import MapMgr, { MapData, PlatData } from "../../manager/MapMgr";
 import Role from "../../role/Role";
 import { LivingType, dropInfo } from "../../common/G";
 import MonsterMgr from "../../manager/MonsterMgr";
@@ -16,7 +16,7 @@ import mapMgr from "../../manager/MapMgr";
 import LEvent from "../../common/EventListner";
 import PlayerCtr from "../../role/playerCtr";
 
-const { ccclass, property, menu } = cc._decorator;
+const { ccclass, menu } = cc._decorator;
 @ccclass
 @menu("map/battle_scene")
 export default class BattleScene extends cc.Component {
@@ -24,14 +24,15 @@ export default class BattleScene extends cc.Component {
 	private endBattle: cc.Prefab = null;
 
 	// 副本数据
-	mapData: MapData = null;
-	platData: PlatData = null;
 	private mapId: number = 0;
 	private stageId: number = 0;
 	private platId: number = 0;
+	mapData: MapData = null;
+	platData: PlatData = null;
 	private get isBossStage(): boolean {
 		return this.platData.boss;
 	}
+	
 	private role: Role = null;
 	roleLayer: cc.Node = null;
 	// 角色列表
@@ -197,6 +198,8 @@ export default class BattleScene extends cc.Component {
 		role.node.parent = this.roleLayer;
 	}
 
+	roleExit(role: Role);
+	roleExit(role: number);
 	roleExit(role: number | Role) {
 		let onlyid = 0;
 		if (typeof role === "number") {

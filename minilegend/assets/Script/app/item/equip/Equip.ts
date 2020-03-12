@@ -1,6 +1,7 @@
-import { Attribute, ItemType, AttrStr, AttrIds } from "../../../common/G"
+import { ItemType, AttrStr, AttrIds } from "../../../common/G"
 import Item from "../Item";
 import { random } from "../../../common/gFunc";
+import { Attribute } from "../../attribute/attribute";
 
 let random_min = 10;
 let random_max = 999999;
@@ -8,6 +9,7 @@ let random_max = 999999;
 function attrRandom() {
 	return random(random_min, random_max);
 }
+
 
 export interface EquipData {
 	id: number;      // 装备id

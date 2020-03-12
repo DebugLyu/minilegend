@@ -5,7 +5,8 @@
  */
 
 import { getRandomArrayItem, lRandom } from "../common/gFunc";
-import { AttrDatas, Attribute, AttrIds, ArtiAttrDatas, AttrArray, RoleAttrDatas } from "../common/G";
+import { AttrDatas, AttrIds, ArtiAttrDatas, AttrArray, RoleAttrDatas } from "../common/G";
+import { Attribute } from "../app/attribute/attribute";
 
 class AttributeMgr {
     private attributeList: { [x: number]: AttrDatas } = {};

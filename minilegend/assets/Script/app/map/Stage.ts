@@ -22,7 +22,7 @@ let OutRand = 1;
 @ccclass
 @menu("map/stage")
 export default class Stage extends cc.Component {
-    nodeArray: cc.Node[][] = [];
+    private mapNodeArray: cc.Node[][] = [];
     platId: number = 0;
     stageData: PlatData = null;
     effectLayer: EffectLayer = null;
@@ -31,13 +31,13 @@ export default class Stage extends cc.Component {
     role: Role = null;
 
     battleScene: BattleScene = null;
-    transportList: { [key: number]: cc.Node } = {};
+    private transportList: { [key: number]: cc.Node } = {};
 
-    itemAtlas: cc.SpriteAtlas = null;
-    isFinish: boolean = false;
-    itemLight: cc.Texture2D = null;
+    private itemAtlas: cc.SpriteAtlas = null;
+    private isFinish: boolean = false;
+    private itemLight: cc.Texture2D = null;
 
-    dropList: cc.Node[] = []; // 掉落的实物
+    private dropList: cc.Node[] = []; // 掉落的实物
 
     start() {
 
@@ -50,7 +50,7 @@ export default class Stage extends cc.Component {
         this.init();
     }
 
-    async init() {
+    private async init() {
         this.itemAtlas = await getRes("item/ItemIcon", cc.SpriteAtlas);
         this.itemLight = await getRes("item/light", cc.Texture2D);
     }
@@ -60,8 +60,8 @@ export default class Stage extends cc.Component {
     }
 
     clearStage() {
-        for (let i = 0; i < this.nodeArray.length; i++) {
-            const list = this.nodeArray[i];
+        for (let i = 0; i < this.mapNodeArray.length; i++) {
+            const list = this.mapNodeArray[i];
             for (let t = 0; t < list.length; t++) {
                 const node = list[t];
                 if (node != null) {
@@ -69,7 +69,7 @@ export default class Stage extends cc.Component {
                 }
             }
         }
-        this.nodeArray = [];
+        this.mapNodeArray = [];
 
         for (const _ in this.transportList) {
             if (this.transportList.hasOwnProperty(_)) {
@@ -190,8 +190,8 @@ export default class Stage extends cc.Component {
         let outy2 = winsize.height + Cell.height * (OutRand - 1 + 0.5)
 
         for (let x = 0; x < max_x; x++) {
-            if (this.nodeArray[x] == null) {
-                this.nodeArray[x] = [];
+            if (this.mapNodeArray[x] == null) {
+                this.mapNodeArray[x] = [];
             }
 
             for (let y = 0; y < max_y; y++) {
@@ -200,14 +200,14 @@ export default class Stage extends cc.Component {
                 let wpos = this.node.convertToWorldSpaceAR(cc.v2(posx, posy));
                 if (wpos.x < outx1 || wpos.x > outx2 || wpos.y < outy1 || wpos.y > outy2) {
                     // 在外围
-                    let node = this.nodeArray[x][y];
+                    let node = this.mapNodeArray[x][y];
                     if (node) {
-                        this.nodeArray[x][y] = null;
+                        this.mapNodeArray[x][y] = null;
                         node.destroy()
                     }
                 } else {
                     // 在屏幕内
-                    let node = this.nodeArray[x][y];
+                    let node = this.mapNodeArray[x][y];
                     if (node == null) {
                         let node = new cc.Node();
                         let spr = node.addComponent(cc.Sprite);
@@ -215,7 +215,7 @@ export default class Stage extends cc.Component {
                         node.setPosition(cc.v2(posx, posy));
                         node.parent = this.node;
                         node.zIndex = -1;
-                        this.nodeArray[x][y] = node;
+                        this.mapNodeArray[x][y] = node;
                     }
                 }
             }

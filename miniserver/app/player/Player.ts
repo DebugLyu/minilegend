@@ -1,4 +1,4 @@
-import { Attribute, ItemType, EquipPos, StartMapStage } from "../../common/G";
+import { ItemType, EquipPos, StartMapStage, DefSkill } from "../../common/G";
 import Item from "../item/Item";
 import { safeJson } from "../../common/gFunc";
 import { ErrList } from "../../common/ErrorList";
@@ -10,6 +10,7 @@ import LEvent from "../../common/EventListner";
 import Skill from "../skill/Skill";
 import skillMgr from "../../manager/SkillMgr";
 import attributeMgr from "../../manager/AttributeMgr";
+import { Attribute } from "../attribute/attribute";
 
 export default class Player {
 	// [x: string]: any;
@@ -56,7 +57,8 @@ export default class Player {
 	attr: Attribute = new Attribute();
 
 	constructor() {
-		
+		this.maxMap = StartMapStage.map;
+		this.maxStage = StartMapStage.stage;
 	}
 
 	init(uuid: string, token?: string) {
@@ -91,6 +93,10 @@ export default class Player {
 					const skilldata = skills[skillid];
 					let skill = new Skill();
 					skill.level = 0;
+					// 添加默认技能
+					if(DefSkill.indexOf(Number(skillid)) != -1){
+						skill.level = 1;
+					}
 					skill.skillid = Number(skillid);
 					skill.skilldata = skilldata;
 					this.skills.push(skill);

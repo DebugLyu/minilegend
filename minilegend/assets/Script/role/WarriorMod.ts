@@ -1,8 +1,9 @@
 import LivingMod from "./LivingMod";
-import { Attribute, AttrIds, SkillIds } from "../common/G";
+import { AttrIds, SkillIds } from "../common/G";
 import WarriorCtr from "./WarriorCtr";
 import Skill from "../app/skill/Skill";
 import skillMgr from "../manager/SkillMgr";
+import { Attribute } from "../app/attribute/attribute";
 
 export default class WarriorMod extends LivingMod {
     // 属性值
@@ -102,6 +103,9 @@ export default class WarriorMod extends LivingMod {
         // 优先选择 在范围内的
         for (let i = 0; i < this.skillList.length; i++) {
             const skill = this.skillList[i];
+            if(skill.level <= 0){
+                continue;
+            }
             if (skill.skilldata.range >= len && skill.cando) {
                 list.push(skill);
             }

@@ -1,6 +1,7 @@
-import { Attribute, ItemType, AttrStr, AttrIds, AttrArray } from "../../../common/G"
+import { ItemType, AttrStr, AttrIds, AttrArray } from "../../../common/G"
 import Item from "../Item";
 import { random } from "../../../common/gFunc";
+import { Attribute } from "../../attribute/attribute";
 
 let random_min = 10;
 let random_max = 999999;

@@ -1,6 +1,7 @@
 import skillMgr, { SkillData } from "../../manager/SkillMgr";
 import { safeJson, lRandom } from "../../common/gFunc";
-import { Attribute, SkillMode, AttrIds, SkillType, SkillSubType } from "../../common/G";
+import { SkillMode, AttrIds, SkillType, SkillSubType } from "../../common/G";
+import { Attribute } from "../attribute/attribute";
 
 export default class Skill {
     skillid: number = 0;
