@@ -41,7 +41,7 @@ export class myhttp {
     };
 
     async sendgeturl(url: string, data: object, safe: boolean) {
-        return new Promise<JSON>((resolve, reject) => {
+        return new Promise<object | string | null>((resolve, reject) => {
             var content = qs.stringify(data);
             url = url + '?' + content;
             let getfunc = __http.get;
@@ -76,7 +76,7 @@ export class myhttp {
     }
 
     async sendget(host: string, port: number, path: string, data: object, safe: boolean) {
-        return new Promise<JSON>((resolve, reject) => {
+        return new Promise<object | string | null>((resolve, reject) => {
             if (host == null) {
                 console.error('[HTTP] ERROR: host is null');
                 return;

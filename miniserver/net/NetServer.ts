@@ -38,9 +38,12 @@ function checkSecret(req: any, player: Player) {
     return s == m;
 }
 
-async function checkPlayer(req: any, res) {
+async function checkPlayer(req: any, res: any) {
     let uuid = req.query.uuid;
     let player = await playerMgr.getPlayer(uuid);
+    if(player == null){
+        return ;
+    }
     if (!checkSecret(req, player)) {
         http.reply(res, { ecode: ErrList.Need_ReLogin });
         return null;

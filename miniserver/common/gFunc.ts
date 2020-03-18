@@ -81,7 +81,7 @@ export function lRandom(min: number = 100, max?: number): number {
 	return Math.floor((rnd() * (max - min)) + min);
 }
 
-export function safeJson(str: any) {
+export function safeJson(str: any) : object| string | null {
 	if (str == null) {
 		return null;
 	}

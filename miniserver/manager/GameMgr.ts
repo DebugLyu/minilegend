@@ -10,6 +10,7 @@ import expMgr from "./ExpMgr";
 import { RootDir } from "../common/gFunc";
 import taskMgr from "./TaskMgr";
 
+
 class GameMgr {
     config: any = null;
 

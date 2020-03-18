@@ -2,13 +2,19 @@ import { TaskData } from "../../manager/TaskMgr";
 import Item from "../item/Item";
 import { safeJson } from "../../common/gFunc";
 
+
 export default class Task {
     taskid: number = 0;
     
-    taskdata: TaskData = null;
+    taskdata: TaskData | null = null;
 
+    // 任务开始时间
     startTime: number = 0;
+
+    // 剩余次数
     leftTimes: number = 0;
+
+    // 上次添加次数的时间
     addStartTime: number = 0;
 
     init(data:TaskData) {
@@ -21,6 +27,9 @@ export default class Task {
     }
 
     isFinish(){
+        if(this.taskdata == null){
+            return;
+        }
         let now = this.nowtime();
         let isfinish = now > (this.startTime + this.taskdata.time)
         return isfinish;
@@ -32,6 +41,10 @@ export default class Task {
     }
 
     getReward(): Item[] | null {
+        if(this.taskdata == null){
+            return null;
+        }
+
         if(!this.isFinish()){
             return null;
         }
@@ -52,8 +65,9 @@ export default class Task {
     }
 
     fromJson(json: any) {
-        for (const key in json) {
-            this[key] = safeJson(json[key]);
-        }
+        // for (const key in json) {
+        //     this[key] = safeJson(json[key]);
+        // }
+        Object.assign(this, json);
     }
 }

@@ -6,53 +6,67 @@ import { redisdb } from "../../util/redisdb";
 import Equip from "../item/equip/Equip";
 import Task from "../task/Task";
 import taskMgr from "../../manager/TaskMgr";
-import LEvent from "../../common/EventListner";
 import Skill from "../skill/Skill";
 import skillMgr from "../../manager/SkillMgr";
 import attributeMgr from "../../manager/AttributeMgr";
 import { Attribute } from "../attribute/attribute";
+import equipMgr from '../../manager/EquipMgr';
 
 export default class Player {
-	// [x: string]: any;
-	// 绝对id
+	// 绝对id 上线后分配的id
 	onlyid: number = 0;
+
 	// 玩家id 数据库id
 	playerid: number = 0;
+
 	// 账号
 	account: string = "";
+
 	// token 验证上下文
 	token: string = "";
-	// uuid
+
+	// 客户端生成唯一id
 	uuid: string = "";
+
 	// 名字
 	name: string = "";
+
 	// 等级
 	level: number = 1;
+
 	// 经验
 	exp: number = 0;
+
 	// 体力
 	power: number = 0;
 
 	// 当前装备
 	equips: { [x: number]: Equip } = {};
+
 	// 背包物品
 	items: Item[] = [];
+
 	// 任务列表
 	tasks: Task[] = [];
+
 	// 技能列表
-	skills:Skill[] = null;
+	skills: Skill[] = [];
+
 	// 佩戴技能列表
 	useSkills: number[] = [];
 
 	// 元宝
 	gold: number = 0;
+
 	// 银币
 	coin: number = 0;
 
 	// 最高地图
 	maxMap: number = 0;
+
 	// 最大关卡
 	maxStage: number = 0;
+
 	// 属性
 	attr: Attribute = new Attribute();
 
@@ -75,7 +89,7 @@ export default class Player {
 	}
 
 	// 设置了基础信息 之后调用
-	initTask(){
+	initTask() {
 		let taskList = taskMgr.getTaskDatasByMapId(this.maxMap);
 		for (const taskdata of taskList) {
 			let task = new Task();
@@ -84,8 +98,8 @@ export default class Player {
 		}
 	}
 
-	initSkill(){
-		if(this.skills == null){
+	initSkill() {
+		if (this.skills == null) {
 			this.skills = [];
 			let skills = skillMgr.getAllSkills();
 			for (const skillid in skills) {
@@ -94,11 +108,10 @@ export default class Player {
 					let skill = new Skill();
 					skill.level = 0;
 					// 添加默认技能
-					if(DefSkill.indexOf(Number(skillid)) != -1){
+					if (DefSkill.indexOf(Number(skillid)) != -1) {
 						skill.level = 1;
 					}
 					skill.skillid = Number(skillid);
-					skill.skilldata = skilldata;
 					this.skills.push(skill);
 				}
 			}
@@ -137,10 +150,10 @@ export default class Player {
 		return ErrList.SUCCESS;
 	}
 
-	delItem(onlyid:string){
+	delItem(onlyid: string) {
 		for (let i = 0; i < this.items.length; i++) {
 			const item = this.items[i];
-			if(item.onlyid == onlyid){
+			if (item.onlyid == onlyid) {
 				this.items.splice(i, 1);
 			}
 		}
@@ -154,9 +167,13 @@ export default class Player {
 		if (item.type != ItemType.Equip) {
 			return;
 		}
-
 		let equip: Equip = item as Equip;
-		let pos = equip.equipData.wear;
+		let equipdata = equipMgr.getEquipData(equip.equipid);
+		if (!equipdata) {
+			return;
+		}
+
+		let pos = equipdata.wear;
 		let curequip = this.equips[pos];
 		if (curequip != null) {
 			// 脱下 现有装备
@@ -168,36 +185,41 @@ export default class Player {
 		return ErrList.SUCCESS;
 	}
 
-	equipOff(equip: Equip);
-	equipOff(equippos: EquipPos);
-	equipOff(t: Equip | EquipPos) {
-		let equip:Equip = null;
+	equipOff(equip: Equip): any;
+	equipOff(equippos: EquipPos): any;
+	equipOff(t: Equip | EquipPos): any {
+		let equip: Equip | null = null;
 		if (typeof t == "number") {
 			equip = this.equips[t];
-		}else{
+		} else {
 			equip = t;
 		}
-		if(equip == null){
+		if (equip == null) {
 			return;
 		}
-		
+
+		let equipdata = equipMgr.getEquipData(equip.equipid);
+		if (!equipdata) {
+			return;
+		}
+
 		this.items.push(equip);
-		this.equips[equip.equipData.wear] = null;
+		delete this.equips[equipdata.wear];
 	}
 
 	// 通关了一个地图 
-	onFinishMap(mapid: number){
+	onFinishMap(mapid: number) {
 		// 需要更新任务
 		this.maxMap = mapid;
 		this.initTask();
 	}
 
-	calAttr(){
+	calAttr() {
 		let baseattr = attributeMgr.getRoleAttr(this.level);
 		this.attr.setAttr(baseattr);
 	}
 
-	getAllAttr(){
+	getAllAttr() {
 		let attr = new Attribute();
 		attr.add(this.attr);
 		for (const key in this.equips) {
@@ -207,8 +229,8 @@ export default class Player {
 		return attr;
 	}
 
-	enterStage(stageid: number): number| Attribute{
-		if(stageid > this.maxStage) {
+	enterStage(stageid: number): number | Attribute {
+		if (stageid > this.maxStage) {
 			return ErrList.Cannot_Enter_Stage;
 		}
 
@@ -234,21 +256,19 @@ export default class Player {
 
 
 
-	toString() {
-		return JSON.stringify(this);
-	}
-
 	fromJson(json: any) {
+		Object.assign(this, json);
+
 		for (const key in json) {
 			if (key == "items") {
 				this.itemFromJson(json[key]);
 				continue;
 			}
-			if(key == "equips"){
+			if (key == "equips") {
 				this.equipFromJson(json[key]);
 				continue;
 			}
-			if(key == "tasks"){
+			if (key == "tasks") {
 				this.taskFromJson(json[key]);
 				continue;
 			}
@@ -256,7 +276,6 @@ export default class Player {
 				this.skillFromJson(json[key]);
 				continue;
 			}
-			this[key] = safeJson(json[key]);
 		}
 	}
 
@@ -276,18 +295,22 @@ export default class Player {
 		}
 	}
 
-	equipFromJson(json:any){
+	equipFromJson(json: any) {
 		this.equips = {};
 		for (const datakey in json) {
 			const data = json[datakey];
 			let equip: Equip = new Equip();
-			
+
 			equip.fromJson(data);
-			this.equips[equip.equipData.wear] = equip;
+			let equipdata = equipMgr.getEquipData(equip.equipid);
+			if (equipdata == null) {
+				continue;
+			}
+			this.equips[equipdata.wear] = equip;
 		}
 	}
 
-	taskFromJson(json:any){
+	taskFromJson(json: any) {
 		this.tasks = [];
 		for (const datakey in json) {
 			const data = json[datakey];
@@ -298,7 +321,7 @@ export default class Player {
 		}
 	}
 
-	skillFromJson(json:any){
+	skillFromJson(json: any) {
 		this.skills = [];
 		for (const datakey in json) {
 			const data = json[datakey];
@@ -309,14 +332,39 @@ export default class Player {
 		}
 	}
 
+	toString() {
+		return JSON.stringify(this);
+	}
+
 	static toObj(obj: string | object) {
 		let newplayer = new Player();
 		if (typeof obj == "string") {
-			obj = safeJson(obj);
+			let newobj = safeJson(obj);
+			if(newobj == null){
+				return null;
+			}
+			obj = newobj;
 		}
 		newplayer.fromJson(obj);
 		return newplayer;
 	}
+	// toString() {
+	// 	const data: string = serialize(this);
+	// 	// const zoo: Zoo = deserialize<Zoo>(json, Zoo);
+	// 	return data;
+	// }
+
+	// static toObj(obj: string | object): Player | null {
+	// 	if (typeof obj == "string") {
+	// 		let jsonobj = safeJson(obj);
+	// 		if(jsonobj == null  || typeof jsonobj == "string"){
+	// 			return null;
+	// 		}
+	// 		obj = jsonobj;
+	// 	}
+	// 	const p: Player = deserialize<Player>(obj, Player);
+	// 	return p;
+	// }
 
 	update() {
 		redisdb.setHash("players", this.uuid, this.toString());

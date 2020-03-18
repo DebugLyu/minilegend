@@ -1,6 +1,5 @@
 import { AttrIds, AttrArray, AttrStr } from "../../common/G";
 
-
 export class Attribute {
 	[AttrIds.Hp]: number = 0;
 	[AttrIds.MaxHp]: number = 0;
@@ -37,11 +36,12 @@ export class Attribute {
 	}
 
 	fromJson(json: any){
-		for (const key in json) {
-			if (json.hasOwnProperty(key)) {
-				this[key] = json[key];
-			}
-		}
+		// for (const key in json) {
+		// 	if (json.hasOwnProperty(key)) {
+		// 		this[key] = json[key];
+		// 	}
+		// }
+		Object.assign(this, json);
 	}
 
 	add(attr: Attribute): Attribute {

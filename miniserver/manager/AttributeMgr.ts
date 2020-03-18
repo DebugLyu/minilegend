@@ -11,7 +11,7 @@ import { Attribute } from "../app/attribute/attribute";
 class AttributeMgr {
     private attributeList: { [x: number]: AttrDatas } = {};
     private artiAttrList: { [x: number]: ArtiAttrDatas } = {};
-    private roleAttrList: {[level: number]: RoleAttrDatas} = {};
+    private roleAttrList: { [level: number]: RoleAttrDatas } = {};
 
     // async init() {
     //     let getRes = (await import("../common/gFunc")).getRes;
@@ -37,12 +37,15 @@ class AttributeMgr {
         return this.attributeList[id];
     }
 
-    public getRoleAttr(level: number): RoleAttrDatas | null{
+    public getRoleAttr(level: number): RoleAttrDatas | null {
         return this.roleAttrList[level];
     }
 
-    public setAttr(attr: Attribute, attrid: number): Attribute {
-        let data: AttrDatas = this.getAttrData(attrid);
+    public setAttr(attr: Attribute, attrid: number): Attribute | undefined {
+        let data: AttrDatas | null = this.getAttrData(attrid);
+        if (data == null) {
+            return;
+        }
         // let attr = new Attribute();
         // attr.Hp = random(data.Hp1, data.Hp2);
         attr[AttrIds.MaxHp] = lRandom(data.MaxHp1, data.MaxHp2);
@@ -60,7 +63,7 @@ class AttributeMgr {
 
         return attr;
     }
-    
+
     public setArtiAttr(arti: Attribute, artiid: number, num: number) {
         let atridata = this.artiAttrList[artiid];
         if (atridata) {

@@ -1,12 +1,12 @@
-import Player from "../app/player/Player";
 import { redisdb } from "../util/redisdb";
 import { mysqldb } from "../util/mysqldb";
 import Token from "../util/token";
+import Player from "../app/player/Player";
 
 let player_seed = 10000;
 
 class PlayerMgr {
-	async getPlayer(uuid: string, update:boolean = false): Promise<Player> {
+	async getPlayer(uuid: string, update:boolean = false): Promise<Player | null> {
 		let pstr = await redisdb.getHash("players", uuid);
 		let p: Player | null = null;
 		if (pstr == null) {
@@ -24,11 +24,14 @@ class PlayerMgr {
 			//redis 中存在
 			p = Player.toObj(pstr);
 		}
+		if(p == null){
+			return null;
+		}
 		if(update){
 			p.onlyid = player_seed++;
 			let token = Token.getToken(uuid);
 			p.token = token;
-			redisdb.setHash("players", uuid, p.toString());
+			p.update();
 		}
 		return p;
 	}

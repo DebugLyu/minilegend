@@ -4,23 +4,25 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@types/ws": "^7.2.1",
+    "@types/ws": "^7.2.2",
     "bufferutil": "^4.0.1",
     "byte-buffer": "^1.0.3",
     "express": "^4.17.1",
     "log4js": "^6.1.2",
-    "protobufjs": "^6.8.8",
+    "protobufjs": "^6.8.9",
+    "reflect-metadata": "^0.1.13",
+    "typescript-json-serializer": "^1.4.5",
     "utf-8-validate": "^5.0.2",
-    "ws": "^7.2.1"
+    "ws": "^7.2.3"
   },
   "devDependencies": {
-    "@types/express": "^4.17.2",
-    "@types/mysql": "^2.15.8",
+    "@types/express": "^4.17.3",
+    "@types/mysql": "^2.15.9",
     "@types/redis": "^2.8.16",
     "mysql": "^2.18.1",
     "redis": "^3.0.2",
     "tsconfig-paths": "^3.9.0",
-    "webpack": "^4.41.6",
+    "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11"
   },
   "scripts": {

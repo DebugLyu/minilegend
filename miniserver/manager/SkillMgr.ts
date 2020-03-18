@@ -26,7 +26,7 @@ export interface SkillData {
     aitype: number, // ai类型1无限释放2目标无buff释放3血量低于50%释放
     range: number,  // 释放距离
     atktype: number,    // 攻击类型1单目标指向2单目标无指向3周围1格4目标及附近1格敌人
-    levelinfo: number,  // 等级数值
+    leveldata: string,  // 等级数值
     desc: string,   // 简介
     type: number,  // 技能类型1加法攻击2乘法攻击
     subtype: number,    // 数值影响1攻击力2敌人防御力3自身受到伤害4定时掉血5自身血量6神兽伤害
@@ -93,7 +93,9 @@ class __skillMgr {
         if (!levelData) {
             return null;
         }
-        return levelData[skilldata.levelinfo];
+
+        let t = skilldata.leveldata as keyof SkillLevelData;
+        return levelData[t];
     }
 
     // getSkillIconSpriteFrame(sf: string) {

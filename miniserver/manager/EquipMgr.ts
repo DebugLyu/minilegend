@@ -42,8 +42,6 @@ class EquipMgr {
         }
 
         let equip = new Equip();
-        equip.equipData = equipdata;
-        equip.itemData = itemdata;
         equip.num = 1;
 
         attributeMgr.setAttr(equip.attr, equipdata.attr);

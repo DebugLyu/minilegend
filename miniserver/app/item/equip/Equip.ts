@@ -1,4 +1,4 @@
-import { ItemType, AttrStr, AttrIds, AttrArray } from "../../../common/G"
+import { ItemType, AttrIds, AttrArray } from "../../../common/G"
 import Item from "../Item";
 import { random } from "../../../common/gFunc";
 import { Attribute } from "../../attribute/attribute";
@@ -21,13 +21,16 @@ export interface EquipData {
 }
 
 export default class Equip extends Item {
-	equipid: number = 0;
-	equipData: EquipData;
 
+	// 装备id 装备配置表id
+	equipid: number = 0;
+	
 	// 主属性
 	attr: Attribute = new Attribute();
+
 	// 炼化属性
 	artiAttr: Attribute = new Attribute();
+
 	// 偏移属性
 	private attrOffset: Attribute = new Attribute();
 	private artiAttrOffset: Attribute = new Attribute();
@@ -36,15 +39,6 @@ export default class Equip extends Item {
 		super();
 		this.type = ItemType.Equip;
 		this.randomOffset();
-		this.equipData = {
-			id: 0,      // 装备id
-			wear: 0,    // 穿戴位置
-			inlook: 0,  // 内观id
-			outlook: 0, // 外观id
-			attr: 0,    // 主属性id
-			arti: 0,    // 副属性id
-			artinum: 0, // 副属性最大个数
-		}
 	}
 
 	private randomOffset(isattr: boolean | null = null) {
